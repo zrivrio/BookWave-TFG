@@ -1,5 +1,6 @@
 package com.BookWave.bookstreaming.controller;
 
+import com.BookWave.bookstreaming.domain.LoginRequest;
 import com.BookWave.bookstreaming.domain.User;
 import com.BookWave.bookstreaming.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ public class UserController {
 
     //Logica para logearse
     @PostMapping("/login")
-    public User login(@RequestParam String username, @RequestParam String password) {
-        return userService.loginUser(username, password);
+    public User login(@RequestBody LoginRequest loginRequest) {
+        return userService.loginUser(loginRequest.getUsername(), loginRequest.getPassword());
     }
 }
