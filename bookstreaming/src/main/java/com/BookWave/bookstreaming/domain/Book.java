@@ -16,37 +16,27 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Book {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NaturalId
-    @Column(nullable = false, unique = true)
-    private String isbn;
+    @Column(unique = true)
+    private String googleBooksId;
 
     private String title;
 
-    private String author;
+    @ElementCollection
+    private List<String> authors;
 
     private String description;
 
-    private String coverImage;
+    private String thumbnail;
 
-    // Relaciones
+    private String publishedDate;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private Category category;
+    private String language;
 
-    @ManyToOne
-    @JoinColumn(name = "language_id")
-    private Language language;
-
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
-    private List<Review> reviews = new ArrayList<>();
-
-    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
-    private List<ReadingList> readingLists = new ArrayList<>();
+    @ElementCollection
+    private List<String> categories;
 }
 

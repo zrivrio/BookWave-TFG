@@ -5,26 +5,25 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
-@Table(name = "languages")
+@Table(name = "reading_progress")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Language {
-
+public class ReadingProgress {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String name;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    //Relaciones
+    @ManyToOne
+    @JoinColumn(name = "book_id", nullable = false)
+    private Book book;
 
-    @OneToMany(mappedBy = "language")
-    private List<Book> books = new ArrayList<>();
+    private int currentPage;
+
+    private double percentageRead;
 }
-

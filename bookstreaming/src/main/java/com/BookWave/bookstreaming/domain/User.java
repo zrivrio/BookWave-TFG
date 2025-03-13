@@ -34,7 +34,12 @@ public class User {
 
     private String profileImage;
 
-    //Relaciones
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    @Enumerated(EnumType.STRING)
+    private SubscriptionType subscriptionType;
+
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Review> reviews = new ArrayList<>();
@@ -42,3 +47,4 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<ReadingList> readingLists = new ArrayList<>();
 }
+

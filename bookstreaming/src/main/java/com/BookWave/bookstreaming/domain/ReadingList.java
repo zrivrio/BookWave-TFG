@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Table(name = "reading_lists")
 @Data
@@ -17,15 +19,13 @@ public class ReadingList {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String status; // Quiero leer, Leyendo, Leído
-
-    //Relaciones
+    private String name;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "book_id")
-    private Book book;
+    @ManyToMany
+    private List<Book> books;
+
 }
