@@ -14,10 +14,10 @@ export class BookListComponent {
 
   constructor(private bookService: BookService) {}
 
-  ngOnInit(): void {
-    this.bookService.obtenerLibros().subscribe((data) => {
-      this.libros = data;
-    });
-  }
+  // ngOnInit(): void {
+  //   this.bookService.obtenerLibros().subscribe((data) => {
+  //     this.libros = data;
+  //   });
+  // }
 
 }

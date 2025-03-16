@@ -7,11 +7,11 @@ import { Observable } from 'rxjs';
 })
 export class BookService {
 
-  private apiUrl = 'http://localhost:8080/bookwave/books';
-
-  constructor(private http: HttpClient) {}
-
-  obtenerLibros(): Observable<any> {
-    return this.http.get<any>(this.apiUrl);
-  }
+  // private apiUrl = 'http://localhost:8080/bookwave/books';
+  //
+  // constructor(private http: HttpClient) {}
+  //
+  // obtenerLibros(): Observable<any> {
+  //   return this.http.get<any>(this.apiUrl);
+  // }
 }
