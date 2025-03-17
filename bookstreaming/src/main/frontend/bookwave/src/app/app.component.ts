@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import {BookService} from './book/service/book.service';
-import { SidebarComponent } from './fragmentos/components/sidebar/sidebar.component';
+import { TopbarComponent } from "./components/layout/topbar/topbar.component";
+import { SidebarComponent } from './components/layout/sidebar/sidebar/sidebar.component';
+
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, SidebarComponent],
+  imports: [RouterOutlet, TopbarComponent, SidebarComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

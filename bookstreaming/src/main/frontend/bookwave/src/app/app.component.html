@@ -1,1 +1,15 @@
-<app-sidebar></app-sidebar>
+<div class="flex">
+    <!-- Sidebar estático -->
+    <app-sidebar></app-sidebar>
+  
+    <div class="flex-1 flex flex-col">
+      <!-- Topbar -->
+      <app-topbar></app-topbar>
+  
+      <!-- Vista dinámica según la ruta -->
+      <main class="p-6 bg-light min-h-screen">
+        <router-outlet></router-outlet>
+      </main>
+    </div>
+  </div>
+  

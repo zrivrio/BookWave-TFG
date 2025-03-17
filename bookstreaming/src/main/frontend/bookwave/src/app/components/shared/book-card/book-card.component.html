@@ -1,0 +1,12 @@
+<div class="flex-none w-48 bg-white rounded-lg shadow p-4">
+    <img [src]="book.image" alt="Libro" class="h-40 w-full object-cover mb-2 rounded">
+    <h4 class="font-bold text-gray-darker">{{ book.title }}</h4>
+    <p class="text-gray-dark text-sm">{{ book.category }}</p>
+  
+    <div *ngIf="showProgress" class="mt-2">
+      <div class="h-2 bg-gray rounded-full overflow-hidden">
+        <div class="h-full bg-primary-light" [style.width.%]="book.progress"></div>
+      </div>
+    </div>
+  </div>
+  
