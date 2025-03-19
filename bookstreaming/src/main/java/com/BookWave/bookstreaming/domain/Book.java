@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.Type;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,23 +21,17 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
-    private String googleBooksId;
-
+    @Column(name = "title", columnDefinition = "TEXT")
     private String title;
 
-    @ElementCollection
-    private List<String> authors;
+    @Column(name = "authors", columnDefinition = "JSON", nullable = true)
+    private String authors;
 
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-    private String thumbnail;
+    private Integer cover_id;
 
-    private String publishedDate;
-
-    private String language;
-
-    @ElementCollection
-    private List<String> categories;
+    private Integer first_publish_year;
 }
 
