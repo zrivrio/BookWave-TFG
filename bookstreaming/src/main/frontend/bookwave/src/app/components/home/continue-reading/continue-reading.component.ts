@@ -4,11 +4,11 @@ import {CommonModule} from '@angular/common';
 
 @Component({
   selector: 'app-continue-reading',
-  imports: [BookCardComponent, CommonModule],
+  imports: [ CommonModule],
   templateUrl: './continue-reading.component.html',
   styleUrl: './continue-reading.component.css'
 })
 export class ContinueReadingComponent {
-  @Input() showProgress: boolean = false;
-  @Input() continueReadingBooks: any[] = [];
+
+  @Input() book: any;
 }

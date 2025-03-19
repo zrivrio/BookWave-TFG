@@ -4,10 +4,10 @@ import {CommonModule} from '@angular/common';
 
 @Component({
   selector: 'app-recommended-books',
-  imports: [BookCardComponent, CommonModule],
+  imports: [CommonModule],
   templateUrl: './recommended-books.component.html',
   styleUrl: './recommended-books.component.css'
 })
 export class RecommendedBooksComponent {
-  @Input() recommendedBooks: any[] = [];
+  @Input() book: any;
 }

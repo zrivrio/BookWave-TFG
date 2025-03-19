@@ -8,5 +8,5 @@ import { ButtonComponent } from "../../shared/button/button.component";
   styleUrl: './new-book.component.css'
 })
 export class NewBookComponent {
-  @Input() featuredBook!: { title: string; description: string; image: string; };
+  @Input() book: any;
 }

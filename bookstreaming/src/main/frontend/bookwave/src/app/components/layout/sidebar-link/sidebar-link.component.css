@@ -22,4 +22,7 @@ a {
     font-size: 1.25rem;
     transition: all 0.3s ease;
   }
-  
+  .text-xxs {
+    font-size: 0.65rem; /* 8px */
+    line-height: 0.725rem; /* 10px */
+  }

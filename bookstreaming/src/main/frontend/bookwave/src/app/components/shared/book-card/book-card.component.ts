@@ -8,7 +8,7 @@ import {CommonModule} from '@angular/common';
   styleUrl: './book-card.component.css'
 })
 export class BookCardComponent {
-  @Input() book!: { title: string; category: string; image: string; progress?: number; };
+  @Input() book: any;
   @Input() showProgress: boolean = false;
 
 }
