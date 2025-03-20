@@ -28,10 +28,6 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    private String bio;
-
-    private String profileImage;
-
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -45,87 +41,5 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<ReadingList> readingLists = new ArrayList<>();
 
-    //Getter y Setters
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getBio() {
-        return bio;
-    }
-
-    public String getProfileImage() {
-        return profileImage;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public SubscriptionType getSubscriptionType() {
-        return subscriptionType;
-    }
-
-    public List<Review> getReviews() {
-        return reviews;
-    }
-
-    public List<ReadingList> getReadingLists() {
-        return readingLists;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setBio(String bio) {
-        this.bio = bio;
-    }
-
-    public void setProfileImage(String profileImage) {
-        this.profileImage = profileImage;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public void setSubscriptionType(SubscriptionType subscriptionType) {
-        this.subscriptionType = subscriptionType;
-    }
-
-    public void setReviews(List<Review> reviews) {
-        this.reviews = reviews;
-    }
-
-    public void setReadingLists(List<ReadingList> readingLists) {
-        this.readingLists = readingLists;
-    }
 }
 

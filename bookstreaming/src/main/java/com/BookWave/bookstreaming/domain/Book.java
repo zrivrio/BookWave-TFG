@@ -5,11 +5,10 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.NaturalId;
-import org.hibernate.annotations.Type;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.Year;
+import java.util.Set;
+
 
 @Entity
 @Table(name = "books")
@@ -20,18 +19,15 @@ public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "title", columnDefinition = "TEXT")
     private String title;
-
-    @Column(name = "authors", columnDefinition = "JSON", nullable = true)
-    private String authors;
-
-    @Column(name = "description", columnDefinition = "TEXT")
+    private String author;
     private String description;
+    private String cover;
+    private String language;
+    private int year;
 
-    private Integer cover_id;
-
-    private Integer first_publish_year;
+    //Relación
+    @ManyToMany(mappedBy = "books")
+    private Set<Category> categories;
 }
 

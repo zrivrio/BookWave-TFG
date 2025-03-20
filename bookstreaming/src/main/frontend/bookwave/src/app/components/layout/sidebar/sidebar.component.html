@@ -9,16 +9,25 @@
   <nav class="flex flex-col space-y-1">
     <app-sidebar-link icon="home" label="Home" route="/"></app-sidebar-link>
     <app-sidebar-link icon="category" label="Categorías" route="/categories"></app-sidebar-link>
-    <app-sidebar-link icon="menu_book" label="Mi Libros" route="/library"></app-sidebar-link>
+    <app-sidebar-link icon="menu_book" label="Mis Libros" route="/library"></app-sidebar-link>
     <app-sidebar-link icon="favorite" label="Favoritos" route="/favorites"></app-sidebar-link>
   </nav>
 
   <!-- Configuración -->
   <div class="mt-auto pt-4 border-t border-gray">
-    <app-sidebar-link icon="person" label="Perfil" route="/settings"></app-sidebar-link>
+    <!-- SOLO cuando el usuario esté logueado -->
+    <ng-container *ngIf="isLoggedIn; else showLogin">
+      <app-sidebar-link icon="person" label="Perfil" route="/profile"></app-sidebar-link>
+      <app-sidebar-link icon="logout" label="Cerrar sesión" route="/logout"></app-sidebar-link>
+    </ng-container>
+    
+    <!-- SOLO cuando el usuario NO esté logueado -->
+    <ng-template #showLogin>
+      <app-sidebar-link icon="login" label="Iniciar sesión" route="/login"></app-sidebar-link>
+    </ng-template>
+    
+    <!-- Ayuda siempre visible -->
     <app-sidebar-link icon="settings" label="Configuración" route="/settings"></app-sidebar-link>
     <app-sidebar-link icon="help" label="Ayuda" route="/help"></app-sidebar-link>
-    <app-sidebar-link icon="logout" label="Cerrar sesión" route="/logout"></app-sidebar-link>
   </div>
-
 </div>
