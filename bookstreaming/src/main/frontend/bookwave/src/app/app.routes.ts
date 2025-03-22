@@ -8,6 +8,7 @@ import { FavoritesComponent } from './components/page/favorites/favorites.compon
 import { SettingsComponent } from './components/page/settings/settings.component';
 import { HelpPComponent } from './components/page/help-p/help-p.component';
 import { ProfileComponent } from './components/page/profile/profile.component';
+import { FuncionamientoComponent } from './components/funcionamiento/funcionamiento.component';
 
 
 
@@ -21,6 +22,8 @@ export const routes: Routes = [
     { path: 'help', component: HelpPComponent},
     { path: 'profile', component: ProfileComponent},
     { path: 'book/{id}', component: BookDetailsComponent},
+    { path: 'f', component: FuncionamientoComponent},
+
 
 
 

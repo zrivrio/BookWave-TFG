@@ -12,8 +12,26 @@ public class BookService {
     @Autowired
     private BookRepository bookRepository;
 
-    public List<Book> obtenerTodosLosLibros() {
+    public List<Book> getAllBooks() {
         return bookRepository.findAll();
     }
+
+    public Book getBookById(long id) {
+        return bookRepository.findById(id).orElse(null);
+    }
+
+    public Book saveBook(Book book) {
+        return bookRepository.save(book);
+    }
+
+    public void deleteBookById(long id) {
+       this.bookRepository.deleteById(id);
+    }
+
+    public Book updateBook(Book book) {
+        return this.bookRepository.save(book);
+    }
+
+
 
 }

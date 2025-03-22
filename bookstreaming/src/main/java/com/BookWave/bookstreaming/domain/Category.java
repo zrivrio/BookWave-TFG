@@ -1,5 +1,6 @@
 package com.BookWave.bookstreaming.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,6 +27,7 @@ public class Category {
             joinColumns = @JoinColumn(name = "category_id"),
             inverseJoinColumns = @JoinColumn(name = "book_id")
     )
+    @JsonManagedReference
     private Set<Book> books;
 
 

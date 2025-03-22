@@ -1,6 +1,7 @@
 package com.BookWave.bookstreaming.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -28,6 +29,7 @@ public class Book {
 
     //Relación
     @ManyToMany(mappedBy = "books")
+    @JsonIgnore
     private Set<Category> categories;
 }
 
