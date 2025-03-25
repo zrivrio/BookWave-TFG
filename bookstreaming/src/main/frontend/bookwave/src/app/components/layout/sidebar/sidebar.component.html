@@ -18,7 +18,7 @@
     <!-- SOLO cuando el usuario esté logueado -->
     <ng-container *ngIf="isLoggedIn; else showLogin">
       <app-sidebar-link icon="person" label="Perfil" route="/profile"></app-sidebar-link>
-      <app-sidebar-link icon="logout" label="Cerrar sesión" route="/logout"></app-sidebar-link>
+      <app-sidebar-link icon="logout" label="Cerrar sesión" (click)="logout()"></app-sidebar-link>
     </ng-container>
     
     <!-- SOLO cuando el usuario NO esté logueado -->

@@ -1,1 +1,67 @@
-<p>login works!</p>
+<div class="flex justify-center items-center min-h-screen bg-gradient-to-br from-[#E0E9F5] to-[#CBD8E8] p-6">
+    <div class="w-full max-w-md bg-white rounded-2xl shadow-lg p-8 border border-[#ADC6E5]">
+  
+      <!-- Título -->
+      <h2 class="text-2xl font-semibold text-[#1E0f75] text-center mb-6">Welcome Back</h2>
+  
+      <!-- Formulario -->
+      <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="space-y-5">
+        
+        <!-- Username -->
+        <div class="flex flex-col">
+          <label for="username" class="text-sm font-medium text-[#1E0f75] mb-1">Username</label>
+          <input 
+            type="text"
+            id="username"
+            formControlName="username"
+            placeholder="Enter your username"
+            [class.border-red-500]="username?.invalid && username?.touched"
+            class="px-4 py-2 rounded-lg border border-[#CCCCCC] focus:ring-2 focus:ring-[#ADC6E5] focus:border-[#1965B3] focus:outline-none bg-[#FFFFFF] text-[#333333] placeholder-[#999999] transition duration-200"
+          />
+          <div class="text-red-500 text-xs mt-1" *ngIf="username?.invalid && username?.touched">
+            <span *ngIf="username?.errors?.['required']">Username is required</span>
+            <span *ngIf="username?.errors?.['minlength']">Minimum 3 characters</span>
+          </div>
+        </div>
+  
+        <!-- Password -->
+        <div class="flex flex-col">
+          <label for="password" class="text-sm font-medium text-[#1E0f75] mb-1">Password</label>
+          <input 
+            type="password"
+            id="password"
+            formControlName="password"
+            placeholder="Enter your password"
+            [class.border-red-500]="password?.invalid && password?.touched"
+            class="px-4 py-2 rounded-lg border border-[#CCCCCC] focus:ring-2 focus:ring-[#ADC6E5] focus:border-[#1965B3] focus:outline-none bg-[#FFFFFF] text-[#333333] placeholder-[#999999] transition duration-200"
+          />
+          <div class="text-red-500 text-xs mt-1" *ngIf="password?.invalid && password?.touched">
+            <span *ngIf="password?.errors?.['required']">Password is required</span>
+            <span *ngIf="password?.errors?.['minlength']">Minimum 6 characters</span>
+          </div>
+        </div>
+  
+        <!-- Error Message -->
+        <div *ngIf="errorMessage" class="bg-[#EBB2C3] border border-[#E893C5] text-[#1E0f75] px-4 py-2 rounded relative text-sm">
+          {{ errorMessage }}
+        </div>
+  
+        <!-- Submit Button -->
+        <button 
+          type="submit" 
+          [disabled]="loginForm.invalid || isLoading"
+          class="w-full flex justify-center items-center px-4 py-2 rounded-lg text-white bg-[#1965B3] hover:bg-[#3785D8] disabled:opacity-50 disabled:cursor-not-allowed shadow-md transition duration-200"
+        >
+          {{ isLoading ? 'Logging in...' : 'Login' }}
+        </button>
+      </form>
+  
+      <!-- Register Link -->
+      <div class="text-center mt-6 text-sm text-[#333333]">
+        Don't have an account? 
+        <a routerLink="/signup" class="text-[#1E0f75] hover:underline font-medium">Sign Up</a>
+      </div>
+  
+    </div>
+  </div>
+  

@@ -1,6 +1,7 @@
 <a
   class="group flex flex-col items-start p-1 rounded-lg transition-all duration-300 cursor-pointer"
   [routerLink]="route"
+  (click)="onClick($event)"
   [ngClass]="{
     'bg-blue-100 text-primary font-semibold': isActiveRoute(),
     'hover:bg-blue-200 hover:text-primary-light text-gray-darker': !isActiveRoute()

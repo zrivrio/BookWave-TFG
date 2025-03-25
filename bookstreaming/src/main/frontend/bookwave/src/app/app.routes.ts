@@ -9,6 +9,7 @@ import { SettingsComponent } from './components/page/settings/settings.component
 import { HelpPComponent } from './components/page/help-p/help-p.component';
 import { ProfileComponent } from './components/page/profile/profile.component';
 import { FuncionamientoComponent } from './components/funcionamiento/funcionamiento.component';
+import { SignupComponent } from './components/page/signup/signup.component';
 
 
 
@@ -17,14 +18,12 @@ export const routes: Routes = [
     { path: 'categories', component: CategoriesComponent },
     { path: 'library', component: LibraryComponent},
     { path: 'login', component: LoginComponent},
+    { path: 'signup', component: SignupComponent},
     { path: 'favorites', component: FavoritesComponent},
     { path: 'settings', component: SettingsComponent},
     { path: 'help', component: HelpPComponent},
     { path: 'profile', component: ProfileComponent},
-    { path: 'book/{id}', component: BookDetailsComponent},
+    { path: 'book/:id', component: BookDetailsComponent},
     { path: 'f', component: FuncionamientoComponent},
-
-
-
-
+    { path: '**', redirectTo: '' }
 ];
