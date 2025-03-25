@@ -1,8 +1,8 @@
-<div class="bg-white rounded-xl shadow hover:shadow-md transition-shadow duration-300 w-40 flex-shrink-0">
+<div *ngIf="book" class="bg-white rounded-xl shadow hover:shadow-md transition-shadow duration-300 w-40 flex-shrink-0">
     <!-- Imagen de la portada -->
     <img 
-      [src]="book.cover" 
-      [alt]="book.title" 
+      [src]="book?.cover || 'assets/images/placeholder.png'" 
+      [alt]="book?.title || 'Book cover'" 
       class="w-full h-48 object-cover rounded-t-xl"
     />
     
@@ -10,12 +10,12 @@
     <div class="p-3">
       <!-- Título del libro -->
       <h4 class="text-sm font-semibold text-gray-800 truncate">
-        {{ book.title }}
+        {{ book?.title || 'Untitled' }}
       </h4>
       
       <!-- Autor del libro -->
       <p class="text-xs text-gray-600 mt-1 truncate">
-        {{ book.author }}
+        {{ book?.author || 'Unknown author' }}
       </p>
     </div>
-  </div>
+</div>

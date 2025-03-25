@@ -5,19 +5,15 @@
     <!-- Continuar Leyendo -->
     <div class="flex flex-col bg-white rounded-2xl shadow-lg p-4 w-1/3 h-full border border-[#ADC6E5]">
       <h2 class="text-lg font-semibold text-[#1E0f75] mb-4">Continuar Leyendo</h2>
-      <!-- Contenido con scroll -->
-      <div class="overflow-y-auto flex-1 pr-2 space-y-4">
-        <div *ngFor="let book of continueReadingBooks">
-          <app-continue-reading [book]="book"></app-continue-reading>
-        </div>
-      </div>
+      <!-- Just use the component directly -->
+      <app-continue-reading></app-continue-reading>
     </div>
 
     <!-- Libro Destacado -->
     <div class="flex flex-col bg-white rounded-2xl shadow-lg p-4 w-2/3 h-full border border-[#ADC6E5]">
       <h2 class="text-lg font-semibold text-[#1E0f75] mb-4">Libro Destacado</h2>
       <!-- Contenido del libro destacado -->
-      <app-new-book [book]="featuredBook"></app-new-book>
+      <app-new-book></app-new-book>
     </div>
   </div>
 
@@ -26,9 +22,9 @@
     <h2 class="text-lg font-semibold text-[#1E0f75] mb-4">Libros que te pueden gustar</h2>
     <!-- Grid de libros recomendados -->
     <div class="grid grid-cols-4 gap-4 overflow-y-auto pr-2">
-      <div *ngFor="let book of recommendedBooks">
-        <app-recommended-books [book]="book"></app-recommended-books>
-      </div>
+     
+        <app-recommended-books></app-recommended-books>
+
     </div>
   </div>
 </div>

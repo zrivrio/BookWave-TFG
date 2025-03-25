@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { UserService } from '../../../service/user.service';
-import { AuthService } from '../../../service/auth.service';
 import { Role } from '../../../models/Role';
 import { SubscriptionType } from '../../../models/SubscriptionType';
 import { HttpClientModule } from '@angular/common/http';
@@ -25,7 +24,6 @@ export class SignupComponent implements OnInit {
     private fb: FormBuilder,
     private userService: UserService,
     private router: Router,
-    private authService: AuthService
   ) {}
 
   ngOnInit(): void {

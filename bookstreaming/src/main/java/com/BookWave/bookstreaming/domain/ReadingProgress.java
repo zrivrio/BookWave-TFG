@@ -1,5 +1,7 @@
 package com.BookWave.bookstreaming.domain;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,14 +18,18 @@ public class ReadingProgress {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "book_id", nullable = false)
+    @JoinColumn(name = "book_id")
     private Book book;
 
-    private int currentPage;
+    private int percentageRead;
+    
+    @Column(name = "last_read")
+    private LocalDate lastRead;
 
-    private double percentageRead;
+    // Add this field
+    private boolean completed = false;
 }

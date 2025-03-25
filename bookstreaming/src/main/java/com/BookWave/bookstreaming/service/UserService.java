@@ -14,14 +14,8 @@ public class UserService {
         return userRepository.save(user);
     }
 
-
-    //Logica paar autentificar un usuraio
     public User loginUser(String username, String password) {
-        User user = userRepository.findByUsername(username);
-        if (user != null && user.getPassword().equals(password)) {
-            return user;
-        }
-        return null;
+        return userRepository.findByUsername(username)
+            .orElseThrow(() -> new RuntimeException("User not found"));
     }
-
 }

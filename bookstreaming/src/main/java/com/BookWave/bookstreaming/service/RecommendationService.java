@@ -5,7 +5,7 @@ import com.BookWave.bookstreaming.domain.User;
 import com.BookWave.bookstreaming.domain.ReadingProgress;
 import com.BookWave.bookstreaming.domain.Category;
 import com.BookWave.bookstreaming.repository.BookRepository;
-import com.BookWave.bookstreaming.repository.ReadinProgressRepository;
+import com.BookWave.bookstreaming.repository.ReadingProgressRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +19,7 @@ public class RecommendationService {
     private BookRepository bookRepository;
 
     @Autowired
-    private ReadinProgressRepository readingProgressRepository;
+    private ReadingProgressRepository readingProgressRepository;
 
     public List<Book> getPersonalizedRecommendations(User user, int limit) {
         // Get user's reading history

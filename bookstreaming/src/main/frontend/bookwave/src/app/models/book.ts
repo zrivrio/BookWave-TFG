@@ -9,4 +9,6 @@ export interface Book {
     language: string;
     year: number;
     categories?: Category[];
+    readCount?: number;
+    readingLists?: Book[];
 }

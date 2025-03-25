@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { UserService } from '../../../service/user.service';
-import { AuthService } from '../../../service/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -11,43 +10,37 @@ import { AuthService } from '../../../service/auth.service';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent implements OnInit {
-  loginForm!: FormGroup;
-  errorMessage: string = '';
-  isLoading: boolean = false;
-
+export class LoginComponent {
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
-    private authService: AuthService,
     private router: Router
   ) {}
+  
+  loginForm = this.fb.group({
+    username: ['', [Validators.required, Validators.minLength(3)]],
+    password: ['', [Validators.required, Validators.minLength(6)]]
+  });
 
-  ngOnInit(): void {
-    this.loginForm = this.fb.group({
-      username: ['', [Validators.required, Validators.minLength(3)]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
-    });
-  }
+  errorMessage = '';
+  isLoading = false;
 
   onLogin(): void {
-    if (this.loginForm.invalid) return;
-
+    if (this.loginForm.invalid || this.isLoading) return;
+  
     this.isLoading = true;
     this.errorMessage = '';
-
+  
     this.userService.login(this.loginForm.value).subscribe({
       next: (user) => {
         this.authService.setCurrentUser(user);
         this.router.navigate(['/']);
       },
       error: (error) => {
-        this.errorMessage = 'Invalid username or password';
+        console.error('Login error:', error);
+        this.errorMessage = 'Usuario o contraseña incorrectos';
         this.isLoading = false;
       }
     });
   }
-
-  get username() { return this.loginForm.get('username'); }
-  get password() { return this.loginForm.get('password'); }
 }

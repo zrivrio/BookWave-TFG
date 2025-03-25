@@ -1,5 +1,6 @@
-import { User } from './user';
+
 import { Book } from './Book';
+import { User } from './User';
 
 export interface ReadingProgress {
     id: number;

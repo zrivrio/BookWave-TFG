@@ -4,5 +4,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ReadinListRepository extends JpaRepository<ReadingList, Long> {
+public interface ReadingListRepository extends JpaRepository<ReadingList, Long> {
 }
