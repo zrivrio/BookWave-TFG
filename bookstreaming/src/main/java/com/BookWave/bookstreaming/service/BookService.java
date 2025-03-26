@@ -13,18 +13,17 @@ public class BookService {
     private BookRepository bookRepository;
 
     //Metodos de Usuario
-    public List<Book> getUserBooks(Long userId) {
-        return bookRepository.findBooksByUserId(userId);
+    public List<Book> getBooksInProgressByUserId(Long userId) {
+        return bookRepository.findBooksInProgressByUserId(userId);
     }
 
     public List<Book> getRecommendedBooks(Long userId) {
         return bookRepository.findRecommendedBooksForUser(userId);
     }
 
-    public List<Book> getBooksInProgressByUserId(Long userId) {
-        return bookRepository.findBooksInProgressByUserId(userId);
+    public List<Book> getUserBooks(Long userId) {
+        return bookRepository.findBooksByUserId(userId);
     }
-
 
     //AMetodos de Administrador
     //CRUD

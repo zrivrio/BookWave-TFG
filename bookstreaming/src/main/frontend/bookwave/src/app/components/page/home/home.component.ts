@@ -6,11 +6,15 @@ import { CommonModule } from '@angular/common';
 import { BookService } from '../../../service/book.service';
 import { Book } from '../../../models/Book';
 import { AuthService } from '../../../service/auth.service';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-home',
-  imports: [NewBookComponent, ContinueReadingComponent, RecommendedBooksComponent, CommonModule],
+  imports: [ CommonModule,
+    RouterModule,
+    NewBookComponent,
+    ContinueReadingComponent,
+    RecommendedBooksComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })

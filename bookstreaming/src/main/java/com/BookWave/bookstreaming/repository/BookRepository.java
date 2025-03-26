@@ -11,18 +11,18 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
 
-   // Libros de un usuario
-   List<Book> findBooksByUserId(Long userId);
+   // Books in progress for a user (through ReadingProgress)
+   @Query("SELECT rp.book FROM ReadingProgress rp WHERE rp.user.id = :userId AND rp.percentageRead > 0")
+   List<Book> findBooksInProgressByUserId(@Param("userId") Long userId);
 
-
-   // Libros recomendados para el usuario
-   @Query("SELECT b FROM Book b WHERE b.id NOT IN " +
-          "(SELECT rb.id FROM Book rb JOIN rb.users u WHERE u.id = :userId) " +
-          "ORDER BY b.averageRating DESC")
+   // Recommended books for user (books not in progress and not in any reading list)
+   @Query("SELECT b FROM Book b " +
+          "WHERE b.id NOT IN (SELECT rp.book.id FROM ReadingProgress rp WHERE rp.user.id = :userId) " +
+          "AND b.id NOT IN (SELECT rlb.id FROM ReadingList rl JOIN rl.books rlb WHERE rl.user.id = :userId) " +
+          "ORDER BY COALESCE(b.averageRating, 0) DESC")
    List<Book> findRecommendedBooksForUser(@Param("userId") Long userId);
 
-
-   // Buscar libros en proceso de lectura por usuario
-   @Query("SELECT b FROM Book b JOIN b.users u WHERE u.id = :userId AND b.readingProgress > 0")
-   List<Book> findBooksInProgressByUserId(@Param("userId") Long userId);
+   // Books in user's reading lists
+   @Query("SELECT rlb FROM ReadingList rl JOIN rl.books rlb WHERE rl.user.id = :userId")
+   List<Book> findBooksByUserId(@Param("userId") Long userId);
 }

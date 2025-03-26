@@ -6,14 +6,7 @@
       <h2 class="text-lg font-semibold text-[#1E0f75] mb-4">Continuar Leyendo</h2>
       <!-- Contenido con scroll -->
       <div class="overflow-y-auto flex-1 pr-2 space-y-4">
-        <div *ngFor="let book of continueReadingBooks">
-          <app-continue-reading 
-            [book]="book"
-            [isLoading]="isLoading"
-            [error]="error"
-            [isLoggedIn]="isAuthenticated">
-          </app-continue-reading>
-        </div>
+        <app-continue-reading></app-continue-reading>
       </div>
     </div>
 

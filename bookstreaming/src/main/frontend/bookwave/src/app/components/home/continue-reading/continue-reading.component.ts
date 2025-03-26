@@ -1,7 +1,9 @@
-import { Component, Input } from '@angular/core';
-import {CommonModule} from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Book } from '../../../models/Book';
 import { RouterModule } from '@angular/router';
+import { BookService } from '../../../service/book.service';
+import { AuthService } from '../../../service/auth.service';
 
 @Component({
   selector: 'app-continue-reading',
@@ -10,15 +12,49 @@ import { RouterModule } from '@angular/router';
   templateUrl: './continue-reading.component.html',
   styleUrl: './continue-reading.component.css'
 })
-export class ContinueReadingComponent {
-  @Input() book!: Book;
-  @Input() isLoading: boolean = false;
-  @Input() error: string = '';
-  @Input() isLoggedIn: boolean = false;
+export class ContinueReadingComponent implements OnInit {
+  books: Book[] = [];
+  isLoading: boolean = false;
+  error: string = '';
+  isLoggedIn: boolean = false;
 
-  getProgressPercentage(): number {
-    if (this.book && this.book.readingProgress) {
-      return this.book.readingProgress.percentageRead;
+  constructor(
+    private bookService: BookService,
+    private authService: AuthService
+  ) {}
+
+  ngOnInit(): void {
+    this.isLoggedIn = this.authService.isAuthenticated();
+    if (this.isLoggedIn) {
+      this.loadBooksInProgress();
+    }
+  }
+
+  private loadBooksInProgress(): void {
+    this.isLoading = true;
+    const currentUser = this.authService.currentUserValue;
+    
+    if (!currentUser) {
+      this.error = 'Usuario no encontrado';
+      this.isLoading = false;
+      return;
+    }
+
+    this.bookService.getBooksInProgress(currentUser.id).subscribe({
+      next: (books) => {
+        this.books = books.slice(0, 3);
+        this.isLoading = false;
+      },
+      error: (err) => {
+        this.error = 'Error al cargar los libros';
+        this.isLoading = false;
+      }
+    });
+  }
+
+  getProgressPercentage(book: Book): number {
+    if (book && book.readingProgress) {
+      return book.readingProgress.percentageRead;
     }
     return 0;
   }

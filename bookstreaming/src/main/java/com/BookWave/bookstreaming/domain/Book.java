@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -24,6 +25,7 @@ public class Book {
     private String cover;
     private String language;
     private int year;
+    private Double averageRating;
 
     //Relaciones
     @ManyToMany(mappedBy = "books")
@@ -34,6 +36,14 @@ public class Book {
     @JsonIgnore
     private List<ReadingProgress> readingProgresses;
 
+    @ManyToMany
+    @JoinTable(
+        name = "reading_list_books",
+        joinColumns = @JoinColumn(name = "book_id"),
+        inverseJoinColumns = @JoinColumn(name = "reading_list_id")
+    )
+    @JsonIgnore
+    private Set<ReadingList> readingLists = new HashSet<>();
 
 }
 
