@@ -1,0 +1,13 @@
+<div class="flex items-center space-x-4">
+    <img [src]="book.cover" [alt]="book.title" class="w-16 h-24 object-cover rounded-lg" />
+    <div>
+      <h4 class="text-sm font-semibold text-gray-darker truncate">{{ book.title }}</h4>
+      <p class="text-xs text-gray-dark">{{ book.author }}</p>
+      <div class="mt-2">
+        <div class="h-2 bg-gray-200 rounded-full">
+          <div class="h-2 bg-primary rounded-full" [style.width.%]="book.progress || 0"></div>
+        </div>
+        <p class="text-xs text-gray-dark mt-1">{{ book.progress || 0 }}% leído</p>
+      </div>
+    </div>
+  </div>

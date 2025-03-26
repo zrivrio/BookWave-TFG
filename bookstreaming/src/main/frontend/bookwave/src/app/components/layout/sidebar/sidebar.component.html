@@ -1,0 +1,33 @@
+<div class="flex flex-col h-screen bg-lightest w-32 p-2 shadow-sm">
+  <!-- Logo -->
+  <div class="flex items-center mb-4">
+    <img src="assets/logo/logo.png" alt="Logo" class="h-8 w-8 mr-2">
+    <h1 class="text-primary text-sm font-bold sm:block hidden">BookWave</h1>
+  </div>
+
+  <!-- Menú -->
+  <nav class="flex flex-col space-y-1">
+    <app-sidebar-link icon="home" label="Home" route="/"></app-sidebar-link>
+    <app-sidebar-link icon="category" label="Categorías" route="/categories"></app-sidebar-link>
+    <app-sidebar-link icon="menu_book" label="Mis Libros" route="/library"></app-sidebar-link>
+    <app-sidebar-link icon="favorite" label="Favoritos" route="/favorites"></app-sidebar-link>
+  </nav>
+
+  <!-- Configuración -->
+  <div class="mt-auto pt-4 border-t border-gray">
+    <!-- SOLO cuando el usuario esté logueado -->
+    <ng-container *ngIf="isLoggedIn; else showLogin">
+      <app-sidebar-link icon="person" label="Perfil" route="/profile"></app-sidebar-link>
+      <app-sidebar-link icon="logout" label="Cerrar sesión" (click)="logout()"></app-sidebar-link>
+    </ng-container>
+    
+    <!-- SOLO cuando el usuario NO esté logueado -->
+    <ng-template #showLogin>
+      <app-sidebar-link icon="login" label="Iniciar sesión" route="/login"></app-sidebar-link>
+    </ng-template>
+    
+    <!-- Ayuda siempre visible -->
+    <app-sidebar-link icon="settings" label="Configuración" route="/settings"></app-sidebar-link>
+    <app-sidebar-link icon="help" label="Ayuda" route="/help"></app-sidebar-link>
+  </div>
+</div>
