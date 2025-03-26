@@ -12,6 +12,22 @@ public class BookService {
     @Autowired
     private BookRepository bookRepository;
 
+    //Metodos de Usuario
+    public List<Book> getUserBooks(Long userId) {
+        return bookRepository.findBooksByUserId(userId);
+    }
+
+    public List<Book> getRecommendedBooks(Long userId) {
+        return bookRepository.findRecommendedBooksForUser(userId);
+    }
+
+    public List<Book> getBooksInProgressByUserId(Long userId) {
+        return bookRepository.findBooksInProgressByUserId(userId);
+    }
+
+
+    //AMetodos de Administrador
+    //CRUD
     public List<Book> getAllBooks() {
         return bookRepository.findAll();
     }
@@ -31,7 +47,5 @@ public class BookService {
     public Book updateBook(Book book) {
         return this.bookRepository.save(book);
     }
-
-
 
 }
