@@ -12,6 +12,20 @@ export class BookService {
 
   constructor(private http : HttpClient) { }
 
+  //Usuario
+  getUserBooks(userId: number): Observable<Book[]> {
+    return this.http.get<Book[]>(`${this.apiUrl}/user/${userId}`);
+}
+
+getRecommendedBooks(userId: number): Observable<Book[]> {
+    return this.http.get<Book[]>(`${this.apiUrl}/recommendedBooks/${userId}`);
+}
+
+getBooksInProgress(userId: number): Observable<Book[]> {
+    return this.http.get<Book[]>(`${this.apiUrl}/progress/${userId}`);
+}
+
+  //Administrador
   getBooks() : Observable<Book[]>{
     return this.http.get<Book[]>(this.apiUrl);
   }

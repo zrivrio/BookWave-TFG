@@ -30,14 +30,10 @@ public class Book {
     @JsonIgnore
     private Set<Category> categories;
 
-    public Long getReadCount() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getReadCount'");
-    }
+    @OneToMany(mappedBy = "book")
+    @JsonIgnore
+    private List<ReadingProgress> readingProgresses;
 
-    public List<Book> getReadingLists() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getReadingLists'");
-    }
+
 }
 
