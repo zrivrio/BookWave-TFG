@@ -14,15 +14,18 @@ import { Router } from '@angular/router';
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
-export class HomeComponent  implements OnInit {
+export class HomeComponent implements OnInit {
   continueReadingBooks: Book[] = [];
   featuredBook: Book | null = null;
   recommendedBooks: Book[] = [];
   isAuthenticated: boolean = false;
+  isLoading: boolean = false;
+  error: string = '';
 
   constructor(
     private bookService: BookService,
     private authService: AuthService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -33,17 +36,27 @@ export class HomeComponent  implements OnInit {
   }
 
   private loadBooks(): void {
+    this.isLoading = true;
+    this.error = '';
     const currentUser = this.authService.currentUserValue;
+    
     if (!currentUser) {
+      this.error = 'Usuario no encontrado';
+      this.isLoading = false;
       return;
     }
-    
+
     // Get books in progress
-    this.bookService.getBooksInProgress(currentUser.id).subscribe(
-      books => {
+    this.bookService.getBooksInProgress(currentUser.id).subscribe({
+      next: (books) => {
         this.continueReadingBooks = books.slice(0, 3);
+        this.isLoading = false;
+      },
+      error: (err) => {
+        this.error = 'Error al cargar los libros';
+        this.isLoading = false;
       }
-    );
+    });
 
     // Get recommended books
     this.bookService.getRecommendedBooks(currentUser.id).subscribe(

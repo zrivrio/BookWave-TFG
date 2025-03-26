@@ -1,12 +1,14 @@
 import { Component, Input } from '@angular/core';
-import { ButtonComponent } from "../../shared/button/button.component";
+import { CommonModule } from '@angular/common';
+import { Book } from '../../../models/Book';
 
 @Component({
   selector: 'app-new-book',
-  imports: [ButtonComponent],
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './new-book.component.html',
   styleUrl: './new-book.component.css'
 })
 export class NewBookComponent {
-  @Input() book: any;
+  @Input() book: Book | null = null;
 }
