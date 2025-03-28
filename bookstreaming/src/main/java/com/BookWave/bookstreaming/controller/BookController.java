@@ -15,14 +15,6 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
-    //Usuario
-    @GetMapping("/user/{userId}")
-    public List<Book> getUserBooks(@PathVariable Long userId) {
-        return bookService.getUserBooks(userId);
-    }
-
-    
-
     @GetMapping("/progress/{userId}")
     public List<Book> getBooksInProgress(@PathVariable Long userId) {
         return bookService.getBooksInProgressByUserId(userId);

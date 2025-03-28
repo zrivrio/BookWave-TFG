@@ -17,11 +17,6 @@ public class BookService {
         return bookRepository.findBooksInProgressByUserId(userId);
     }
 
-    
-    public List<Book> getUserBooks(Long userId) {
-        return bookRepository.findBooksByUserId(userId);
-    }
-
     //AMetodos de Administrador
     //CRUD
     public List<Book> getAllBooks() {
