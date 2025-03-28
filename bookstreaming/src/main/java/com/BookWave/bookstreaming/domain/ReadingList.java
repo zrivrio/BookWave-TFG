@@ -1,6 +1,7 @@
 package com.BookWave.bookstreaming.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,9 +24,11 @@ public class ReadingList {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
     private User user;
 
-    @ManyToMany
+    @ManyToMany()
+    @JsonIgnore
     private List<Book> books;
 
 }

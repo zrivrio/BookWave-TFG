@@ -19,8 +19,6 @@ import { Router, RouterModule } from '@angular/router';
   styleUrl: './home.component.css'
 })
 export class HomeComponent implements OnInit {
-  continueReadingBooks: Book[] = [];
-  featuredBook: Book | null = null;
   recommendedBooks: Book[] = [];
   isAuthenticated: boolean = false;
   isLoading: boolean = false;
@@ -50,25 +48,10 @@ export class HomeComponent implements OnInit {
       return;
     }
 
-    // Get books in progress
-    this.bookService.getBooksInProgress(currentUser.id).subscribe({
-      next: (books) => {
-        this.continueReadingBooks = books.slice(0, 3);
-        this.isLoading = false;
-      },
-      error: (err) => {
-        this.error = 'Error al cargar los libros';
-        this.isLoading = false;
-      }
-    });
-
     // Get recommended books
     this.bookService.getRecommendedBooks(currentUser.id).subscribe(
       books => {
         this.recommendedBooks = books.slice(0, 4);
-        if (books.length > 0) {
-          this.featuredBook = books[0];
-        }
       }
     );
   }

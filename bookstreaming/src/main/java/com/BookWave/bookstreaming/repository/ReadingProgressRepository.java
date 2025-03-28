@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ReadinProgressRepository extends JpaRepository<ReadingProgress, Long> {
+public interface ReadingProgressRepository extends JpaRepository<ReadingProgress, Long> {
     List<ReadingProgress> findByUserId(Long userId);
 }
