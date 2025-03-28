@@ -31,6 +31,15 @@ public interface BookRepository extends JpaRepository<Book, Long> {
    @Query("SELECT b FROM Book b JOIN b.readingLists rl WHERE rl.id = :readingListId")
    List<Book> findBooksByReadingListId(Long readingListId);
 
+   // Sirve
+
+   @Query(value = """
+    SELECT * FROM books 
+    ORDER BY RAND() 
+    LIMIT 10
+""", nativeQuery = true)
+List<Book> findRandomBooks();
+
    @Query(value = """
     WITH UserCategories AS (
         -- Obtener las categorías de los libros que el usuario ya tiene

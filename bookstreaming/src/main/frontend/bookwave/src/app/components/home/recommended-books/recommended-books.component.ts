@@ -21,28 +21,37 @@ export class RecommendedBooksComponent {
   ) {}
 
   ngOnInit(): void {
-    this.loadRecommendedBooks();
+    this.loadBooks();
   }
 
-  private loadRecommendedBooks(): void {
+  private loadBooks(): void {
     this.isLoading = true;
     const currentUser = this.authService.currentUserValue;
 
     if (!currentUser) {
-      this.error = 'Usuario no encontrado';
-      this.isLoading = false;
-      return;
+      // Load random books for non-logged-in users
+      this.recommendationsService.getRandomBooks().subscribe({
+        next: (books) => {
+          this.recommendedBooks = books;
+          this.isLoading = false;
+        },
+        error: (err) => {
+          this.error = 'Error al cargar los libros';
+          this.isLoading = false;
+        }
+      });
+    } else {
+      // Load personalized recommendations for logged-in users
+      this.recommendationsService.getRecommendedBooks(currentUser.id).subscribe({
+        next: (books) => {
+          this.recommendedBooks = books;
+          this.isLoading = false;
+        },
+        error: (err) => {
+          this.error = 'Error al cargar los libros recomendados';
+          this.isLoading = false;
+        }
+      });
     }
-
-    this.recommendationsService.getRecommendedBooks(currentUser.id).subscribe({
-      next: (books) => {
-        this.recommendedBooks = books.slice(0, 4);
-        this.isLoading = false;
-      },
-      error: (err) => {
-        this.error = 'Error al cargar los libros recomendados';
-        this.isLoading = false;
-      }
-    });
   }
 }

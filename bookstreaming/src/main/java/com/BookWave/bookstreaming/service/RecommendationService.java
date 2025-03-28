@@ -24,6 +24,10 @@ public class RecommendationService {
         return bookRepository.findRecommendedBooksForUser(userId);
     }
 
+    public List<Book> getRandomBooks() {
+        return bookRepository.findRandomBooks();
+    }
+
 
 
 

@@ -27,4 +27,9 @@ public class RecommendationController {
         return recommendationService.getPersonalizedRecommendations(userId);
     }
 
+    @GetMapping("/random")
+public List<Book> getRandomBooks() {
+    return recommendationService.getRandomBooks();
+}
+
 }

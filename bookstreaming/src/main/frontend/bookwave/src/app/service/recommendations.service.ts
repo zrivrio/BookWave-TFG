@@ -18,6 +18,10 @@ export class RecommendationsService {
     return this.http.get<Book>(`${this.apiUrl}/popular`);
   }
 
+  getRandomBooks(): Observable<Book[]> {
+    return this.http.get<Book[]>(`${this.apiUrl}/random`);
+  }
+
 
 
 }
