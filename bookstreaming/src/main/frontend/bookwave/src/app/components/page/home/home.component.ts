@@ -18,41 +18,6 @@ import { Router, RouterModule } from '@angular/router';
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
-export class HomeComponent implements OnInit {
-  recommendedBooks: Book[] = [];
-  isAuthenticated: boolean = false;
-  isLoading: boolean = false;
-  error: string = '';
+export class HomeComponent {
 
-  constructor(
-    private bookService: BookService,
-    private authService: AuthService,
-    private router: Router
-  ) { }
-
-  ngOnInit(): void {
-    this.isAuthenticated = this.authService.isAuthenticated();
-    if (this.isAuthenticated) {
-      this.loadBooks();
-    }
-  }
-
-  private loadBooks(): void {
-    this.isLoading = true;
-    this.error = '';
-    const currentUser = this.authService.currentUserValue;
-    
-    if (!currentUser) {
-      this.error = 'Usuario no encontrado';
-      this.isLoading = false;
-      return;
-    }
-
-    // Get recommended books
-    this.bookService.getRecommendedBooks(currentUser.id).subscribe(
-      books => {
-        this.recommendedBooks = books.slice(0, 4);
-      }
-    );
-  }
 }

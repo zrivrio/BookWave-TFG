@@ -1,5 +1,13 @@
-<div class="bg-white rounded-xl shadow hover:shadow-md transition-shadow duration-300 w-40 flex-shrink-0">
-    <!-- Imagen de la portada -->
+<div *ngIf="isLoading" class="text-center p-4">
+  <p>Cargando recomendaciones...</p>
+</div>
+
+<div *ngIf="error" class="text-center text-red-600 p-4">
+  {{ error }}
+</div>
+
+<div *ngIf="!isLoading && !error" class="grid grid-cols-4 gap-4">
+  <div *ngFor="let book of recommendedBooks" class="bg-white rounded-xl shadow hover:shadow-md transition-shadow duration-300 w-40 flex-shrink-0">
     <img 
       [src]="book.cover" 
       [alt]="book.title" 
@@ -8,14 +16,13 @@
     
     <!-- Contenido del libro -->
     <div class="p-3">
-      <!-- Título del libro -->
       <h4 class="text-sm font-semibold text-gray-800 truncate">
         {{ book.title }}
       </h4>
       
-      <!-- Autor del libro -->
       <p class="text-xs text-gray-600 mt-1 truncate">
         {{ book.author }}
       </p>
     </div>
   </div>
+</div>

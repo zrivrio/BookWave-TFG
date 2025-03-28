@@ -30,4 +30,37 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
    @Query("SELECT b FROM Book b JOIN b.readingLists rl WHERE rl.id = :readingListId")
    List<Book> findBooksByReadingListId(Long readingListId);
+
+   @Query(value = """
+    WITH UserCategories AS (
+        -- Obtener las categorías de los libros que el usuario ya tiene
+        SELECT DISTINCT c.id
+        FROM category c
+        JOIN category_book cb ON c.id = cb.category_id
+        JOIN reading_list_books rlb ON cb.book_id = rlb.book_id
+        JOIN reading_lists rl ON rlb.reading_list_id = rl.id
+        WHERE rl.user_id = :userId
+    ),
+    RecommendedBooks AS (
+        -- Libros que comparten categorías con los del usuario
+        SELECT b.*,
+               COUNT(DISTINCT cb.category_id) AS matching_categories,
+               RAND() AS random_order
+        FROM books b
+        JOIN category_book cb ON b.id = cb.book_id
+        WHERE cb.category_id IN (SELECT id FROM UserCategories)
+        AND b.id NOT IN (
+            -- Excluir libros que el usuario ya tiene
+            SELECT DISTINCT rlb.book_id
+            FROM reading_list_books rlb
+            JOIN reading_lists rl ON rlb.reading_list_id = rl.id
+            WHERE rl.user_id = :userId
+        )
+        GROUP BY b.id
+    )
+    SELECT * FROM RecommendedBooks
+    ORDER BY matching_categories DESC, random_order
+    LIMIT 10
+""", nativeQuery = true)
+List<Book> findRecommendedBooksForUser(@Param("userId") Long userId);
 }

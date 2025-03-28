@@ -24,8 +24,7 @@ public class RecommendationController {
 
     @GetMapping("/books/{userId}")
     public List<Book> getRecommendedBooks(@PathVariable Long userId) {
-        return recommendationService.getRecommendedBooks(userId);
-   
+        return recommendationService.getPersonalizedRecommendations(userId);
     }
 
 }

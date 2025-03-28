@@ -11,8 +11,8 @@ export class RecommendationsService {
 
   constructor(private http : HttpClient) { }
 
-  getRecommendedBooks(userId: number): Observable<Book> {
-    return this.http.get<Book>(`${this.apiUrl}/Books/${userId}`);
+  getRecommendedBooks(userId: number): Observable<Book[]> {
+    return this.http.get<Book[]>(`${this.apiUrl}/books/${userId}`);
 }
   getMostPopularBook(): Observable<Book> {
     return this.http.get<Book>(`${this.apiUrl}/popular`);
