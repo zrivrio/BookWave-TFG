@@ -16,13 +16,18 @@ public interface BookRepository extends JpaRepository<Book, Long> {
    List<Book> findBooksInProgressByUserId(@Param("userId") Long userId);
 
    // Recommended books for user (books not in progress and not in any reading list)
-   @Query("SELECT b FROM Book b " +
-          "WHERE b.id NOT IN (SELECT rp.book.id FROM ReadingProgress rp WHERE rp.user.id = :userId) " +
-          "AND b.id NOT IN (SELECT rlb.id FROM ReadingList rl JOIN rl.books rlb WHERE rl.user.id = :userId) " +
-          "ORDER BY COALESCE(b.averageRating, 0) DESC")
-   List<Book> findRecommendedBooksForUser(@Param("userId") Long userId);
-
+   @Query(value = """
+        SELECT b.* FROM books b
+        JOIN reading_list_books rlb ON b.id = rlb.book_id
+        GROUP BY b.id
+        ORDER BY COUNT(rlb.reading_list_id) DESC
+        LIMIT 10
+    """, nativeQuery = true)
+    List<Book> findRecommendedBooks();
    // Books in user's reading lists
    @Query("SELECT rlb FROM ReadingList rl JOIN rl.books rlb WHERE rl.user.id = :userId")
    List<Book> findBooksByUserId(@Param("userId") Long userId);
+
+   @Query("SELECT b FROM Book b JOIN b.readingLists rl WHERE rl.id = :readingListId")
+   List<Book> findBooksByReadingListId(Long readingListId);
 }

@@ -21,11 +21,7 @@ public class BookController {
         return bookService.getUserBooks(userId);
     }
 
-    @GetMapping("/recommendedBooks/{userId}")
-    public List<Book> getRecommendedBooks(@PathVariable Long userId) {
-        return bookService.getRecommendedBooks(userId);
-   
-    }
+    
 
     @GetMapping("/progress/{userId}")
     public List<Book> getBooksInProgress(@PathVariable Long userId) {

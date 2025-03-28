@@ -25,6 +25,9 @@ getBooksInProgress(userId: number): Observable<Book[]> {
     return this.http.get<Book[]>(`${this.apiUrl}/progress/${userId}`);
 }
 
+
+
+
   //Administrador
   getBooks() : Observable<Book[]>{
     return this.http.get<Book[]>(this.apiUrl);

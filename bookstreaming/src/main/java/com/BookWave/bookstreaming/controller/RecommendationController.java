@@ -1,5 +1,7 @@
 package com.BookWave.bookstreaming.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +20,12 @@ public class RecommendationController {
     @GetMapping("/popular")
     public Book getPopularBooks() {
         return recommendationService.getMostPopularBook();
+    }
+
+    @GetMapping("/books/{userId}")
+    public List<Book> getRecommendedBooks(@PathVariable Long userId) {
+        return recommendationService.getRecommendedBooks(userId);
+   
     }
 
 }

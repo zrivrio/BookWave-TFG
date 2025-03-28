@@ -17,10 +17,7 @@ public class BookService {
         return bookRepository.findBooksInProgressByUserId(userId);
     }
 
-    public List<Book> getRecommendedBooks(Long userId) {
-        return bookRepository.findRecommendedBooksForUser(userId);
-    }
-
+    
     public List<Book> getUserBooks(Long userId) {
         return bookRepository.findBooksByUserId(userId);
     }
