@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import {CommonModule} from '@angular/common';
 import { Book } from '../../../models/Book';
 import { RecommendationsService } from '../../../service/recommendations.service';

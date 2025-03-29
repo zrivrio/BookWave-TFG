@@ -1,6 +1,6 @@
 package com.BookWave.bookstreaming.domain;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,13 +20,13 @@ public class Category {
 
     private String nombre;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "category_book",
             joinColumns = @JoinColumn(name = "category_id"),
             inverseJoinColumns = @JoinColumn(name = "book_id")
     )
-    @JsonManagedReference
+    @JsonIgnoreProperties({"categories", "readingLists"})
     private Set<Book> books;
 
 
