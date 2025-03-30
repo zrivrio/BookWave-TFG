@@ -1,6 +1,8 @@
 package com.BookWave.bookstreaming.repository;
 
 import com.BookWave.bookstreaming.domain.Book;
+import com.BookWave.bookstreaming.domain.Category;
+
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,13 +13,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
 
-   // Books in progress for a user (through ReadingProgress)
    @Query("SELECT rp.book FROM ReadingProgress rp WHERE rp.user.id = :userId AND rp.percentageRead > 0")
    List<Book> findBooksInProgressByUserId(@Param("userId") Long userId);
-
-  
-
-   // Sirve
 
    @Query(value = """
     SELECT * FROM books 
@@ -58,4 +55,7 @@ List<Book> findRandomBooks();
     LIMIT 10
 """, nativeQuery = true)
 List<Book> findRecommendedBooksForUser(@Param("userId") Long userId);
+
+
+
 }

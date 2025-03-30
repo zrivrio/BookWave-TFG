@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CategoryService } from '../../../service/category.service';
 import { CommonModule } from '@angular/common';
+import { Mapa } from '../../../models/mapa';
 
 @Component({
   selector: 'app-button-category',
@@ -9,7 +10,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './button-category.component.css'
 })
 export class ButtonCategoryComponent {
-  categories: String[] = [];
+  categories: Mapa[] = [];
 
   constructor(private categoryService: CategoryService) {}
 
@@ -19,9 +20,9 @@ export class ButtonCategoryComponent {
 
   loadCategories(): void {
     this.categoryService.getCategories().subscribe({
-      next: (data) => {
+      next: (data: Mapa[]) => {
         this.categories = data;
-      },
+        },
       error: (error) => {
         console.error('Error fetching categories:', error);
       }

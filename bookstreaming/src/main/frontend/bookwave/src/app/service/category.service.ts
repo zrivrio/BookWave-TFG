@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Mapa } from '../models/mapa';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class CategoryService {
 
   constructor(private http : HttpClient) { }
 
-  getCategories() : Observable<String[]>{
-    return this.http.get<String[]>(`${this.apiUrl}/names`);
+  getCategories() : Observable<Mapa[]>{
+    return this.http.get<Mapa[]>(`${this.apiUrl}/names`);
   }
 }

@@ -1,8 +1,13 @@
 package com.BookWave.bookstreaming.controller;
 
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import com.BookWave.bookstreaming.domain.Book;
+import com.BookWave.bookstreaming.domain.Category;
 import com.BookWave.bookstreaming.service.CategoryService;
 
 
@@ -15,9 +20,14 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @GetMapping("/names")
-    public List<String> getAllCategoryName() {
+    public List<Map<String, Object>> getAllCategoryName() {
         return categoryService.getAllCategoryNames();
     }
+
+    // @GetMapping("/{nombre}")
+    // public List<Book> getBookByCategory(@PathVariable String nombre) {
+    //     return categoryService.getBooksByCategory(nombre);
+    // }
 
    
 
