@@ -1,6 +1,7 @@
 <div class="categories-page">
     <h1>Categories</h1>
     <div class="categories-container">
-        <app-button-category></app-button-category>
+        <app-button-category (categorySelected)="onCategorySelected($event)"></app-button-category>
     </div>
+    <app-libros [selectedCategoryId]="selectedCategoryId"></app-libros>
 </div>

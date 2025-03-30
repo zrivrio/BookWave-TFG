@@ -1,1 +1,18 @@
-<p>libros works!</p>
+<div class="books-container">
+    <div *ngIf="loading" class="loading">
+        Loading books...
+    </div>
+    <div *ngIf="!loading" class="books-grid">
+        <div *ngIf="books.length === 0" class="no-books">
+            No books found in this category
+        </div>
+        <div *ngFor="let book of books" class="book-card">
+            <img [src]="book.cover" [alt]="book.title" onerror="this.src='assets/images/default-book-cover.jpg'">
+            <div class="book-info">
+                <h3>{{ book.title }}</h3>
+                <p class="author">{{ book.author }}</p>
+                <p class="year">{{ book.year }}</p>
+            </div>
+        </div>
+    </div>
+</div>

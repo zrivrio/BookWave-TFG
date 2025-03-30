@@ -23,13 +23,11 @@ public class CategoryService {
         return categoryRepository.findAllCategoryName();
     }
 
-    // public List<Book> getBooksByCategory(String categoryName) {
-    //     String category = categoryRepository.findByNombre(categoryName);
-    //     if (category != null) {
-    //         return bookRepository.findByCategory(category);
-    //     }
-    //     return List.of();
-    // }
+    public List<Book> getBooksByCategory(int id) {
+        return bookRepository.findByCategory(id);
+    
+       
+    }
 
 
     

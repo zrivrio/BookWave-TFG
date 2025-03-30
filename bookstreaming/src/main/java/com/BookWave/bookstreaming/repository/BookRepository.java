@@ -56,6 +56,8 @@ List<Book> findRandomBooks();
 """, nativeQuery = true)
 List<Book> findRecommendedBooksForUser(@Param("userId") Long userId);
 
+@Query("SELECT b FROM Book b JOIN b.categories c WHERE c.id = :categoryId")
+List<Book> findByCategory(@Param("categoryId") int categoryId);
 
 
 }

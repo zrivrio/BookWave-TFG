@@ -24,10 +24,10 @@ public class CategoryController {
         return categoryService.getAllCategoryNames();
     }
 
-    // @GetMapping("/{nombre}")
-    // public List<Book> getBookByCategory(@PathVariable String nombre) {
-    //     return categoryService.getBooksByCategory(nombre);
-    // }
+    @GetMapping("/{id}")
+    public List<Book> getBookByCategory(@PathVariable int id) {
+        return categoryService.getBooksByCategory(id);
+    }
 
    
 
