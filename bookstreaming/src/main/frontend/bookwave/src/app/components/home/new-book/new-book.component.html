@@ -1,15 +1,20 @@
-<div *ngIf="!book" class="flex items-center justify-center h-full text-gray-500">
-  <p>No hay libro destacado disponible</p>
+<div *ngIf="!book" class="flex items-center justify-center h-full text-gray-500 text-center p-4">
+  <p class="text-lg">No hay libro destacado disponible</p>
 </div>
 
-<div *ngIf="book" class="flex h-full">
-  <img [src]="book.cover || 'assets/images/placeholder.png'" 
-       [alt]="book.title || 'Book cover'" 
-       class="w-1/3 object-cover rounded-lg shadow-md"
+<div *ngIf="book" class="flex flex-col md:flex-row items-center md:items-start h-full bg-white p-6 rounded-lg ">
+  <img 
+    [src]="book.cover || 'assets/images/placeholder.png'" 
+    [alt]="book.title || 'Book cover'" 
+    class="w-40 h-56 object-cover rounded-lg shadow-md"
   />
-  <div class="flex flex-col ml-6 flex-1">
-    <h3 class="text-xl font-semibold text-gray-800">{{book.title || 'Sin título'}}</h3>
-    <p class="text-gray-600 mt-2">{{book.author || 'Autor desconocido'}}</p>
-    <p class="text-gray-700 mt-4 line-clamp-4">{{book.description || 'Sin descripción disponible'}}</p>
+  
+  <div class="flex flex-col md:ml-6 mt-4 md:mt-0 text-center md:text-left flex-1">
+    <h3 class="text-2xl font-bold text-gray-900">{{book.title || 'Sin título'}}</h3>
+    <p class="text-gray-600 mt-1 text-lg">{{book.author || 'Autor desconocido'}}</p>
+    <p class="text-gray-700 mt-3 text-base line-clamp-4">{{book.description || 'Sin descripción disponible'}}</p>
+    <button>
+      Añadir a mi biblioteca
+    </button>
   </div>
 </div>

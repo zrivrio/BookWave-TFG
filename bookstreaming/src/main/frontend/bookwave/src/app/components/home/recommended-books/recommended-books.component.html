@@ -2,27 +2,28 @@
   <p>Cargando recomendaciones...</p>
 </div>
 
-<div *ngIf="error" class="text-center text-red-600 p-4">
-  {{ error }}
-</div>
-
-<div *ngIf="!isLoading && !error" class="grid grid-cols-4 gap-4">
-  <div *ngFor="let book of recommendedBooks" class="bg-white rounded-xl shadow hover:shadow-md transition-shadow duration-300 w-40 flex-shrink-0">
-    <img 
-      [src]="book.cover" 
-      [alt]="book.title" 
-      class="w-full h-48 object-cover rounded-t-xl"
-    />
-    
-    <!-- Contenido del libro -->
-    <div class="p-3">
-      <h4 class="text-sm font-semibold text-gray-800 truncate">
-        {{ book.title }}
-      </h4>
-      
-      <p class="text-xs text-gray-600 mt-1 truncate">
-        {{ book.author }}
-      </p>
+<div *ngIf="!isLoading" class="relative">
+  <!-- Contenedor con scroll limitado SOLO para el carrusel -->
+  <div class="max-w-full overflow-x-auto scroll-smooth scrollbar-hide snap-x">
+    <div class="flex gap-4 w-max">
+      <div *ngFor="let book of recommendedBooks" 
+           class="bg-white rounded-xl shadow hover:shadow-md transition-shadow duration-300 w-40 flex-shrink-0 snap-start">
+        <img 
+          [src]="book.cover" 
+          [alt]="book.title" 
+          class="w-full h-48 object-cover rounded-t-xl"
+        />
+        
+        <!-- Contenido del libro -->
+        <div class="p-3">
+          <h4 class="text-sm font-semibold text-gray-800 truncate">
+            {{ book.title }}
+          </h4>
+          <p class="text-xs text-gray-600 mt-1 truncate">
+            {{ book.author }}
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 </div>
