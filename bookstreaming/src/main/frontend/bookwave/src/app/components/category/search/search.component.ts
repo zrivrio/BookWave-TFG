@@ -31,4 +31,8 @@ export class SearchComponent {
     const searchTerm = this.searchForm.get('searchTerm')?.value;
     this.searchTermChange.emit(searchTerm || '');
   }
+
+  clearSearch(): void {
+    this.searchForm.get('searchTerm')?.setValue('');
+  }
 }

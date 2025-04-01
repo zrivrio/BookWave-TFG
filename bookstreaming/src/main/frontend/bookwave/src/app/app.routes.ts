@@ -12,7 +12,7 @@ import { SignupComponent } from './components/page/signup/signup.component';
 
 
 export const routes: Routes = [
-    { path: '', component: HomeComponent },
+    { path: '', component: HomeComponent, pathMatch: 'full' },
     { path: 'categories', component: CategoriesComponent },
     { path: 'library', component: LibraryComponent},
     { path: 'login', component: LoginComponent},

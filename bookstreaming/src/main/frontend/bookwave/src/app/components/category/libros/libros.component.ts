@@ -6,12 +6,14 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-libros',
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './libros.component.html',
   styleUrl: './libros.component.css'
 })
 export class LibrosComponent implements OnChanges {
   @Input() selectedCategoryId: number | 'all' = 'all';
+  @Input() searchTerm: string = '';
   books: Book[] = [];
   loading = false;
 
@@ -21,13 +23,28 @@ export class LibrosComponent implements OnChanges {
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['selectedCategoryId']) {
+    if (changes['selectedCategoryId'] || changes['searchTerm']) {
       this.loadBooks();
     }
   }
 
   loadBooks(): void {
     this.loading = true;
+
+    if (this.searchTerm) {
+      this.bookService.getBooksBySearch(this.searchTerm).subscribe({
+        next: (books) => {
+          this.books = books;
+          this.loading = false;
+        },
+        error: (error) => {
+          console.error('Error searching books:', error);
+          this.loading = false;
+        }
+      });
+      return;
+    }
+
     if (this.selectedCategoryId === 'all') {
       this.bookService.getBooks().subscribe({
         next: (books) => {
@@ -51,24 +68,5 @@ export class LibrosComponent implements OnChanges {
         }
       });
     }
-  }
-
-  onSearch(searchTerm: string): void {
-    if (!searchTerm.trim()) {
-      this.loadBooks();
-      return;
-    }
-
-    this.loading = true;
-    this.bookService.getBooksBySearch(searchTerm).subscribe({
-      next: (books) => {
-        this.books = books;
-        this.loading = false;
-      },
-      error: (error) => {
-        console.error('Error searching books:', error);
-        this.loading = false;
-      }
-    });
   }
 }

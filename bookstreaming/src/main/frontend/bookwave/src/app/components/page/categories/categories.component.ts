@@ -6,6 +6,7 @@ import { SearchComponent } from '../../category/search/search.component';
 
 @Component({
   selector: 'app-categories',
+  standalone: true,
   imports: [ButtonCategoryComponent, LibrosComponent, CommonModule, SearchComponent],
   templateUrl: './categories.component.html',
   styleUrl: './categories.component.css'
@@ -21,7 +22,9 @@ export class CategoriesComponent {
 
   onSearch(searchTerm: string): void {
     this.currentSearchTerm = searchTerm;
-    this.selectedCategoryId = 'all';
+    if (searchTerm) {
+      this.selectedCategoryId = 'all';
+    }
   }
 
   getHeaderText(): string {
