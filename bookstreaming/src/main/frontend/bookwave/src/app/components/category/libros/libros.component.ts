@@ -52,4 +52,23 @@ export class LibrosComponent implements OnChanges {
       });
     }
   }
+
+  onSearch(searchTerm: string): void {
+    if (!searchTerm.trim()) {
+      this.loadBooks();
+      return;
+    }
+
+    this.loading = true;
+    this.bookService.getBooksBySearch(searchTerm).subscribe({
+      next: (books) => {
+        this.books = books;
+        this.loading = false;
+      },
+      error: (error) => {
+        console.error('Error searching books:', error);
+        this.loading = false;
+      }
+    });
+  }
 }

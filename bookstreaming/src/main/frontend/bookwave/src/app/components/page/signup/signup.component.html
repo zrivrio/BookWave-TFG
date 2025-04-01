@@ -1,99 +1,107 @@
-<div class="flex justify-center items-center min-h-screen bg-gradient-to-br from-[#E0E9F5] to-[#CBD8E8] p-6">
-  <div class="w-full max-w-md bg-white rounded-2xl shadow-lg p-8 border border-[#ADC6E5]">
+<div class="flex justify-center items-center min-h-screen bg-gradient-to-br from-[#E0E9F5] to-[#CBD8E8] p-4">
+  <div class="w-full max-w-md bg-white rounded-2xl shadow-xl p-8 border border-[#ADC6E5]">
 
-    <!-- Título -->
-    <h2 class="text-2xl font-semibold text-[#1E0f75] text-center mb-6">Create Account</h2>
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <h2 class="text-3xl font-bold text-[#1E0f75] mb-2">Create Account</h2>
+      <p class="text-[#666666]">Join our community of readers</p>
+    </div>
 
-    <!-- Formulario -->
-    <form [formGroup]="signupForm" (ngSubmit)="onSignup()" class="space-y-5">
+    <!-- Form -->
+    <form [formGroup]="signupForm" (ngSubmit)="onSignup()" class="space-y-6">
 
-      <!-- Username -->
-      <div class="flex flex-col">
-        <label for="username" class="text-sm font-medium text-[#1E0f75] mb-1">Username</label>
+      <!-- Username Field -->
+      <div>
+        <label for="username" class="block text-sm font-medium text-[#2A2A2A] mb-1">Username</label>
         <input 
           type="text"
           id="username"
           formControlName="username"
-          placeholder="Choose a username"
+          placeholder="Your username"
           [class.border-red-500]="username?.invalid && username?.touched"
-          class="px-4 py-2 rounded-lg border border-[#CCCCCC] focus:ring-2 focus:ring-[#ADC6E5] focus:border-[#1965B3] focus:outline-none bg-[#FFFFFF] text-[#333333] placeholder-[#999999] transition duration-200"
-        />
-        <div class="text-red-500 text-xs mt-1" *ngIf="username?.invalid && username?.touched">
-          <span *ngIf="username?.errors?.['required']">Username is required</span>
+          class="w-full px-4 py-3 rounded-lg border border-[#E0E0E0] focus:ring-2 focus:ring-[#ADC6E5] focus:border-[#1E0f75] outline-none transition-all"
+        >
+        <div class="h-4 mt-1 text-xs text-red-500" *ngIf="username?.invalid && username?.touched">
+          <span *ngIf="username?.errors?.['required']">Required field</span>
           <span *ngIf="username?.errors?.['minlength']">Minimum 3 characters</span>
         </div>
       </div>
 
-      <!-- Email -->
-      <div class="flex flex-col">
-        <label for="email" class="text-sm font-medium text-[#1E0f75] mb-1">Email</label>
+      <!-- Email Field -->
+      <div>
+        <label for="email" class="block text-sm font-medium text-[#2A2A2A] mb-1">Email</label>
         <input 
           type="email"
           id="email"
           formControlName="email"
-          placeholder="Enter your email"
+          placeholder="your@email.com"
           [class.border-red-500]="email?.invalid && email?.touched"
-          class="px-4 py-2 rounded-lg border border-[#CCCCCC] focus:ring-2 focus:ring-[#ADC6E5] focus:border-[#1965B3] focus:outline-none bg-[#FFFFFF] text-[#333333] placeholder-[#999999] transition duration-200"
-        />
-        <div class="text-red-500 text-xs mt-1" *ngIf="email?.invalid && email?.touched">
-          <span *ngIf="email?.errors?.['required']">Email is required</span>
+          class="w-full px-4 py-3 rounded-lg border border-[#E0E0E0] focus:ring-2 focus:ring-[#ADC6E5] focus:border-[#1E0f75] outline-none transition-all"
+        >
+        <div class="h-4 mt-1 text-xs text-red-500" *ngIf="email?.invalid && email?.touched">
+          <span *ngIf="email?.errors?.['required']">Required field</span>
           <span *ngIf="email?.errors?.['email']">Invalid email format</span>
         </div>
       </div>
 
-      <!-- Password -->
-      <div class="flex flex-col">
-        <label for="password" class="text-sm font-medium text-[#1E0f75] mb-1">Password</label>
+      <!-- Password Field -->
+      <div>
+        <label for="password" class="block text-sm font-medium text-[#2A2A2A] mb-1">Password</label>
         <input 
           type="password"
           id="password"
           formControlName="password"
-          placeholder="Create a password"
+          placeholder="••••••••"
           [class.border-red-500]="password?.invalid && password?.touched"
-          class="px-4 py-2 rounded-lg border border-[#CCCCCC] focus:ring-2 focus:ring-[#ADC6E5] focus:border-[#1965B3] focus:outline-none bg-[#FFFFFF] text-[#333333] placeholder-[#999999] transition duration-200"
-        />
-        <div class="text-red-500 text-xs mt-1" *ngIf="password?.invalid && password?.touched">
-          <span *ngIf="password?.errors?.['required']">Password is required</span>
+          class="w-full px-4 py-3 rounded-lg border border-[#E0E0E0] focus:ring-2 focus:ring-[#ADC6E5] focus:border-[#1E0f75] outline-none transition-all"
+        >
+        <div class="h-4 mt-1 text-xs text-red-500" *ngIf="password?.invalid && password?.touched">
+          <span *ngIf="password?.errors?.['required']">Required field</span>
           <span *ngIf="password?.errors?.['minlength']">Minimum 6 characters</span>
         </div>
       </div>
 
       <!-- Confirm Password -->
-      <div class="flex flex-col">
-        <label for="confirmPassword" class="text-sm font-medium text-[#1E0f75] mb-1">Confirm Password</label>
+      <div>
+        <label for="confirmPassword" class="block text-sm font-medium text-[#2A2A2A] mb-1">Confirm Password</label>
         <input 
           type="password"
           id="confirmPassword"
           formControlName="confirmPassword"
-          placeholder="Confirm your password"
+          placeholder="••••••••"
           [class.border-red-500]="(confirmPassword?.invalid || signupForm.errors?.['mismatch']) && confirmPassword?.touched"
-          class="px-4 py-2 rounded-lg border border-[#CCCCCC] focus:ring-2 focus:ring-[#ADC6E5] focus:border-[#1965B3] focus:outline-none bg-[#FFFFFF] text-[#333333] placeholder-[#999999] transition duration-200"
-        />
-        <div class="text-red-500 text-xs mt-1" *ngIf="(confirmPassword?.invalid || signupForm.errors?.['mismatch']) && confirmPassword?.touched">
-          <span *ngIf="confirmPassword?.errors?.['required']">Please confirm your password</span>
-          <span *ngIf="signupForm.errors?.['mismatch']">Passwords do not match</span>
+          class="w-full px-4 py-3 rounded-lg border border-[#E0E0E0] focus:ring-2 focus:ring-[#ADC6E5] focus:border-[#1E0f75] outline-none transition-all"
+        >
+        <div class="h-4 mt-1 text-xs text-red-500" *ngIf="(confirmPassword?.invalid || signupForm.errors?.['mismatch']) && confirmPassword?.touched">
+          <span *ngIf="confirmPassword?.errors?.['required']">Please confirm password</span>
+          <span *ngIf="signupForm.errors?.['mismatch']">Passwords don't match</span>
         </div>
       </div>
 
       <!-- Error Message -->
-      <div *ngIf="errorMessage" class="bg-[#EBB2C3] border border-[#E893C5] text-[#1E0f75] px-4 py-2 rounded relative text-sm">
+      <div *ngIf="errorMessage" class="p-3 bg-[#EBB2C3]/30 border border-[#E893C5] text-[#1E0f75] rounded-lg text-sm flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
         {{ errorMessage }}
       </div>
 
       <!-- Submit Button -->
-      <button 
-        type="submit" 
+      <button
+        type="submit"
         [disabled]="signupForm.invalid || isLoading"
-        class="w-full flex justify-center items-center px-4 py-2 rounded-lg text-white bg-[#1965B3] hover:bg-[#3785D8] disabled:opacity-50 disabled:cursor-not-allowed shadow-md transition duration-200"
+        class="w-full py-3 px-4 bg-[#1E0f75] hover:bg-[#1C1DAB] text-white font-medium rounded-lg shadow-md transition-all disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center"
       >
+        <span *ngIf="isLoading" class="inline-block animate-spin mr-2">↻</span>
         {{ isLoading ? 'Creating account...' : 'Sign Up' }}
       </button>
+
     </form>
 
     <!-- Login Link -->
-    <div class="text-center mt-6 text-sm text-[#333333]">
+    <div class="mt-6 text-center text-sm text-[#666666]">
       Already have an account? 
-      <a routerLink="/login" class="text-[#1E0f75] hover:underline font-medium">Login</a>
+      <a routerLink="/login" class="text-[#1E0f75] font-medium hover:underline ml-1">Log in</a>
     </div>
 
   </div>

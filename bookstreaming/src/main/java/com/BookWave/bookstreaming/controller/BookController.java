@@ -20,6 +20,11 @@ public class BookController {
         return bookService.getBooksInProgressByUserId(userId);
     }
 
+    @GetMapping("/search/{searchTerm}")
+    public List<Book> getBooksBySearch(@PathVariable String searchTerm) {
+        return bookService.getBooksBySearch(searchTerm);
+    }
+
 
     //Administrador
     @GetMapping({"", "/"})

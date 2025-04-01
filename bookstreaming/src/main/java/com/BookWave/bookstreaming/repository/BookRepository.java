@@ -1,8 +1,6 @@
 package com.BookWave.bookstreaming.repository;
 
 import com.BookWave.bookstreaming.domain.Book;
-import com.BookWave.bookstreaming.domain.Category;
-
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -58,6 +56,23 @@ List<Book> findRecommendedBooksForUser(@Param("userId") Long userId);
 
 @Query("SELECT b FROM Book b JOIN b.categories c WHERE c.id = :categoryId")
 List<Book> findByCategory(@Param("categoryId") int categoryId);
+
+@Query("""
+    SELECT b FROM Book b 
+    WHERE LOWER(b.title) LIKE LOWER(CONCAT('%', :searchTerm, '%')) 
+    OR LOWER(b.author) LIKE LOWER(CONCAT('%', :searchTerm, '%'))
+    OR LOWER(b.description) LIKE LOWER(CONCAT('%', :searchTerm, '%'))
+    ORDER BY 
+        CASE 
+            WHEN LOWER(b.title) LIKE LOWER(CONCAT(:searchTerm, '%')) THEN 1
+            WHEN LOWER(b.title) LIKE LOWER(CONCAT('%', :searchTerm, '%')) THEN 2
+            ELSE 3 
+        END
+""")
+List<Book> findBooksBySearch(@Param("searchTerm") String searchTerm);
+
+
+
 
 
 }

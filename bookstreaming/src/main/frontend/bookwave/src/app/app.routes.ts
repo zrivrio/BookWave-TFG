@@ -3,12 +3,10 @@ import { HomeComponent } from './components/page/home/home.component';
 import { CategoriesComponent } from './components/page/categories/categories.component';
 import { LibraryComponent } from './components/page/library/library.component';
 import { LoginComponent } from './components/page/login/login.component';
-import { BookDetailsComponent } from './components/shared/book-details/book-details.component';
 import { FavoritesComponent } from './components/page/favorites/favorites.component';
 import { SettingsComponent } from './components/page/settings/settings.component';
 import { HelpPComponent } from './components/page/help-p/help-p.component';
 import { ProfileComponent } from './components/page/profile/profile.component';
-import { FuncionamientoComponent } from './components/funcionamiento/funcionamiento.component';
 import { SignupComponent } from './components/page/signup/signup.component';
 
 
@@ -23,7 +21,5 @@ export const routes: Routes = [
     { path: 'settings', component: SettingsComponent},
     { path: 'help', component: HelpPComponent},
     { path: 'profile', component: ProfileComponent},
-    { path: 'book/:id', component: BookDetailsComponent},
-    { path: 'f', component: FuncionamientoComponent},
     { path: '**', redirectTo: '' }
 ];

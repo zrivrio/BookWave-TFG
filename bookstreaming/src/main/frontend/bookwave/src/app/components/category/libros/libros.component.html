@@ -1,17 +1,50 @@
-<div class="books-container">
-    <div *ngIf="loading" class="loading">
-        Loading books...
+<div class="books-container px-4 py-6 max-w-7xl mx-auto">
+    <!-- Loading State -->
+    <div *ngIf="loading" class="flex flex-col items-center justify-center py-12">
+        <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-[#1E0f75] border-opacity-50 mb-4"></div>
+        <p class="text-[#666666]">Cargando libros...</p>
     </div>
+
+    <!-- Books Grid -->
     <div *ngIf="!loading" class="books-grid">
-        <div *ngIf="books.length === 0" class="no-books">
-            No books found in this category
+        <!-- Empty State -->
+        <div *ngIf="books.length === 0" class="no-books text-center py-12">
+            <div class="w-20 h-20 mx-auto mb-4 bg-[#E6F0F7] rounded-full flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-[#1E0f75]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
+            </div>
+            <h3 class="text-xl font-medium text-[#2A2A2A] mb-2">No se encontraron libros</h3>
+            <p class="text-[#666666] max-w-md mx-auto">No hay libros disponibles en esta categoría actualmente.</p>
         </div>
-        <div *ngFor="let book of books" class="book-card">
-            <img [src]="book.cover" [alt]="book.title" onerror="this.src='assets/images/default-book-cover.jpg'">
-            <div class="book-info">
-                <h3>{{ book.title }}</h3>
-                <p class="author">{{ book.author }}</p>
-                <p class="year">{{ book.year }}</p>
+
+        <!-- Scrollable Books Container -->
+        <div class="overflow-y-auto max-h-[calc(100vh-200px)]">
+            <!-- Books Grid -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 pb-4">
+                <div *ngFor="let book of books" class="book-card bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 border border-[#F4F4F4]">
+                    <!-- Book Cover -->
+                    <div class="relative aspect-[2/3]">
+                        <img 
+                            [src]="book.cover || 'assets/images/default-book-cover.jpg'" 
+                            [alt]="book.title" 
+                            class="w-full h-full object-cover"
+                            onerror="this.src='assets/images/default-book-cover.jpg'"
+                        >
+                    </div>
+                    
+                    <!-- Book Info -->
+                    <div class="p-3">
+                        <h3 class="text-sm font-semibold text-[#2A2A2A] truncate mb-1">{{ book.title }}</h3>
+                        <p class="text-xs text-[#666666] truncate">{{ book.author || 'Autor desconocido' }}</p>
+                        <p *ngIf="book.year" class="text-xs text-[#999999] mt-1">{{ book.year }}</p>
+                        
+                        <!-- Quick Action -->
+                        <button class="mt-3 w-full text-xs py-1.5 bg-[#1E0f75] hover:bg-[#1C1DAB] text-white rounded-lg transition-colors duration-200">
+                            Ver detalles
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -1,0 +1,9 @@
+.categories-page {
+    min-height: calc(100vh - 120px); /* Adjust based on your header/footer */
+}
+
+@media (min-width: 768px) {
+    .categories-page {
+        padding: 2rem 5%;
+    }
+}

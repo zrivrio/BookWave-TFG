@@ -1,28 +1,42 @@
 <a
-  class="group flex flex-col items-start p-1 rounded-lg transition-all duration-300 cursor-pointer"
+  class="group flex items-center gap-3 p-3 rounded-lg transition-all duration-200 cursor-pointer"
   [routerLink]="route"
+  routerLinkActive="active"
   (click)="onClick($event)"
-  [ngClass]="{
-    'bg-blue-100 text-primary font-semibold': isActiveRoute(),
-    'hover:bg-blue-200 hover:text-primary-light text-gray-darker': !isActiveRoute()
-  }"
 >
-  <!-- CUADRADO DEL ICONO -->
+  <!-- Icon Container -->
   <div
-    class="flex items-center justify-center w-6 h-6 rounded-md bg-gray-50 shadow transition-all duration-300"
+    class="flex items-center justify-center w-10 h-10 rounded-lg transition-all duration-200"
     [ngClass]="{
-      'bg-primary text-blue-400': isActiveRoute(),
-      'group-hover:bg-primary-light group-hover:text-blue-400': !isActiveRoute()
+      'bg-[#1E0F75] text-white': isActiveRoute(),
+      'bg-[#E6F0F7] text-[#1965B3] group-hover:bg-[#ADC6E5]': !isActiveRoute()
     }"
   >
     <span
-      class="material-symbols-outlined text-md transition-all duration-300"
-      style="font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;"
+      class="material-symbols-outlined text-lg"
+      [ngClass]="{
+        '!font-semibold': isActiveRoute()
+      }"
+      [style.font-variation-settings]="isActiveRoute() ? '\'FILL\' 1, \'wght\' 400, \'GRAD\' 0, \'opsz\' 24' : '\'FILL\' 0, \'wght\' 300, \'GRAD\' 0, \'opsz\' 24'"
     >
       {{ icon }}
     </span>
   </div>
 
-  <!-- TEXTO -->
-  <span class="mt-1 text-xxs">{{ label }}</span>
+  <!-- Label -->
+  <span 
+    class="text-sm font-medium transition-all duration-200"
+    [ngClass]="{
+      'text-[#1E0F75] font-semibold': isActiveRoute(),
+      'text-[#2A2A2A] group-hover:text-[#1E0F75]': !isActiveRoute()
+    }"
+  >
+    {{ label }}
+  </span>
+
+  <!-- Active indicator -->
+  <span 
+    *ngIf="isActiveRoute()"
+    class="ml-auto w-1 h-8 bg-[#1E0F75] rounded-full"
+  ></span>
 </a>

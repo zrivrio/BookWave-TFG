@@ -14,6 +14,7 @@ export class RecommendedBooksComponent {
   recommendedBooks: Book[] = [];
   isLoading: boolean = false;
   error: string = '';
+  @ViewChild('carousel', { static: false }) carousel!: ElementRef;
 
   constructor(
     private recommendationsService: RecommendationsService,
@@ -53,5 +54,19 @@ export class RecommendedBooksComponent {
         }
       });
     }
+  }
+
+  scrollLeft(): void {
+    this.carousel.nativeElement.scrollBy({
+      left: -300, // Adjust this value based on your card width + gap
+      behavior: 'smooth'
+    });
+  }
+
+  scrollRight(): void {
+    this.carousel.nativeElement.scrollBy({
+      left: 300, // Adjust this value based on your card width + gap
+      behavior: 'smooth'
+    });
   }
 }

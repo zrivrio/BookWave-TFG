@@ -6,7 +6,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.BookWave.bookstreaming.domain.Book;
-import com.BookWave.bookstreaming.domain.Category;
 import com.BookWave.bookstreaming.repository.BookRepository;
 import com.BookWave.bookstreaming.repository.CategoryRepository;
 
@@ -25,9 +24,8 @@ public class CategoryService {
 
     public List<Book> getBooksByCategory(int id) {
         return bookRepository.findByCategory(id);
-    
-       
     }
+
 
 
     

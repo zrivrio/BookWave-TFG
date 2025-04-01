@@ -25,6 +25,10 @@ getBooksInProgress(userId: number): Observable<Book[]> {
     return this.http.get<Book[]>(`${this.apiUrl}/progress/${userId}`);
 }
 
+getBooksBySearch(searchTerm: string): Observable<Book[]> {
+  return this.http.get<Book[]>(`${this.apiUrl}/search/${searchTerm}`);
+}
+
 
 
 

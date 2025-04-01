@@ -17,6 +17,10 @@ public class BookService {
         return bookRepository.findBooksInProgressByUserId(userId);
     }
 
+    public List<Book> getBooksBySearch(String searchTerm) {
+        return bookRepository.findBooksBySearch(searchTerm.trim());
+    }
+
     //AMetodos de Administrador
     //CRUD
     public List<Book> getAllBooks() {
