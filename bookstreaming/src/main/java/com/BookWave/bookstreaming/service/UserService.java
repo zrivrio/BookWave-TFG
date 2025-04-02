@@ -1,5 +1,6 @@
 package com.BookWave.bookstreaming.service;
 
+import com.BookWave.bookstreaming.domain.SubscriptionType;
 import com.BookWave.bookstreaming.domain.User;
 import com.BookWave.bookstreaming.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,14 @@ public class UserService {
 
     public User getUserById(Long userId) {
         return userRepository.findById(userId).orElse(null);
+    }
+
+    public User upgradeUserToPremium(Long userId) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        
+        user.setSubscriptionType(SubscriptionType.Premium);
+        return userRepository.save(user);
     }
 
 }

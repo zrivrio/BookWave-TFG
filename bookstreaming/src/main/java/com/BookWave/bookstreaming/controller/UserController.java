@@ -25,4 +25,9 @@ public class UserController {
     public User login(@RequestBody LoginRequest loginRequest) {
         return userService.loginUser(loginRequest.getUsername(), loginRequest.getPassword());
     }
+
+    @PostMapping("/upgrade/{userId}")
+public User upgradeToPremium(@PathVariable Long userId) {
+    return userService.upgradeUserToPremium(userId);
+}
 }

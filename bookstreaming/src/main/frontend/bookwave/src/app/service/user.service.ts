@@ -23,4 +23,8 @@ export class UserService {
   signup(userData: UserSignupRequest): Observable<User> {
       return this.http.post<User>(`${this.baseUrl}/signup`, userData);
   }
+
+  upgradeToPremium(userId: number): Observable<User> {
+    return this.http.post<User>(`${this.baseUrl}/upgrade/${userId}`, {});
+  }
 }
