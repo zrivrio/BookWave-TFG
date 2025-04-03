@@ -12,10 +12,10 @@
         <div *ngFor="let review of reviews" class="bg-white p-6 rounded-lg shadow-md mb-4 border border-gray-200">
           <div class="flex items-center mb-4">
             <div class="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center mr-3">
-              <span class="text-gray-600 font-medium">{{ review.user.username.charAt(0).toUpperCase() || 'U' }}</span>
+              <span class="text-gray-600 font-medium">{{ user.username.charAt(0).toUpperCase() || 'U' }}</span>
             </div>
             <div>
-              <h4 class="font-semibold text-[#2A2A2A] truncate">{{ review.user.username || 'Usuario anónimo' }}</h4>
+              <h4 class="font-semibold text-[#2A2A2A] truncate">{{ user.username || 'Usuario anónimo' }}</h4>
               <div class="flex items-center">
                 <div class="flex mr-2">
                   <svg 

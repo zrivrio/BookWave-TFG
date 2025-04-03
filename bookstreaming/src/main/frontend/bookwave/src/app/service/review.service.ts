@@ -1,6 +1,6 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, Observable, of, throwError } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Observable, tap } from 'rxjs';
 import { Review } from '../models/Review';
 
 @Injectable({
@@ -12,26 +12,10 @@ export class ReviewService {
   constructor(private http: HttpClient) { }
 
   getReviewsByBook(bookId: number): Observable<Review[]> {
-    return this.http.get<Review[]>(`${this.apiUrl}/book/${bookId}`).pipe(
-        catchError((error: HttpErrorResponse) => {
-            if (error.status === 404) {
-                // Si no hay reseñas, devuelve un array vacío
-                return of([]);
-            }
-            return throwError(() => error);
-        })
-    );
-}
+    return this.http.get<Review[]>(`${this.apiUrl}/book/${bookId}`);
+  }
 
   createReview(review: Review): Observable<Review> {
     return this.http.post<Review>(this.apiUrl, review);
-  }
-
-  updateReview(id: number, review: Review): Observable<Review> {
-    return this.http.put<Review>(`${this.apiUrl}/${id}`, review);
-  }
-
-  deleteReview(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }

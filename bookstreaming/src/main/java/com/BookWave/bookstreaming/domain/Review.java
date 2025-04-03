@@ -1,5 +1,7 @@
 package com.BookWave.bookstreaming.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,10 +20,12 @@ public class Review {
 
     @ManyToOne
     @JoinColumn(name = "book_id", nullable = false)
+    @JsonIgnoreProperties("reviews")
     private Book book;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnoreProperties("reviews") 
     private User user;
 
     private int rating;
