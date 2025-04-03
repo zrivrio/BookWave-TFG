@@ -79,3 +79,15 @@
     <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-[#1E0f75] border-opacity-50 mb-4"></div>
     <p class="text-[#666666]">Cargando detalles del libro...</p>
   </div>
+
+  <!-- Sección de reseñas -->
+<div *ngIf="book">
+  <app-review-form 
+    *ngIf="currentUser"
+    [bookId]="book.id" 
+    [currentUser]="currentUser"
+    (reviewSubmitted)="onReviewSubmitted()"
+  ></app-review-form>
+
+  <app-review-list *ngIf="book.id" [bookId]="book.id"></app-review-list>
+</div>

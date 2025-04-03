@@ -1,27 +1,41 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { BookService } from '../../../service/book.service';
 import { Book } from '../../../models/Book';
+import { ReviewListComponent } from '../../review/review-list/review-list.component';
+import { ReviewFormComponent } from '../../review/review-form/review-form.component';
+import { FormsModule } from '@angular/forms'; // Añadir esto
+import { UserService } from '../../../service/user.service';
+import { User } from '../../../models/User';
 
 @Component({
   selector: 'app-book-details',
-  imports: [CommonModule],
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReviewFormComponent,
+    ReviewListComponent,
+    FormsModule // Añadir esto para ngModel
+  ],
   templateUrl: './book-details.component.html',
-  styleUrl: './book-details.component.css'
+  styleUrls: ['./book-details.component.css']
 })
 export class BookDetailsComponent {
   book: Book | undefined;
-  loading: boolean = true;
+  loading = true;
   error: string | null = null;
+  currentUser: User | null = null;
 
   constructor(
     private route: ActivatedRoute,
-    private bookService: BookService
-  ) { }
+    private bookService: BookService,
+    private userService: UserService
+  ) {}
 
   ngOnInit(): void {
     this.loadBookDetails();
+    this.currentUser = this.userService.getCurrentUser();
   }
 
   loadBookDetails(): void {
@@ -43,5 +57,10 @@ export class BookDetailsComponent {
       this.error = 'ID de libro no proporcionado';
       this.loading = false;
     }
+  }
+
+  onReviewSubmitted(): void {
+    // Aquí puedes actualizar la lista de reseñas si es necesario
+    // Por ejemplo, recargando las reseñas o actualizando la vista
   }
 }

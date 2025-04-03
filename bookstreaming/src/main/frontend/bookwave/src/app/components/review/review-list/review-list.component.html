@@ -1,0 +1,53 @@
+<div class="mt-12">
+    <h3 class="text-2xl font-bold text-[#2A2A2A] mb-6">Reseñas</h3>
+  
+    <!-- Mensaje de error -->
+    <div *ngIf="error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+      {{ error }}
+    </div>
+  
+    <!-- Lista de reseñas -->
+    <div *ngIf="!loading; else loadingReviews">
+      <div *ngIf="reviews.length > 0; else noReviews">
+        <div *ngFor="let review of reviews" class="bg-white p-6 rounded-lg shadow-md mb-4 border border-gray-200">
+          <div class="flex items-center mb-4">
+            <div class="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center mr-3">
+              <span class="text-gray-600 font-medium">{{ review.user.username.charAt(0).toUpperCase() || 'U' }}</span>
+            </div>
+            <div>
+              <h4 class="font-semibold text-[#2A2A2A] truncate">{{ review.user.username || 'Usuario anónimo' }}</h4>
+              <div class="flex items-center">
+                <div class="flex mr-2">
+                  <svg 
+                    *ngFor="let star of [1, 2, 3, 4, 5]"
+                    xmlns="http://www.w3.org/2000/svg" 
+                    class="h-5 w-5" 
+                    [class.text-yellow-400]="star <= review.rating"
+                    [class.text-gray-300]="star > review.rating"
+                    fill="currentColor" 
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                  </svg>
+                </div>
+                <span class="text-gray-500 text-sm">{{ review.createdAt | date:'mediumDate' }}</span>
+              </div>
+            </div>
+          </div>
+          <p class="text-gray-700">{{ review.comment }}</p>
+        </div>
+      </div>
+  
+      <ng-template #noReviews>
+        <div class="bg-blue-50 border border-blue-200 text-blue-800 px-4 py-3 rounded">
+          No hay reseñas para este libro aún. ¡Sé el primero en opinar!
+        </div>
+      </ng-template>
+    </div>
+  
+    <ng-template #loadingReviews>
+      <div class="flex justify-center py-8">
+        <div class="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-[#1E0f75]"></div>
+      </div>
+    </ng-template>
+  </div>
