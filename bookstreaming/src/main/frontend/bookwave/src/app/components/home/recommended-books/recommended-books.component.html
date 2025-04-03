@@ -29,7 +29,7 @@
           />
           <!-- Badge for Special Books -->
           <div class="absolute top-1 right-1 bg-[#BF8CE1] text-[#FFFFFF] text-[10px] font-bold px-1.5 py-0.5 rounded-full">
-            Nuevo
+            Recomendado
           </div>
         </div>
         
@@ -42,9 +42,11 @@
             {{ book.author || 'Autor desconocido' }}
           </p>
           <!-- Quick Action Button -->
-          <button class="mt-2 w-full text-xs py-1.5 bg-[#1E0f75] hover:bg-[#1C1DAB] text-[#FFFFFF] rounded-md transition-colors duration-150">
-            Ver detalles
-          </button>
+          <button 
+          [routerLink]="['/book', book.id]"
+          class="mt-2 w-full text-xs py-1.5 bg-[#1E0f75] hover:bg-[#1C1DAB] text-[#FFFFFF] rounded-md transition-colors duration-150">
+          Ver detalles
+        </button>
         </div>
       </div>
     </div>

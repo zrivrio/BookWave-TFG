@@ -40,7 +40,8 @@
                         <p *ngIf="book.year" class="text-xs text-[#999999] mt-1">{{ book.year }}</p>
                         
                         <!-- Quick Action -->
-                        <button class="mt-3 w-full text-xs py-1.5 bg-[#1E0f75] hover:bg-[#1C1DAB] text-white rounded-lg transition-colors duration-200">
+                        <button  [routerLink]="['/book', book.id]"
+                        class="mt-3 w-full text-xs py-1.5 bg-[#1E0f75] hover:bg-[#1C1DAB] text-white rounded-lg transition-colors duration-200">
                             Ver detalles
                         </button>
                     </div>

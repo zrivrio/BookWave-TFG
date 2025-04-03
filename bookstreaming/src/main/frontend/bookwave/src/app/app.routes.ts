@@ -14,7 +14,7 @@ import { BookDetailsComponent } from './components/page/book-details/book-detail
 
 export const routes: Routes = [
     { path: '', component: HomeComponent, pathMatch: 'full' },
-    { path: 'book/{id}', component: BookDetailsComponent},
+    { path: 'book/:id', component: BookDetailsComponent},
     { path: 'categories', component: CategoriesComponent },
     { path: 'library', component: LibraryComponent},
     { path: 'login', component: LoginComponent},

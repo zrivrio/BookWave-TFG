@@ -4,12 +4,12 @@ import { Book } from '../../../models/Book';
 import { RecommendationsService } from '../../../service/recommendations.service';
 import { AuthService } from '../../../service/auth.service';
 import { Subscription } from 'rxjs';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-recommended-books',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './recommended-books.component.html',
   styleUrl: './recommended-books.component.css'
 })

@@ -3,11 +3,12 @@ import { Book } from '../../../models/Book';
 import { BookService } from '../../../service/book.service';
 import { CategoryService } from '../../../service/category.service';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-libros',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './libros.component.html',
   styleUrl: './libros.component.css'
 })

@@ -18,8 +18,7 @@
             <div class="px-3 py-1 rounded-full text-sm font-medium mt-1"
                  [ngClass]="{
                    'bg-[#E6F0F7] text-[#1E0f75]': currentUser.subscriptionType === 'Free',
-                   'bg-[#1E0f75] text-white': currentUser.subscriptionType === 'Premium',
-                   'bg-[#BF8CE1] text-white': currentUser.subscriptionType === 'Custom'
+                   'bg-[#1E0f75] text-white': currentUser.subscriptionType === 'Premium'
                  }">
               {{ currentUser.subscriptionType }}
             </div>
@@ -63,12 +62,8 @@
           </h2>
           <div class="space-y-4">
             <div class="flex flex-col sm:flex-row gap-2">
-              <span class="w-32 text-[#666666] font-medium">Estado:</span>
+              <span class="w-32 text-[#666666] font-medium">Tipo de subcripción:</span>
               <span class="text-[#2A2A2A]">{{ currentUser.subscriptionType }}</span>
-            </div>
-            <div class="flex flex-col sm:flex-row gap-2">
-              <span class="w-32 text-[#666666] font-medium">Miembro desde:</span>
-              <span class="text-[#2A2A2A]">2023 (ejemplo)</span>
             </div>
           </div>
         </div>
