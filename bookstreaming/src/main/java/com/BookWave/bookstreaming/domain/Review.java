@@ -18,18 +18,23 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "book_id", nullable = false)
-    @JsonIgnoreProperties("reviews")
+    // Remove insertable=false, updatable=false to allow setting these values
+    @Column(name = "book_id")
+    private Long bookid;
+
+    @Column(name = "user_id")
+    private Long userid;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "book_id", insertable = false, updatable = false)
+    @JsonIgnoreProperties({"reviews", "hibernateLazyInitializer"})
     private Book book;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    @JsonIgnoreProperties("reviews") 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    @JsonIgnoreProperties({"reviews", "hibernateLazyInitializer"})
     private User user;
 
     private int rating;
-
     private String comment;
-
 }

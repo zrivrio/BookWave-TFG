@@ -15,14 +15,12 @@ import { User } from '../../../models/User';
 })
 export class ReviewListComponent implements OnInit {
   @Input({ required: true }) bookId!: number;
-  @Input() reviews: Review[] = []; // Especifica el tipo como Review[]
+  @Input() reviews: Review[] = [];
   @Input() loading: boolean = false;
   error: string | null = null;
-  user: User = {} as User;
+  users: { [key: number]: User } = {}; // Add this to store user data
 
-  constructor(private reviewService: ReviewService, private userService: UserService) {
-    this.user = userService.getCurrentUser()!;
-  }
+  constructor(private reviewService: ReviewService, private userService: UserService) {}
 
   ngOnInit(): void {
     this.loadReviews();
@@ -31,8 +29,22 @@ export class ReviewListComponent implements OnInit {
   loadReviews(): void {
     this.reviewService.getReviewsByBook(this.bookId).subscribe({
       next: (reviews) => {
-        console.log('Reseñas cargadas:', reviews); // Agrega este log para depuración
         this.reviews = reviews;
+        // Load user data for each review
+        this.reviews.forEach(review => {
+          if (review.userid) { // Add this check
+            this.userService.getUserById(review.userid).subscribe({
+              next: (user) => {
+                if (user) { // Add this check
+                  this.users[review.userid] = user;
+                }
+              },
+              error: (err) => {
+                console.error(`Error loading user data for review ${review.id}:`, err);
+              }
+            });
+          }
+        });
         this.loading = false;
       },
       error: (err) => {
@@ -41,5 +53,9 @@ export class ReviewListComponent implements OnInit {
         console.error(err);
       }
     });
+  }
+
+  getUserForReview(userId: number): User | null {
+    return this.users[userId] || null;
   }
 }

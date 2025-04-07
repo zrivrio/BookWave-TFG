@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Book } from '../../../models/Book';
+import { Book } from '../../../models/book';
 import { RouterModule } from '@angular/router';
 import { BookService } from '../../../service/book.service';
 import { AuthService } from '../../../service/auth.service';

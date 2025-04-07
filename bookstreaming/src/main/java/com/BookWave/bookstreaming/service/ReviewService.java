@@ -14,7 +14,7 @@ public class ReviewService {
     private ReviewRepository reviewRepository;
 
     public List<Review> getReviewsByBook(Long bookId) {
-        return reviewRepository.findByBookId(bookId);
+        return reviewRepository.findByBookid(bookId); // Changed to match repository method name
     }
 
     public Review createReview(Review review) {

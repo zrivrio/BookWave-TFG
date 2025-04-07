@@ -1,5 +1,5 @@
 
-import { Book } from './Book';
+import { Book } from './book';
 import { User } from './User';
 
 

@@ -7,12 +7,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200") // Add this annotation
 @RequestMapping("/user")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
+    // Add this new endpoint
+    @GetMapping("/{id}")
+    public User getUserById(@PathVariable Long id) {
+        return userService.getUserById(id);
+    }
 
     //Logica para crear usuario
     @PostMapping("/signup")
@@ -27,7 +33,7 @@ public class UserController {
     }
 
     @PostMapping("/upgrade/{userId}")
-public User upgradeToPremium(@PathVariable Long userId) {
-    return userService.upgradeUserToPremium(userId);
-}
+    public User upgradeToPremium(@PathVariable Long userId) {
+        return userService.upgradeUserToPremium(userId);
+    }
 }

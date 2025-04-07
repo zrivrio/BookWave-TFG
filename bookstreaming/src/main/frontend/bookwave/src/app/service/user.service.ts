@@ -37,25 +37,21 @@ export class UserService {
   }
 
   getCurrentUser(): User | null {
-    // Intenta obtener del BehaviorSubject primero
-    const user = this.currentUserSubject.value;
-    if (user) return user;
-    
-    // Si no hay en BehaviorSubject, busca en localStorage
     if(typeof localStorage != 'undefined'){
-      const storedUser = localStorage.getItem('currentUser');
-      if (storedUser) {
-        const parsedUser = JSON.parse(storedUser);
-        this.currentUserSubject.next(parsedUser);
-        return parsedUser;
-      }
+      const userJson = localStorage.getItem('currentUser');
+      return userJson ? JSON.parse(userJson) : null;
     }
-    
-    return null;
+    return null; 
   }
 
   clearCurrentUser(): void {
     this.currentUserSubject.next(null);
     localStorage.removeItem('currentUser');
   }
+
+  getUserById(id: number): Observable<User> {
+    return this.http.get<User>(`${this.baseUrl}/${id}`);
+  }
+
+  
 }

@@ -7,7 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "reading_lists")
@@ -27,8 +29,23 @@ public class ReadingList {
     @JsonIgnore
     private User user;
 
-    @ManyToMany()
-    @JsonIgnore
-    private List<Book> books;
+    @ManyToMany
+    @JoinTable(
+        name = "reading_list_books",
+        joinColumns = @JoinColumn(name = "reading_list_id"),
+        inverseJoinColumns = @JoinColumn(name = "book_id"))
+    private Set<Book> books = new HashSet<>();
+
+     // Métodos de conveniencia para manejar la relación bidireccional
+     public void addBook(Book book) {
+        this.books.add(book);
+        book.getReadingLists().add(this);
+    }
+    
+    public void removeBook(Book book) {
+        this.books.remove(book);
+        book.getReadingLists().remove(this);
+    }
+    
 
 }

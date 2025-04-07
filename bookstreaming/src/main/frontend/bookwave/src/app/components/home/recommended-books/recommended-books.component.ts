@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {CommonModule} from '@angular/common';
-import { Book } from '../../../models/Book';
+import { Book } from '../../../models/book';
 import { RecommendationsService } from '../../../service/recommendations.service';
 import { AuthService } from '../../../service/auth.service';
 import { Subscription } from 'rxjs';

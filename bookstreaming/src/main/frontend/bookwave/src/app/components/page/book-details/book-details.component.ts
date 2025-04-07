@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { BookService } from '../../../service/book.service';
-import { Book } from '../../../models/Book';
+import { Book } from '../../../models/book';
 import { ReviewListComponent } from '../../review/review-list/review-list.component';
 import { ReviewFormComponent } from '../../review/review-form/review-form.component';
 import { FormsModule } from '@angular/forms'; // Añadir esto
@@ -59,8 +59,11 @@ export class BookDetailsComponent {
     }
   }
 
+  @ViewChild(ReviewListComponent) reviewList!: ReviewListComponent;
+
   onReviewSubmitted(): void {
-    // Aquí puedes actualizar la lista de reseñas si es necesario
-    // Por ejemplo, recargando las reseñas o actualizando la vista
+      if (this.reviewList) {
+          this.reviewList.loadReviews();
+      }
   }
 }
