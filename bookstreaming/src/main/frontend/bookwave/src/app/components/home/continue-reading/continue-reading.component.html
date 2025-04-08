@@ -1,82 +1,72 @@
-<!-- Estado de Carga -->
 <div *ngIf="isLoading" class="flex flex-col items-center justify-center h-64 space-y-4">
-  <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-[#1E0f75] border-[#E0E9F5]"></div>
-  <p class="text-[#666666] text-sm">Cargando tu progreso...</p>
+  <!-- Spinner de carga -->
 </div>
 
-
-<!-- Estado de Usuario No Logueado -->
 <div *ngIf="!isLoggedIn && !isLoading" class="max-w-md mx-auto p-8 text-center">
-  <div class="w-16 h-16 mx-auto mb-6 bg-[#E6F0F7] rounded-full flex items-center justify-center">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#1E0f75]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-    </svg>
-  </div>
-  <h3 class="text-xl font-semibold text-[#2A2A2A] mb-2">Tu progreso de lectura</h3>
-  <p class="text-[#666666] mb-6">Inicia sesión para ver y continuar con tus libros</p>
-  <div class="space-y-3">
-    <a routerLink="/login" class="block px-6 py-3 bg-[#1E0f75] text-[#FFFFFF] rounded-lg hover:bg-[#1C1DAB] transition-colors font-medium">
-      Iniciar Sesión
-    </a>
-    <a routerLink="/signup" class="block px-6 py-3 border border-[#CCCCCC] text-[#333333] rounded-lg hover:bg-[#F5F5F5] transition-colors">
-      Crear cuenta
-    </a>
-  </div>
+  <!-- Mensaje para usuarios no logueados -->
 </div>
 
-<!-- Estado de Usuario Logueado con Libros -->
 <div *ngIf="isLoggedIn && !isLoading && !error && books.length > 0" class="space-y-6">
-<div *ngFor="let book of books" class="bg-[#FFFFFF] p-4 rounded-xl shadow-xs border border-[#F4F4F4] hover:shadow-sm transition-all">
+  <div *ngFor="let book of books" class="bg-white p-4 rounded-xl shadow-xs border border-gray-100 hover:shadow-sm transition-all">
     <div class="flex space-x-4">
       <div class="relative">
         <img [src]="book.cover || 'assets/images/placeholder.png'" 
              [alt]="book.title || 'Book cover'" 
-             class="w-20 h-28 object-cover rounded-lg border border-[#F4F4F4]">
-        <div class="absolute -bottom-2 -right-2 bg-[#1E0f75] text-[#FFFFFF] text-xs px-2 py-1 rounded-full">
+             class="w-20 h-28 object-cover rounded-lg border border-gray-100">
+        <div class="absolute -bottom-2 -right-2 bg-indigo-900 text-white text-xs px-2 py-1 rounded-full">
           {{ getProgressPercentage(book) }}%
         </div>
       </div>
       
       <div class="flex-1 min-w-0">
-        <h4 class="text-md font-semibold text-[#2A2A2A] truncate">{{ book.title || 'Título no disponible' }}</h4>
-        <p class="text-sm text-[#666666] mb-2">{{ book.author || 'Autor desconocido' }}</p>
+        <h4 class="text-md font-semibold text-gray-800 truncate">{{ book.title || 'Título no disponible' }}</h4>
+        <p class="text-sm text-gray-600 mb-2">{{ book.author || 'Autor desconocido' }}</p>
         
         <div class="mb-3">
-          <div class="h-2 bg-[#F4F4F4] rounded-full overflow-hidden">
-            <div class="h-2 bg-[#3785D8] rounded-full transition-all duration-500 ease-in-out" 
+          <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
+            <div class="h-2 rounded-full transition-all duration-500 ease-in-out" 
+                 [ngClass]="getProgressColor(getProgressPercentage(book))"
                  [style.width.%]="getProgressPercentage(book)"></div>
           </div>
         </div>
         
-        <div class="flex space-x-2">
-          <button class="text-xs text-[#1E0f75] hover:text-[#1C1DAB] font-medium">
-            Continuar
-          </button>
-          <span class="text-[#CCCCCC]">•</span>
-          <button [routerLink]="['/book', book.id]"  class="text-xs text-[#666666] hover:text-[#333333]">
-            Detalles
-          </button>
+        <div class="flex flex-col space-y-2">
+          <div *ngIf="!editingProgress[book.id]" class="flex space-x-2">
+            <button (click)="toggleEditMode(book.id)" class="text-xs text-indigo-900 hover:text-indigo-700 font-medium">
+              Actualizar Progreso
+            </button>
+            <span class="text-gray-300">•</span>
+            <button [routerLink]="['/book', book.id]" class="text-xs text-gray-600 hover:text-gray-800">
+              Continuar Leyendo
+            </button>
+          </div>
+          
+          <div *ngIf="editingProgress[book.id]" class="flex flex-col space-y-3">
+            <div class="flex items-center space-x-3">
+              <input type="range" min="0" max="100" step="1" 
+                     [(ngModel)]="currentProgress[book.id]"
+                     class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+              <span class="text-sm font-medium text-gray-700 w-12 text-center">
+                {{ currentProgress[book.id] }}%
+              </span>
+            </div>
+            <div class="flex space-x-2">
+              <button (click)="updateProgress(book)" 
+                      class="px-3 py-1 text-xs bg-indigo-900 text-white rounded hover:bg-indigo-700">
+                Guardar
+              </button>
+              <button (click)="toggleEditMode(book.id)" 
+                      class="px-3 py-1 text-xs bg-gray-200 text-gray-700 rounded hover:bg-gray-300">
+                Cancelar
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Estado de Sin Libros en Progreso -->
 <div *ngIf="isLoggedIn && !isLoading && !error && books.length === 0" class="max-w-md mx-auto p-8 text-center">
-  <div class="w-16 h-16 mx-auto mb-6 bg-[#E6F0F7] rounded-full flex items-center justify-center">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#1E0f75]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-    </svg>
-  </div>
-  <h3 class="text-xl font-semibold text-[#2A2A2A] mb-2">Aún no tienes libros en progreso</h3>
-  <p class="text-[#666666] mb-6">Explora nuestra biblioteca y comienza tu próxima lectura</p>
-  <div class="space-y-3">
-    <a routerLink="/library" class="block px-6 py-3 bg-[#1E0f75] text-[#FFFFFF] rounded-lg hover:bg-[#1C1DAB] transition-colors font-medium">
-      Explorar Biblioteca
-    </a>
-    <button class="block w-full px-6 py-3 text-[#333333] rounded-lg hover:bg-[#F5F5F5] transition-colors">
-      Ver recomendaciones
-    </button>
-  </div>
+  <!-- Mensaje cuando no hay libros en progreso -->
 </div>

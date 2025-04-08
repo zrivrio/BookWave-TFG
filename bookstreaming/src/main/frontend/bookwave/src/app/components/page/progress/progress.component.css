@@ -1,0 +1,25 @@
+/* Estilos personalizados para el input range */
+input[type=range] {
+    -webkit-appearance: none;
+    height: 6px;
+    background: #E5E7EB;
+    border-radius: 3px;
+  }
+  
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    background: #1E0f75;
+    cursor: pointer;
+    border-radius: 50%;
+  }
+  
+  input[type=range]::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    background: #1E0f75;
+    cursor: pointer;
+    border-radius: 50%;
+  }

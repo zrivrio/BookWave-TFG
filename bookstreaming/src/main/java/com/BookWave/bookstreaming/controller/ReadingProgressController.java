@@ -1,14 +1,10 @@
 package com.BookWave.bookstreaming.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.BookWave.bookstreaming.domain.ReadingProgress;
-import com.BookWave.bookstreaming.domain.Review;
 import com.BookWave.bookstreaming.service.ReadingProgressService;
-import com.BookWave.bookstreaming.service.ReviewService;
 
 
 @RestController

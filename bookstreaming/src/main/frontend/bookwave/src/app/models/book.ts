@@ -1,6 +1,7 @@
 import { Category } from "./Category";
 import { ReadingProgress } from "./ReadinProgress";
 
+
 export interface Book {
     id: number;
     title: string;
@@ -9,7 +10,8 @@ export interface Book {
     cover: string;
     language: string;
     year: number;
+    totalPages?: number;
     averageRating?: number;
     categories?: Category[];
-    readingProgress?: ReadingProgress;
+    readingProgresses?: ReadingProgress[];
 }
