@@ -36,9 +36,14 @@ public class Book {
     @JsonIgnore
     private List<ReadingProgress> readingProgresses;
 
-    @ManyToMany(mappedBy = "books")
+    @ManyToMany
+    @JoinTable(
+        name = "reading_list_books",
+        joinColumns = @JoinColumn(name = "book_id"),
+        inverseJoinColumns = @JoinColumn(name = "reading_list_id")
+    )
     @JsonIgnore
-    private Set<ReadingList> readingLists;
+    private Set<ReadingList> readingLists = new HashSet<>();
 
 }
 

@@ -22,6 +22,4 @@ public interface ReadingListRepository extends JpaRepository<ReadingList, Long> 
 
     List<ReadingList> findByUserId(Long userId);
 
-    long countByUserId(Long userId);
-
 }

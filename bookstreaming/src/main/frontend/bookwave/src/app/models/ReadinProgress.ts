@@ -1,4 +1,4 @@
-import { Book } from "./book";
+import { Book } from "./Book";
 import { User } from "./User";
 
 export interface ReadingProgress {

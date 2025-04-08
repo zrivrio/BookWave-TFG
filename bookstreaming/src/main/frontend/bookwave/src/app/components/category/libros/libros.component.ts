@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { Book } from '../../../models/book';
+import { Book } from '../../../models/Book';
 import { BookService } from '../../../service/book.service';
 import { CategoryService } from '../../../service/category.service';
 import { CommonModule } from '@angular/common';

@@ -3,10 +3,9 @@ import { Review } from '../../../models/Review';
 import { User } from '../../../models/User';
 import { FormsModule } from '@angular/forms'; 
 import { CommonModule } from '@angular/common';
-import { Book } from '../../../models/book';
+import { Book } from '../../../models/Book';
 import { BookService } from '../../../service/book.service';
 import { UserService } from '../../../service/user.service';
-import { ReviewService } from '../../../service/review.service';
 
 @Component({
   selector: 'app-review-form',
@@ -23,11 +22,7 @@ export class ReviewFormComponent {
   usuario: User = {} as User;
   libro: Book = {} as Book;
 
-  constructor(
-    private bookService: BookService, 
-    private userService: UserService,
-    private reviewService: ReviewService // Add this
-  ) {
+  constructor(private bookService: BookService, private userService: UserService) {
     this.usuario = userService.getCurrentUser()!;
     bookService.getBookById(this.bookId).subscribe(
       book => {
@@ -63,24 +58,17 @@ export class ReviewFormComponent {
       return;
     }
   
+    // Crear objeto simplificado para el backend
     const reviewToSend = {
-      bookid: this.bookId, // Change this line: use the @Input bookId instead of this.libro.id
-      userid: this.usuario.id,
+      bookid: this.libro.id , // Solo enviar el ID del libro
+      userid:this.usuario.id, // Solo enviar el ID del usuario
       rating: this.newReview.rating,
       comment: this.newReview.comment.trim()
     };
   
-    this.reviewService.createReview(reviewToSend).subscribe({
-      next: (savedReview) => {
-        this.reviewSubmitted.emit(savedReview);
-        this.resetForm();
-      },
-      error: (error) => {
-        this.error = 'Error al guardar la reseña';
-        console.error('Error saving review:', error);
-      }
-    });
-}
+    this.reviewSubmitted.emit(reviewToSend);
+    this.resetForm();
+  }
 
   private resetForm(): void {
     this.newReview = {

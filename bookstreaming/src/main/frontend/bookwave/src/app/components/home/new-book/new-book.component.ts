@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Book } from '../../../models/book';
+import { Book } from '../../../models/Book';
 import { RecommendationsService } from '../../../service/recommendations.service';
 import { Subscription } from 'rxjs';
 import { Router, RouterModule } from '@angular/router';

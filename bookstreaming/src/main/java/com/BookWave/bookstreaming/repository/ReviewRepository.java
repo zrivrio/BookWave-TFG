@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
-    List<Review> findByBookid(Long bookId); // Changed from findByBookId to findByBookid to match entity field name
+    List<Review> findByBookId(Long bookId);
 }
