@@ -1,7 +1,10 @@
 package com.BookWave.bookstreaming.service;
 
 import com.BookWave.bookstreaming.domain.Book;
+import com.BookWave.bookstreaming.domain.ReadingProgress;
 import com.BookWave.bookstreaming.repository.BookRepository;
+import com.BookWave.bookstreaming.repository.ReadingProgressRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,9 +15,21 @@ public class BookService {
     @Autowired
     private BookRepository bookRepository;
 
+    @Autowired
+    private ReadingProgressRepository readingProgressRepository;
+
     //Metodos de Usuario
     public List<Book> getBooksInProgressByUserId(Long userId) {
-        return bookRepository.findBooksInProgressByUserId(userId);
+        List<Book> books = bookRepository.findBooksInProgressByUserId(userId);
+        
+        // Para cada libro, cargar el progreso específico del usuario
+        books.forEach(book -> {
+            ReadingProgress progress = readingProgressRepository.findByUserIdAndBookId(userId, book.getId())
+                .orElse(null);
+            book.setReadingProgresses(progress != null ? List.of(progress) : List.of());
+        });
+        
+        return books;
     }
 
     public List<Book> getBooksBySearch(String searchTerm) {

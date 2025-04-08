@@ -25,6 +25,7 @@ public class Book {
     private String cover;
     private String language;
     private int year;
+    private Integer totalPages;
     private Double averageRating;
 
     //Relaciones

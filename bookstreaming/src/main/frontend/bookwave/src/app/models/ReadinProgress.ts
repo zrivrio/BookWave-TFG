@@ -1,10 +1,12 @@
-import { Book } from "./Book";
-import { User } from "./User";
-
 export interface ReadingProgress {
-    id: number;
-    user: User;
-    book: Book;
+    id?: number;
+    user: {
+      id: number;
+    };
+    book: {
+      id: number;
+      totalPages?: number;
+    };
     currentPage: number;
     percentageRead: number;
-}
+  }
