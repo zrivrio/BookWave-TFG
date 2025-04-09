@@ -85,44 +85,48 @@ export class ContinueReadingComponent implements OnInit {
     const currentUser = this.authService.currentUserValue;
     if (!currentUser) return;
 
-    let progress = this.getUserReadingProgress(book);
+    const progress = this.getUserReadingProgress(book);
+    const newPercentage = this.currentProgress[book.id];
     
     this.isLoading = true;
 
-    if (!progress) {
-      // Crear nuevo progreso si no existe
-      const newProgress: Omit<ReadingProgress, 'id'> = {
-        user: { id: currentUser.id },
-        book: { id: book.id, totalPages: book.totalPages },
-        currentPage: 0,
-        percentageRead: this.currentProgress[book.id]
-      };
-      
-      this.readingProgressService.createReadingProgress(newProgress).subscribe({
-        next: (createdProgress) => {
-          if (!book.readingProgresses) book.readingProgresses = [];
-          book.readingProgresses.push(createdProgress);
-          this.handleUpdateSuccess(book);
-        },
-        error: (err) => this.handleUpdateError()
-      });
+    if (progress) {
+        // Actualizar progreso existente
+        progress.percentageRead = newPercentage;
+        if (book.totalPages) {
+            progress.currentPage = Math.round((newPercentage * book.totalPages) / 100);
+        }
+        
+        this.readingProgressService.updateReadingProgress(progress).subscribe({
+            next: (updatedProgress) => {
+                // Actualizar el progreso en el array existente
+                const index = book.readingProgresses!.findIndex(p => p.id === updatedProgress.id);
+                if (index >= 0) {
+                    book.readingProgresses![index] = updatedProgress;
+                }
+                this.currentProgress[book.id] = updatedProgress.percentageRead;
+                this.handleUpdateSuccess(book);
+            },
+            error: (err) => this.handleUpdateError()
+        });
     } else {
-      // Actualizar progreso existente
-      progress.percentageRead = this.currentProgress[book.id];
-      if (book.totalPages) {
-        progress.currentPage = Math.round((this.currentProgress[book.id] * book.totalPages) / 100);
-      }
-      
-      this.readingProgressService.updateReadingProgress(progress).subscribe({
-        next: (updatedProgress) => {
-          const index = book.readingProgresses!.findIndex(p => p.id === updatedProgress.id);
-          if (index >= 0) {
-            book.readingProgresses![index] = updatedProgress;
-          }
-          this.handleUpdateSuccess(book);
-        },
-        error: (err) => this.handleUpdateError()
-      });
+        // Crear nuevo progreso
+        const newProgress: Omit<ReadingProgress, 'id'> = {
+            user: { id: currentUser.id },
+            book: { id: book.id, totalPages: book.totalPages },
+            currentPage: Math.round((newPercentage * (book.totalPages || 0)) / 100),
+            percentageRead: newPercentage
+        };
+        
+        this.readingProgressService.createReadingProgress(newProgress).subscribe({
+            next: (createdProgress) => {
+                if (!book.readingProgresses) book.readingProgresses = [];
+                book.readingProgresses.push(createdProgress);
+                this.currentProgress[book.id] = createdProgress.percentageRead;
+                this.handleUpdateSuccess(book);
+            },
+            error: (err) => this.handleUpdateError()
+        });
     }
 }
 

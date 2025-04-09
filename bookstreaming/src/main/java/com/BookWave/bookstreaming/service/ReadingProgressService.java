@@ -1,6 +1,8 @@
 package com.BookWave.bookstreaming.service;
 
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,19 +36,20 @@ public class ReadingProgressService {
     }
 
     public ReadingProgress saveReadingProgress(ReadingProgress progress) {
-        // Validar que el porcentaje esté entre 0 y 100
-        if (progress.getPercentageRead() < 0) {
-            progress.setPercentageRead(0.0);
-        } else if (progress.getPercentageRead() > 100) {
-            progress.setPercentageRead(100.0);
+        // Buscar progreso existente
+        Optional<ReadingProgress> existingProgress = readingProgressRepository
+            .findByUserIdAndBookId(progress.getUser().getId(), progress.getBook().getId());
+        
+        // Si existe, actualizarlo manteniendo el ID original
+        if (existingProgress.isPresent()) {
+            ReadingProgress toUpdate = existingProgress.get();
+            toUpdate.setCurrentPage(progress.getCurrentPage());
+            toUpdate.setPercentageRead(progress.getPercentageRead());
+            return readingProgressRepository.save(toUpdate);
         }
-
-        // Calcular currentPage basado en el porcentaje (asumiendo que el libro tiene totalPages)
-        if (progress.getBook() != null && progress.getBook().getTotalPages() != null) {
-            int totalPages = progress.getBook().getTotalPages();
-            progress.setCurrentPage((int) Math.round(progress.getPercentageRead() * totalPages / 100));
-        }
-
+        
+        // Si no existe, crear nuevo asegurándose de que el ID sea null
+        progress.setId(null);
         return readingProgressRepository.save(progress);
     }
 }

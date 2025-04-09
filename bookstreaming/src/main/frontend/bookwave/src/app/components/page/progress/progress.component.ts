@@ -23,7 +23,7 @@ export class ProgressComponent {
   currentProgress: { [key: number]: number } = {};
 
   constructor(
-    private readingProgress: ReadingProgressService,
+    private readingProgressService: ReadingProgressService,
     private bookService: BookService,
     private authService: AuthService
   ) {}
@@ -62,15 +62,20 @@ export class ProgressComponent {
 
   private initializeProgress(): void {
     this.books.forEach(book => {
-      const progress = this.getReadingProgress(book);
+      const progress = this.getUserReadingProgress(book);
       this.currentProgress[book.id] = progress ? progress.percentageRead : 0;
     });
   }
 
-  getReadingProgress(book: Book): ReadingProgress | null {
-    if (!book.readingProgresses || book.readingProgresses.length === 0) return null;
+  getUserReadingProgress(book: Book) {
     const currentUser = this.authService.currentUserValue;
-    return book.readingProgresses.find(p => p.user.id === currentUser!.id) || null;
+    if (!book.readingProgresses || !currentUser) return null;
+    return book.readingProgresses.find(p => p.user.id === currentUser.id);
+  }
+
+  getProgressPercentage(book: Book): number {
+    const progress = this.getUserReadingProgress(book);
+    return progress ? progress.percentageRead : 0;
   }
 
   toggleEditMode(bookId: number): void {
@@ -78,33 +83,62 @@ export class ProgressComponent {
   }
 
   updateProgress(book: Book): void {
-    const progress = this.getReadingProgress(book);
-    if (!progress) return;
+    const currentUser = this.authService.currentUserValue;
+    if (!currentUser) return;
 
+    const progress = this.getUserReadingProgress(book);
+    const newPercentage = this.currentProgress[book.id];
+    
     this.isLoading = true;
-    progress.percentageRead = this.currentProgress[book.id];
-    
-    this.readingProgress.updateReadingProgress(progress).subscribe({
-      next: () => {
-        this.isLoading = false;
-        this.editingProgress[book.id] = false;
-      },
-      error: (err) => {
-        this.error = 'Error al actualizar el progreso';
-        this.isLoading = false;
-      }
-    });
-    
-    // Simulación hasta que implementes el servicio
-    setTimeout(() => {
-      this.isLoading = false;
-      this.editingProgress[book.id] = false;
-    }, 500);
+
+    if (progress) {
+        // Actualizar progreso existente
+        progress.percentageRead = newPercentage;
+        if (book.totalPages) {
+            progress.currentPage = Math.round((newPercentage * book.totalPages) / 100);
+        }
+        
+        this.readingProgressService.updateReadingProgress(progress).subscribe({
+            next: (updatedProgress) => {
+                // Actualizar el progreso en el array existente
+                const index = book.readingProgresses!.findIndex(p => p.id === updatedProgress.id);
+                if (index >= 0) {
+                    book.readingProgresses![index] = updatedProgress;
+                }
+                this.currentProgress[book.id] = updatedProgress.percentageRead;
+                this.handleUpdateSuccess(book);
+            },
+            error: (err) => this.handleUpdateError()
+        });
+    } else {
+        // Crear nuevo progreso
+        const newProgress: Omit<ReadingProgress, 'id'> = {
+            user: { id: currentUser.id },
+            book: { id: book.id, totalPages: book.totalPages },
+            currentPage: Math.round((newPercentage * (book.totalPages || 0)) / 100),
+            percentageRead: newPercentage
+        };
+        
+        this.readingProgressService.createReadingProgress(newProgress).subscribe({
+            next: (createdProgress) => {
+                if (!book.readingProgresses) book.readingProgresses = [];
+                book.readingProgresses.push(createdProgress);
+                this.currentProgress[book.id] = createdProgress.percentageRead;
+                this.handleUpdateSuccess(book);
+            },
+            error: (err) => this.handleUpdateError()
+        });
+    }
+}
+
+  private handleUpdateSuccess(book: Book): void {
+    this.isLoading = false;
+    this.editingProgress[book.id] = false;
   }
 
-  getProgressPercentage(book: Book): number {
-    const progress = this.getReadingProgress(book);
-    return progress ? progress.percentageRead : 0;
+  private handleUpdateError(): void {
+    this.error = 'Error al actualizar el progreso';
+    this.isLoading = false;
   }
 
   getProgressColor(percentage: number): string {
