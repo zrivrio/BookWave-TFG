@@ -8,6 +8,7 @@ import com.BookWave.bookstreaming.repository.ReadingProgressRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,7 +27,14 @@ public class BookService {
         books.forEach(book -> {
             ReadingProgress progress = readingProgressRepository.findByUserIdAndBookId(userId, book.getId())
                 .orElse(null);
-            book.setReadingProgresses(progress != null ? List.of(progress) : List.of());
+            if (progress != null) {
+                // Asegurarse de que la lista de progreso está inicializada
+                if (book.getReadingProgresses() == null) {
+                    book.setReadingProgresses(new ArrayList<>());
+                }
+                book.getReadingProgresses().clear(); // Limpiar la lista existente
+                book.getReadingProgresses().add(progress); // Añadir el progreso actual
+            }
         });
         
         return books;

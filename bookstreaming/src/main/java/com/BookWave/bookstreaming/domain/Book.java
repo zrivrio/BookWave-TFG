@@ -33,7 +33,7 @@ public class Book {
     @JsonIgnore
     private Set<Category> categories;
 
-    @OneToMany(mappedBy = "book")
+    @OneToMany(mappedBy = "book", fetch = FetchType.EAGER)
     @JsonIgnore
     private List<ReadingProgress> readingProgresses;
 

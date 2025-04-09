@@ -31,9 +31,9 @@
           <img [src]="book.cover || 'assets/images/placeholder.png'" 
                [alt]="book.title || 'Book cover'" 
                class="w-20 h-28 object-cover rounded-lg border border-[#F4F4F4]">
-          <div class="absolute -bottom-2 -right-2 bg-[#1E0f75] text-[#FFFFFF] text-xs px-2 py-1 rounded-full">
-            {{ getProgressPercentage(book) }}%
-          </div>
+               <div class="absolute -bottom-2 -right-2 bg-[#1E0f75] text-[#FFFFFF] text-xs px-2 py-1 rounded-full">
+                {{ getProgressPercentage(book) }}%
+            </div>
         </div>
         
         <div class="flex-1 min-w-0">
@@ -64,9 +64,9 @@
                 <input type="range" min="0" max="100" step="1" 
                        [(ngModel)]="currentProgress[book.id]"
                        class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
-                       <div class="absolute -bottom-2 -right-2 bg-[#1E0f75] text-[#FFFFFF] text-xs px-2 py-1 rounded-full">
-                        {{ currentProgress[book.id] || getProgressPercentage(book) }}%
-                    </div>
+                <span class="text-sm font-medium text-gray-700 w-12 text-center">
+                  {{ currentProgress[book.id] }}%
+                </span>
               </div>
               <div class="flex space-x-2">
                 <button (click)="updateProgress(book)" 

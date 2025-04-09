@@ -17,6 +17,7 @@ import { RouterModule } from '@angular/router';
 export class ProgressComponent {
   @Input() books: Book[] = [];
   isLoading: boolean = false;
+  readingProgresses: {[bookId: number]: ReadingProgress} = {}; // Almacena los progresos por libro
   error: string = '';
   isLoggedIn: boolean = false;
   editingProgress: { [key: number]: boolean } = {};
@@ -50,7 +51,7 @@ export class ProgressComponent {
     this.bookService.getBooksInProgress(currentUser.id).subscribe({
       next: (books) => {
         this.books = books;
-        this.initializeProgress();
+        this.loadAllReadingProgresses(currentUser.id);
         this.isLoading = false;
       },
       error: (err) => {
@@ -60,21 +61,42 @@ export class ProgressComponent {
     });
   }
 
-  private initializeProgress(): void {
+  private loadAllReadingProgresses(userId: number): void {
     this.books.forEach(book => {
-      const progress = this.getUserReadingProgress(book);
-      this.currentProgress[book.id] = progress ? progress.percentageRead : 0;
+      this.loadReadingProgress(userId, book.id);
     });
   }
 
-  getUserReadingProgress(book: Book) {
+  private loadReadingProgress(userId: number, bookId: number): void {
+    this.readingProgressService.getReadingProgress(userId, bookId).subscribe({
+      next: (progress) => {
+        this.readingProgresses[bookId] = progress;
+        this.currentProgress[bookId] = progress.percentageRead;
+      },
+      error: (err) => {
+        // Si no existe progreso, crea uno por defecto
+        this.readingProgresses[bookId] = {
+          user: { id: userId },
+          book: { id: bookId },
+          currentPage: 0,
+          percentageRead: 0
+        };
+        this.currentProgress[bookId] = 0;
+      }
+    });
+  }
+
+  private initializeProgress(): void {
     const currentUser = this.authService.currentUserValue;
-    if (!book.readingProgresses || !currentUser) return null;
-    return book.readingProgresses.find(p => p.user.id === currentUser.id);
+    if (!currentUser) return;
+
+    this.books.forEach(book => {
+      this.loadReadingProgress(currentUser.id, book.id);
+    });
   }
 
   getProgressPercentage(book: Book): number {
-    const progress = this.getUserReadingProgress(book);
+    const progress = this.readingProgresses[book.id];
     return progress ? progress.percentageRead : 0;
   }
 
@@ -86,50 +108,46 @@ export class ProgressComponent {
     const currentUser = this.authService.currentUserValue;
     if (!currentUser) return;
 
-    const progress = this.getUserReadingProgress(book);
+    const progress = this.readingProgresses[book.id];
     const newPercentage = this.currentProgress[book.id];
     
     this.isLoading = true;
 
-    if (progress) {
-        // Actualizar progreso existente
-        progress.percentageRead = newPercentage;
-        if (book.totalPages) {
-            progress.currentPage = Math.round((newPercentage * book.totalPages) / 100);
-        }
-        
-        this.readingProgressService.updateReadingProgress(progress).subscribe({
-            next: (updatedProgress) => {
-                // Actualizar el progreso en el array existente
-                const index = book.readingProgresses!.findIndex(p => p.id === updatedProgress.id);
-                if (index >= 0) {
-                    book.readingProgresses![index] = updatedProgress;
-                }
-                this.currentProgress[book.id] = updatedProgress.percentageRead;
-                this.handleUpdateSuccess(book);
-            },
-            error: (err) => this.handleUpdateError()
-        });
+    const updateData: Partial<ReadingProgress> = {
+      user: { id: currentUser.id },
+      book: { id: book.id },
+      currentPage: Math.round((newPercentage * (book.totalPages || 0)) / 100),
+      percentageRead: newPercentage
+    };
+
+    if (progress && progress.id) {
+      // Actualizar progreso existente
+      this.readingProgressService.updateReadingProgress({
+        ...progress,
+        ...updateData
+      }).subscribe({
+        next: (updatedProgress) => {
+          this.readingProgresses[book.id] = updatedProgress;
+          this.currentProgress[book.id] = updatedProgress.percentageRead;
+          this.handleUpdateSuccess(book);
+        },
+        error: (err) => this.handleUpdateError()
+      });
     } else {
-        // Crear nuevo progreso
-        const newProgress: Omit<ReadingProgress, 'id'> = {
-            user: { id: currentUser.id },
-            book: { id: book.id, totalPages: book.totalPages },
-            currentPage: Math.round((newPercentage * (book.totalPages || 0)) / 100),
-            percentageRead: newPercentage
-        };
-        
-        this.readingProgressService.createReadingProgress(newProgress).subscribe({
-            next: (createdProgress) => {
-                if (!book.readingProgresses) book.readingProgresses = [];
-                book.readingProgresses.push(createdProgress);
-                this.currentProgress[book.id] = createdProgress.percentageRead;
-                this.handleUpdateSuccess(book);
-            },
-            error: (err) => this.handleUpdateError()
-        });
+      // Crear nuevo progreso
+      this.readingProgressService.createReadingProgress({
+        ...updateData,
+        id: undefined
+      } as ReadingProgress).subscribe({
+        next: (createdProgress) => {
+          this.readingProgresses[book.id] = createdProgress;
+          this.currentProgress[book.id] = createdProgress.percentageRead;
+          this.handleUpdateSuccess(book);
+        },
+        error: (err) => this.handleUpdateError()
+      });
     }
-}
+  }
 
   private handleUpdateSuccess(book: Book): void {
     this.isLoading = false;

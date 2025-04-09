@@ -1,8 +1,6 @@
 package com.BookWave.bookstreaming.service;
 
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +8,8 @@ import com.BookWave.bookstreaming.domain.ReadingProgress;
 import com.BookWave.bookstreaming.repository.BookRepository;
 import com.BookWave.bookstreaming.repository.ReadingProgressRepository;
 import com.BookWave.bookstreaming.repository.UserRepository;
+
+import java.util.Optional;
 
 @Service
 public class ReadingProgressService {
@@ -38,8 +38,8 @@ public class ReadingProgressService {
     public ReadingProgress saveReadingProgress(ReadingProgress progress) {
         // Buscar progreso existente
         Optional<ReadingProgress> existingProgress = readingProgressRepository
-            .findByUserIdAndBookId(progress.getUser().getId(), progress.getBook().getId());
-        
+                .findByUserIdAndBookId(progress.getUser().getId(), progress.getBook().getId());
+
         // Si existe, actualizarlo manteniendo el ID original
         if (existingProgress.isPresent()) {
             ReadingProgress toUpdate = existingProgress.get();
@@ -47,9 +47,6 @@ public class ReadingProgressService {
             toUpdate.setPercentageRead(progress.getPercentageRead());
             return readingProgressRepository.save(toUpdate);
         }
-        
-        // Si no existe, crear nuevo asegurándose de que el ID sea null
-        progress.setId(null);
         return readingProgressRepository.save(progress);
     }
 }

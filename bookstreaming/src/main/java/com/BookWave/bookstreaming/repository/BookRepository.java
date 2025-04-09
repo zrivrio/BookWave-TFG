@@ -11,7 +11,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
 
-   @Query("SELECT rp.book FROM ReadingProgress rp WHERE rp.user.id = :userId AND rp.percentageRead > 0")
+   // Update the query to include reading progress
+   @Query("SELECT DISTINCT b FROM Book b JOIN b.readingProgresses rp WHERE rp.user.id = :userId AND rp.percentageRead > 0")
    List<Book> findBooksInProgressByUserId(@Param("userId") Long userId);
 
    @Query(value = """
