@@ -5,6 +5,8 @@ import { CommonModule } from '@angular/common';
 import { DatePipe } from '@angular/common';
 import { UserService } from '../../../service/user.service';
 import { User } from '../../../models/User';
+import { Role } from '../../../models/Role';
+import { SubscriptionType } from '../../../models/SubscriptionType';
 
 @Component({
   selector: 'app-review-list',
@@ -15,13 +17,25 @@ import { User } from '../../../models/User';
 })
 export class ReviewListComponent implements OnInit {
   @Input({ required: true }) bookId!: number;
-  @Input() reviews: Review[] = []; // Especifica el tipo como Review[]
+  @Input() reviews: Review[] = [];
   @Input() loading: boolean = false;
   error: string | null = null;
-  user: User = {} as User;
+  user: User = {
+    id: 0,
+    username: 'Usuario anónimo',
+    email: '',
+    password: '',
+    role: Role.User,
+    subscriptionType: SubscriptionType.Free,
+    reviews: [],
+    readingLists: []
+  };
 
   constructor(private reviewService: ReviewService, private userService: UserService) {
-    this.user = userService.getCurrentUser()!;
+    const currentUser = userService.getCurrentUser();
+    if (currentUser) {
+      this.user = currentUser;
+    }
   }
 
   ngOnInit(): void {
@@ -31,7 +45,6 @@ export class ReviewListComponent implements OnInit {
   loadReviews(): void {
     this.reviewService.getReviewsByBook(this.bookId).subscribe({
       next: (reviews) => {
-        console.log('Reseñas cargadas:', reviews); // Agrega este log para depuración
         this.reviews = reviews;
         this.loading = false;
       },
