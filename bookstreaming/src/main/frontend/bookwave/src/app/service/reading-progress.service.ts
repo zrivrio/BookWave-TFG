@@ -24,13 +24,6 @@ export class ReadingProgressService {
     return this.http.put<ReadingProgress>(`${this.apiUrl}/${progress.id}`, progress);
   }
 
-  saveReadingProgress(progress: ReadingProgress): Observable<ReadingProgress> {
-    if (progress.id) {
-      return this.updateReadingProgress(progress);
-    } else {
-      return this.createReadingProgress(progress);
-    }
-  }
   deleteReadingProgress(progressId: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${progressId}`);
   }

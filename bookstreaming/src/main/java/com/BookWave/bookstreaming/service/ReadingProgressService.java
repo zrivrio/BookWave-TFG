@@ -40,7 +40,6 @@ public class ReadingProgressService {
     }
 
     public ReadingProgress saveReadingProgress(ReadingProgress progress) {
-        System.out.print("Consolaaaaaa:   " + progress);
         User usuario = userRepository.findById(progress.getUser().getId()).orElseThrow();
         Book book = bookRepository.findById(progress.getBook().getId()).orElseThrow();
 

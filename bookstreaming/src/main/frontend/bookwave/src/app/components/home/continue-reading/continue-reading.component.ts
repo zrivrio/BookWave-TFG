@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Book } from '../../../models/Book';
 import { RouterModule } from '@angular/router';
-import { BookService } from '../../../service/book.service';
 import { AuthService } from '../../../service/auth.service';
 import { ReadingProgressService } from '../../../service/reading-progress.service';
 import { ReadingProgress } from '../../../models/ReadinProgress';
@@ -24,11 +23,10 @@ export class ContinueReadingComponent implements OnInit {
   editingProgress: { [key: number]: boolean } = {};
   currentProgress: { [key: number]: number } = {};
   readingProgresses: { [bookId: number]: ReadingProgress } = {};
-
+  
   constructor(
-    private bookService: BookService,
-    private authService: AuthService,
-    private readingProgressService: ReadingProgressService
+      private authService: AuthService,
+      private readingProgressService: ReadingProgressService
   ) {}
 
   ngOnInit(): void {
@@ -52,7 +50,7 @@ export class ContinueReadingComponent implements OnInit {
       .pipe(finalize(() => this.isLoading = false))
       .subscribe({
         next: (books) => {
-          this.books = books.slice(0, 3); // Only show first 3 books
+          this.books = books.slice(0, 3);
           this.loadReadingProgresses(currentUser.id);
         },
         error: (err) => {
@@ -70,7 +68,6 @@ export class ContinueReadingComponent implements OnInit {
             this.currentProgress[book.id] = progress.percentageRead;
           },
           error: (err) => {
-            // Si no existe progreso, inicializar con 0%
             this.readingProgresses[book.id] = {
               user: { id: userId },
               book: { id: book.id },
@@ -133,6 +130,7 @@ export class ContinueReadingComponent implements OnInit {
     this.error = 'Error al actualizar el progreso';
     this.isLoading = false;
   }
+
 
   getProgressColor(percentage: number): string {
     if (percentage < 25) return 'bg-red-500';

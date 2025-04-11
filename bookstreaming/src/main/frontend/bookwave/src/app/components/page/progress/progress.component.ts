@@ -3,7 +3,6 @@ import { ReadingProgress } from '../../../models/ReadinProgress';
 import { ReadingProgressService } from '../../../service/reading-progress.service';
 import { Book } from '../../../models/Book';
 import { AuthService } from '../../../service/auth.service';
-import { BookService } from '../../../service/book.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -17,26 +16,24 @@ import { RouterModule } from '@angular/router';
 export class ProgressComponent implements OnInit {
   @Input() books: Book[] = [];
   isLoading: boolean = false;
-  readingProgresses: {[bookId: number]: ReadingProgress} = {}; // Almacena los progresos por libro
+  readingProgresses: {[bookId: number]: ReadingProgress} = {}; 
   error: string = '';
   isLoggedIn: boolean = false;
   editingProgress: { [key: number]: boolean } = {};
   currentProgress: { [key: number]: number } = {};
 
   constructor(
-    private readingProgressService: ReadingProgressService,
-    private authService: AuthService
+      private readingProgressService: ReadingProgressService,
+      private authService: AuthService
   ) {}
 
   ngOnInit(): void {
     this.isLoggedIn = this.authService.isAuthenticated();
-    // Always load books in progress if user is logged in
     if (this.isLoggedIn) {
       this.loadBooksInProgress();
     }
   }
 
-  // Add ngOnChanges to handle when books input changes
   ngOnChanges(): void {
     if (this.isLoggedIn && this.books.length > 0) {
       this.initializeProgress();
@@ -79,7 +76,6 @@ export class ProgressComponent implements OnInit {
         this.currentProgress[bookId] = progress.percentageRead;
       },
       error: (err) => {
-        // Si no existe progreso, crea uno por defecto
         this.readingProgresses[bookId] = {
           user: { id: userId },
           book: { id: bookId },
@@ -158,6 +154,7 @@ export class ProgressComponent implements OnInit {
     if (percentage < 75) return 'bg-blue-500';
     return 'bg-green-500';
   }
+
   deleteProgress(book: Book): void {
     const progress = this.readingProgresses[book.id];
     if (!progress?.id) return;
@@ -165,7 +162,6 @@ export class ProgressComponent implements OnInit {
     this.isLoading = true;
     this.readingProgressService.deleteReadingProgress(progress.id).subscribe({
       next: () => {
-        // Remove the book from the lists
         this.books = this.books.filter(b => b.id !== book.id);
         delete this.readingProgresses[book.id];
         delete this.currentProgress[book.id];
