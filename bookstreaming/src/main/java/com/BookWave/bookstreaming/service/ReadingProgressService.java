@@ -11,7 +11,9 @@ import com.BookWave.bookstreaming.repository.BookRepository;
 import com.BookWave.bookstreaming.repository.ReadingProgressRepository;
 import com.BookWave.bookstreaming.repository.UserRepository;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -56,5 +58,12 @@ public class ReadingProgressService {
 
     public void deleteReadingProgress(Long id) {
         readingProgressRepository.deleteById(id);
+    }
+
+    public List<Book> getBooksInProgress(Long userId) {
+        return readingProgressRepository.findBooksByUserId(userId)
+                .stream()
+                .map(ReadingProgress::getBook)
+                .collect(Collectors.toList());
     }
 }

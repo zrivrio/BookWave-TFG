@@ -1,7 +1,11 @@
 package com.BookWave.bookstreaming.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import com.BookWave.bookstreaming.domain.Book;
 import com.BookWave.bookstreaming.domain.ReadingProgress;
 import com.BookWave.bookstreaming.service.ReadingProgressService;
 
@@ -11,6 +15,11 @@ import com.BookWave.bookstreaming.service.ReadingProgressService;
 public class ReadingProgressController {
     @Autowired
     private ReadingProgressService readingProgressService;
+
+    @GetMapping("/user/{userId}/books")
+    public List<Book> getBooksInProgress(@PathVariable Long userId) {
+        return readingProgressService.getBooksInProgress(userId);
+    }
 
     @GetMapping("/user/{userId}/book/{bookId}")
     public ReadingProgress getReadingProgress(

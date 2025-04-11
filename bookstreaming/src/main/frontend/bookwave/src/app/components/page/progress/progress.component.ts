@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ReadingProgress } from '../../../models/ReadinProgress';
 import { ReadingProgressService } from '../../../service/reading-progress.service';
 import { Book } from '../../../models/Book';
@@ -14,7 +14,7 @@ import { RouterModule } from '@angular/router';
   templateUrl: './progress.component.html',
   styleUrl: './progress.component.css'
 })
-export class ProgressComponent {
+export class ProgressComponent implements OnInit {
   @Input() books: Book[] = [];
   isLoading: boolean = false;
   readingProgresses: {[bookId: number]: ReadingProgress} = {}; // Almacena los progresos por libro
@@ -25,15 +25,20 @@ export class ProgressComponent {
 
   constructor(
     private readingProgressService: ReadingProgressService,
-    private bookService: BookService,
     private authService: AuthService
   ) {}
 
   ngOnInit(): void {
     this.isLoggedIn = this.authService.isAuthenticated();
-    if (this.isLoggedIn && this.books.length === 0) {
+    // Always load books in progress if user is logged in
+    if (this.isLoggedIn) {
       this.loadBooksInProgress();
-    } else if (this.books.length > 0) {
+    }
+  }
+
+  // Add ngOnChanges to handle when books input changes
+  ngOnChanges(): void {
+    if (this.isLoggedIn && this.books.length > 0) {
       this.initializeProgress();
     }
   }
@@ -48,7 +53,7 @@ export class ProgressComponent {
       return;
     }
 
-    this.bookService.getBooksInProgress(currentUser.id).subscribe({
+    this.readingProgressService.getBooksInProgress(currentUser.id).subscribe({
       next: (books) => {
         this.books = books;
         this.loadAllReadingProgresses(currentUser.id);

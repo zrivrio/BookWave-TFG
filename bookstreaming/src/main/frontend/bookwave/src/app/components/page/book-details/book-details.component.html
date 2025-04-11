@@ -46,7 +46,11 @@
             
             <!-- Actions -->
             <div class="flex flex-wrap gap-3 pt-4">
-              <button class="px-6 py-2 bg-[#1E0f75] hover:bg-[#1C1DAB] text-white rounded-lg shadow-md transition-colors font-medium">
+              <button 
+                (click)="onReadNow()"
+                [disabled]="!currentUser"
+                class="px-6 py-2 bg-[#1E0f75] hover:bg-[#1C1DAB] text-white rounded-lg shadow-md transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                [title]="!currentUser ? 'Debes iniciar sesión para leer' : 'Comenzar a leer'">
                 Leer ahora
               </button>
               <button class="px-6 py-2 border border-[#1E0f75] text-[#1E0f75] hover:bg-[#E6F0F7] rounded-lg transition-colors font-medium">
@@ -81,7 +85,7 @@
   </div>
 
   <!-- Sección de reseñas -->
-<div *ngIf="book">
+<div *ngIf="book && book.id">
   <app-review-form 
     *ngIf="currentUser"
     [bookId]="book.id" 
@@ -89,5 +93,5 @@
     (reviewSubmitted)="onReviewSubmitted()"
   ></app-review-form>
 
-  <app-review-list *ngIf="book.id" [bookId]="book.id"></app-review-list>
+  <app-review-list [bookId]="book.id"></app-review-list>
 </div>

@@ -48,11 +48,11 @@ export class ContinueReadingComponent implements OnInit {
       return;
     }
 
-    this.bookService.getBooksInProgress(currentUser.id)
+    this.readingProgressService.getBooksInProgress(currentUser.id)
       .pipe(finalize(() => this.isLoading = false))
       .subscribe({
         next: (books) => {
-          this.books = books.slice(0, 3);
+          this.books = books.slice(0, 3); // Only show first 3 books
           this.loadReadingProgresses(currentUser.id);
         },
         error: (err) => {

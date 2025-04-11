@@ -3,6 +3,7 @@ package com.BookWave.bookstreaming.controller;
 import com.BookWave.bookstreaming.domain.Book;
 import com.BookWave.bookstreaming.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -31,9 +32,17 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    public Book getBookById(@PathVariable String id) {
-        Long bookId = Long.parseLong(id);
-        return bookService.getBookById(bookId);
+    public ResponseEntity<?> getBookById(@PathVariable String id) {
+        try {
+            Long bookId = Long.parseLong(id);
+            Book book = bookService.getBookById(bookId);
+            if (book == null) {
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.ok(book);
+        } catch (NumberFormatException e) {
+            return ResponseEntity.badRequest().body("Invalid book ID format");
+        }
     }
 
     @PostMapping

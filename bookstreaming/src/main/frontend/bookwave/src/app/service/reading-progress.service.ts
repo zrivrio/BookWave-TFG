@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ReadingProgress } from '../models/ReadinProgress';
+import { Book } from '../models/Book';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +33,10 @@ export class ReadingProgressService {
   }
   deleteReadingProgress(progressId: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${progressId}`);
+  }
+
+  getBooksInProgress(userId: number): Observable<Book[]> {
+    return this.http.get<Book[]>(`${this.apiUrl}/user/${userId}/books`);
   }
 
 }
