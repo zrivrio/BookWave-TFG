@@ -106,47 +106,52 @@ export class ProgressComponent {
 
   updateProgress(book: Book): void {
     const currentUser = this.authService.currentUserValue;
-    if (!currentUser) return;
-
+    if (!currentUser) {
+      console.error('Usuario no autenticado');
+      return;
+    }
+  
+    console.log('Iniciando actualización de progreso para libro:', book.id);
+  
     const progress = this.readingProgresses[book.id];
     const newPercentage = this.currentProgress[book.id];
     
     this.isLoading = true;
-
+    console.log('Nuevo porcentaje:', newPercentage);
+  
     const updateData: Partial<ReadingProgress> = {
       user: { id: currentUser.id },
       book: { id: book.id },
       currentPage: Math.round((newPercentage * (book.totalPages || 0)) / 100),
       percentageRead: newPercentage
     };
-
-    if (progress && progress.id) {
-      // Actualizar progreso existente
-      this.readingProgressService.updateReadingProgress({
-        ...progress,
-        ...updateData
-      }).subscribe({
-        next: (updatedProgress) => {
-          this.readingProgresses[book.id] = updatedProgress;
-          this.currentProgress[book.id] = updatedProgress.percentageRead;
-          this.handleUpdateSuccess(book);
-        },
-        error: (err) => this.handleUpdateError()
-      });
-    } else {
-      // Crear nuevo progreso
-      this.readingProgressService.createReadingProgress({
-        ...updateData,
-        id: undefined
-      } as ReadingProgress).subscribe({
-        next: (createdProgress) => {
-          this.readingProgresses[book.id] = createdProgress;
-          this.currentProgress[book.id] = createdProgress.percentageRead;
-          this.handleUpdateSuccess(book);
-        },
-        error: (err) => this.handleUpdateError()
-      });
-    }
+  
+    console.log('Datos a enviar:', updateData);
+  
+    const request$ = progress?.id 
+      ? this.readingProgressService.updateReadingProgress({
+          ...progress,
+          ...updateData
+        })
+      : this.readingProgressService.createReadingProgress({
+          ...updateData,
+          id: undefined
+        } as ReadingProgress);
+  
+    request$.subscribe({
+      next: (updatedProgress) => {
+        console.log('Actualización exitosa:', updatedProgress);
+        this.readingProgresses[book.id] = updatedProgress;
+        this.currentProgress[book.id] = updatedProgress.percentageRead;
+        this.isLoading = false;
+        this.editingProgress[book.id] = false;
+      },
+      error: (err) => {
+        console.error('Error al actualizar progreso:', err);
+        this.error = 'Error al actualizar el progreso';
+        this.isLoading = false;
+      }
+    });
   }
 
   private handleUpdateSuccess(book: Book): void {

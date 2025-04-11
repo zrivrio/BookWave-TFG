@@ -5,7 +5,6 @@ export interface ReadingProgress {
     };
     book: {
       id: number;
-      totalPages?: number;
     };
     currentPage: number;
     percentageRead: number;

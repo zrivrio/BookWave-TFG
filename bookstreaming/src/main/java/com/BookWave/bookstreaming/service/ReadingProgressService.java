@@ -1,6 +1,9 @@
 package com.BookWave.bookstreaming.service;
 
 
+import com.BookWave.bookstreaming.domain.Book;
+import com.BookWave.bookstreaming.domain.User;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +14,7 @@ import com.BookWave.bookstreaming.repository.UserRepository;
 
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class ReadingProgressService {
     @Autowired
@@ -36,9 +40,12 @@ public class ReadingProgressService {
     }
 
     public ReadingProgress saveReadingProgress(ReadingProgress progress) {
+        System.out.print("Consolaaaaaa:   " + progress);
+        User usuario = userRepository.findById(progress.getUser().getId()).orElseThrow();
+        Book book = bookRepository.findById(progress.getBook().getId()).orElseThrow();
         // Buscar progreso existente
         Optional<ReadingProgress> existingProgress = readingProgressRepository
-                .findByUserIdAndBookId(progress.getUser().getId(), progress.getBook().getId());
+                .findByUserIdAndBookId(usuario.getId(), book.getId());
 
         // Si existe, actualizarlo manteniendo el ID original
         if (existingProgress.isPresent()) {

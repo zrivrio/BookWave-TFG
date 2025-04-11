@@ -1,6 +1,8 @@
 package com.BookWave.bookstreaming.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.BookWave.bookstreaming.domain.ReadingProgress;
@@ -15,19 +17,27 @@ public class ReadingProgressController {
     private ReadingProgressService readingProgressService;
 
     @GetMapping("/user/{userId}/book/{bookId}")
-    public ReadingProgress getReadingProgress(@PathVariable Long userId, @PathVariable Long bookId) {
-        return readingProgressService.getReadingProgress(userId, bookId);
+    public ResponseEntity<ReadingProgress> getReadingProgress(
+            @PathVariable Long userId, 
+            @PathVariable Long bookId) {
+        ReadingProgress progress = readingProgressService.getReadingProgress(userId, bookId);
+        return ResponseEntity.ok(progress);
     }
 
     @PostMapping
-    public ReadingProgress createOrUpdateReadingProgress(@RequestBody ReadingProgress progress) {
-        return readingProgressService.saveReadingProgress(progress);
+    public ResponseEntity<ReadingProgress> createReadingProgress(
+            @RequestBody ReadingProgress progress) {
+        ReadingProgress savedProgress = readingProgressService.saveReadingProgress(progress);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedProgress);
     }
 
     @PutMapping("/{id}")
-    public ReadingProgress updateReadingProgress(@PathVariable Long id, @RequestBody ReadingProgress progress) {
+    public ResponseEntity<ReadingProgress> updateReadingProgress(
+            @PathVariable Long id, 
+            @RequestBody ReadingProgress progress) {
         progress.setId(id);
-        return readingProgressService.saveReadingProgress(progress);
+        ReadingProgress updatedProgress = readingProgressService.saveReadingProgress(progress);
+        return ResponseEntity.ok(updatedProgress);
     }
 
 }
