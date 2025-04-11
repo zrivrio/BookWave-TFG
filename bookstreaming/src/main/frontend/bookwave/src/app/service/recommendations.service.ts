@@ -21,7 +21,4 @@ export class RecommendationsService {
   getRandomBooks(): Observable<Book[]> {
     return this.http.get<Book[]>(`${this.apiUrl}/random`);
   }
-
-
-
 }

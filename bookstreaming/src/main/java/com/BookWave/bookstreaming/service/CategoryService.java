@@ -2,7 +2,6 @@ package com.BookWave.bookstreaming.service;
 
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.BookWave.bookstreaming.domain.Book;
@@ -17,7 +16,9 @@ public class CategoryService {
 
     @Autowired
     private BookRepository bookRepository;
-    
+
+
+    //Metodos Usuarios
     public List<Map<String, Object>> getAllCategoryNames() {
         return categoryRepository.findAllCategoryName();
     }
@@ -26,11 +27,6 @@ public class CategoryService {
         return bookRepository.findByCategory(id);
     }
 
-
-
-    
-
-
-
+    //Metodos Admin
 
 }

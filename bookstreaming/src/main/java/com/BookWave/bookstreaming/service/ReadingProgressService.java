@@ -6,7 +6,6 @@ import com.BookWave.bookstreaming.domain.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.BookWave.bookstreaming.domain.ReadingProgress;
 import com.BookWave.bookstreaming.repository.BookRepository;
 import com.BookWave.bookstreaming.repository.ReadingProgressRepository;
@@ -29,7 +28,6 @@ public class ReadingProgressService {
     public ReadingProgress getReadingProgress(Long userId, Long bookId) {
         return readingProgressRepository.findByUserIdAndBookId(userId, bookId)
                 .orElseGet(() -> {
-                    // Si no existe, creamos uno nuevo con 0% de progreso
                     ReadingProgress newProgress = new ReadingProgress();
                     newProgress.setUser(userRepository.findById(userId).orElseThrow());
                     newProgress.setBook(bookRepository.findById(bookId).orElseThrow());
@@ -43,11 +41,10 @@ public class ReadingProgressService {
         System.out.print("Consolaaaaaa:   " + progress);
         User usuario = userRepository.findById(progress.getUser().getId()).orElseThrow();
         Book book = bookRepository.findById(progress.getBook().getId()).orElseThrow();
-        // Buscar progreso existente
+
         Optional<ReadingProgress> existingProgress = readingProgressRepository
                 .findByUserIdAndBookId(usuario.getId(), book.getId());
 
-        // Si existe, actualizarlo manteniendo el ID original
         if (existingProgress.isPresent()) {
             ReadingProgress toUpdate = existingProgress.get();
             toUpdate.setCurrentPage(progress.getCurrentPage());
@@ -55,5 +52,9 @@ public class ReadingProgressService {
             return readingProgressRepository.save(toUpdate);
         }
         return readingProgressRepository.save(progress);
+    }
+
+    public void deleteReadingProgress(Long id) {
+        readingProgressRepository.deleteById(id);
     }
 }

@@ -14,9 +14,7 @@ public class UserService {
     public User registerUser(User user) {
         return userRepository.save(user);
     }
-
-
-    //Logica paar autentificar un usuraio
+    
     public User loginUser(String username, String password) {
         User user = userRepository.findByUsername(username);
         if (user != null && user.getPassword().equals(password)) {

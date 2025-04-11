@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CategoryService } from '../../../service/category.service';
 import { CommonModule } from '@angular/common';
-import { Mapa } from '../../../models/mapa';
+import { Mapa } from '../../../models/Mapa';
 
 @Component({
   selector: 'app-button-category',

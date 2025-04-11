@@ -1,10 +1,8 @@
 package com.BookWave.bookstreaming.service;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.BookWave.bookstreaming.domain.Review;
 import com.BookWave.bookstreaming.repository.ReviewRepository;
 

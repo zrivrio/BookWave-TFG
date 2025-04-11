@@ -16,14 +16,20 @@ export class CategoriesComponent {
   currentSearchTerm: string = '';
 
   onCategorySelected(categoryId: number | 'all'): void {
-    this.selectedCategoryId = categoryId;
-    this.currentSearchTerm = '';
+    // Asegúrate de que solo se emita cuando realmente cambia
+    if (this.selectedCategoryId !== categoryId) {
+      this.selectedCategoryId = categoryId;
+      this.currentSearchTerm = '';
+    }
   }
 
   onSearch(searchTerm: string): void {
-    this.currentSearchTerm = searchTerm;
-    if (searchTerm) {
-      this.selectedCategoryId = 'all';
+    // Solo actualiza si el término cambió
+    if (this.currentSearchTerm !== searchTerm) {
+      this.currentSearchTerm = searchTerm;
+      if (searchTerm) {
+        this.selectedCategoryId = 'all';
+      }
     }
   }
 

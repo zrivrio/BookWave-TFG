@@ -153,4 +153,24 @@ export class ProgressComponent {
     if (percentage < 75) return 'bg-blue-500';
     return 'bg-green-500';
   }
+  deleteProgress(book: Book): void {
+    const progress = this.readingProgresses[book.id];
+    if (!progress?.id) return;
+
+    this.isLoading = true;
+    this.readingProgressService.deleteReadingProgress(progress.id).subscribe({
+      next: () => {
+        // Remove the book from the lists
+        this.books = this.books.filter(b => b.id !== book.id);
+        delete this.readingProgresses[book.id];
+        delete this.currentProgress[book.id];
+        delete this.editingProgress[book.id];
+        this.isLoading = false;
+      },
+      error: (err) => {
+        this.error = 'Error al eliminar el progreso';
+        this.isLoading = false;
+      }
+    });
+  }
 }

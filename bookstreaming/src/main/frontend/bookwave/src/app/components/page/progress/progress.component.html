@@ -49,6 +49,7 @@
           </div>
           
           <div class="flex flex-col space-y-2">
+            <!-- In the buttons section, add the delete button -->
             <div *ngIf="!editingProgress[book.id]" class="flex space-x-2">
               <button (click)="toggleEditMode(book.id)" class="text-xs text-[#1E0f75] hover:text-[#1C1DAB] font-medium">
                 Actualizar Progreso
@@ -56,6 +57,10 @@
               <span class="text-[#CCCCCC]">•</span>
               <button [routerLink]="['/book', book.id]" class="text-xs text-[#666666] hover:text-[#333333]">
                 Continuar Leyendo
+              </button>
+              <span class="text-[#CCCCCC]">•</span>
+              <button (click)="deleteProgress(book)" class="text-xs text-red-600 hover:text-red-700">
+                Eliminar Progreso
               </button>
             </div>
             
@@ -98,7 +103,7 @@
       <a routerLink="/library" class="block px-6 py-3 bg-[#1E0f75] text-[#FFFFFF] rounded-lg hover:bg-[#1C1DAB] transition-colors font-medium">
         Explorar Biblioteca
       </a>
-      <button class="block w-full px-6 py-3 text-[#333333] rounded-lg hover:bg-[#F5F5F5] transition-colors">
+      <button routerLink="/categories" class="block w-full px-6 py-3 text-[#333333] rounded-lg hover:bg-[#F5F5F5] transition-colors">
         Ver recomendaciones
       </button>
     </div>

@@ -1,9 +1,8 @@
 package com.BookWave.bookstreaming.repository;
+
 import com.BookWave.bookstreaming.domain.Book;
 import com.BookWave.bookstreaming.domain.ReadingList;
-
 import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

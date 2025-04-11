@@ -2,7 +2,6 @@ package com.BookWave.bookstreaming.controller;
 
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.BookWave.bookstreaming.domain.Book;
@@ -26,7 +25,5 @@ public class CategoryController {
     public List<Book> getBookByCategory(@PathVariable int id) {
         return categoryService.getBooksByCategory(id);
     }
-
-   
 
 }

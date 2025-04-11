@@ -1,9 +1,10 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from '@angular/core';
 import { Book } from '../../../models/Book';
 import { BookService } from '../../../service/book.service';
 import { CategoryService } from '../../../service/category.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-libros',
@@ -12,11 +13,12 @@ import { RouterModule } from '@angular/router';
   templateUrl: './libros.component.html',
   styleUrl: './libros.component.css'
 })
-export class LibrosComponent implements OnChanges {
+export class LibrosComponent implements OnChanges, OnDestroy {
   @Input() selectedCategoryId: number | 'all' = 'all';
   @Input() searchTerm: string = '';
   books: Book[] = [];
   loading = false;
+  private subscriptions = new Subscription();
 
   constructor(
     private bookService: BookService,
@@ -31,9 +33,13 @@ export class LibrosComponent implements OnChanges {
 
   loadBooks(): void {
     this.loading = true;
+    
+    // Cancelar suscripciones anteriores para evitar llamadas duplicadas
+    this.subscriptions.unsubscribe();
+    this.subscriptions = new Subscription();
 
     if (this.searchTerm) {
-      this.bookService.getBooksBySearch(this.searchTerm).subscribe({
+      const sub = this.bookService.getBooksBySearch(this.searchTerm).subscribe({
         next: (books) => {
           this.books = books;
           this.loading = false;
@@ -43,11 +49,12 @@ export class LibrosComponent implements OnChanges {
           this.loading = false;
         }
       });
+      this.subscriptions.add(sub);
       return;
     }
 
     if (this.selectedCategoryId === 'all') {
-      this.bookService.getBooks().subscribe({
+      const sub = this.bookService.getBooks().subscribe({
         next: (books) => {
           this.books = books;
           this.loading = false;
@@ -57,8 +64,9 @@ export class LibrosComponent implements OnChanges {
           this.loading = false;
         }
       });
+      this.subscriptions.add(sub);
     } else {
-      this.categoryService.getBooksByCategory(this.selectedCategoryId as number).subscribe({
+      const sub = this.categoryService.getBooksByCategory(this.selectedCategoryId as number).subscribe({
         next: (books) => {
           this.books = books;
           this.loading = false;
@@ -68,6 +76,11 @@ export class LibrosComponent implements OnChanges {
           this.loading = false;
         }
       });
+      this.subscriptions.add(sub);
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 }

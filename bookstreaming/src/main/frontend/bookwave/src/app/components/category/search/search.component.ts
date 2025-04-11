@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { debounceTime, distinctUntilChanged, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-search',
@@ -11,20 +11,25 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
 })
 export class SearchComponent {
   @Output() searchTermChange = new EventEmitter<string>();
+  private searchSubscription?: Subscription;
   
   searchForm = new FormGroup({
     searchTerm: new FormControl('')
   });
 
   constructor() {
-    this.searchForm.get('searchTerm')?.valueChanges
+    this.searchSubscription = this.searchForm.get('searchTerm')?.valueChanges
       .pipe(
-        debounceTime(300),
+        debounceTime(500), // Aumenté el debounceTime
         distinctUntilChanged()
       )
       .subscribe(value => {
         this.searchTermChange.emit(value || '');
       });
+  }
+
+  ngOnDestroy(): void {
+    this.searchSubscription?.unsubscribe();
   }
 
   onSubmit(): void {

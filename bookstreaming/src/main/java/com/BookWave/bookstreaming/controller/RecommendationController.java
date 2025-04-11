@@ -1,10 +1,8 @@
 package com.BookWave.bookstreaming.controller;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import com.BookWave.bookstreaming.domain.Book;
 import com.BookWave.bookstreaming.service.RecommendationService;
 
@@ -28,8 +26,8 @@ public class RecommendationController {
     }
 
     @GetMapping("/random")
-public List<Book> getRandomBooks() {
-    return recommendationService.getRandomBooks();
-}
+    public List<Book> getRandomBooks() {
+        return recommendationService.getRandomBooks();
+    }
 
 }

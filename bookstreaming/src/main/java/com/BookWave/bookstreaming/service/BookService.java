@@ -4,10 +4,8 @@ import com.BookWave.bookstreaming.domain.Book;
 import com.BookWave.bookstreaming.domain.ReadingProgress;
 import com.BookWave.bookstreaming.repository.BookRepository;
 import com.BookWave.bookstreaming.repository.ReadingProgressRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,17 +21,15 @@ public class BookService {
     public List<Book> getBooksInProgressByUserId(Long userId) {
         List<Book> books = bookRepository.findBooksInProgressByUserId(userId);
         
-        // Para cada libro, cargar el progreso específico del usuario
         books.forEach(book -> {
             ReadingProgress progress = readingProgressRepository.findByUserIdAndBookId(userId, book.getId())
                 .orElse(null);
             if (progress != null) {
-                // Asegurarse de que la lista de progreso está inicializada
                 if (book.getReadingProgresses() == null) {
                     book.setReadingProgresses(new ArrayList<>());
                 }
-                book.getReadingProgresses().clear(); // Limpiar la lista existente
-                book.getReadingProgresses().add(progress); // Añadir el progreso actual
+                book.getReadingProgresses().clear();
+                book.getReadingProgresses().add(progress);
             }
         });
         
@@ -44,8 +40,7 @@ public class BookService {
         return bookRepository.findBooksBySearch(searchTerm.trim());
     }
 
-    //AMetodos de Administrador
-    //CRUD
+    //Metodos de Admin
     public List<Book> getAllBooks() {
         return bookRepository.findAll();
     }

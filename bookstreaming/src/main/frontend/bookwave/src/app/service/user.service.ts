@@ -23,7 +23,7 @@ export class UserService {
   }
 
   signup(userData: UserSignupRequest): Observable<User> {
-      return this.http.post<User>(`${this.baseUrl}/signup`, userData);
+    return this.http.post<User>(`${this.baseUrl}/signup`, userData);
   }
 
   upgradeToPremium(userId: number): Observable<User> {
@@ -32,17 +32,14 @@ export class UserService {
 
   setCurrentUser(user: User): void {
     this.currentUserSubject.next(user);
-    // También podrías guardar en localStorage/sessionStorage
     localStorage.setItem('currentUser', JSON.stringify(user));
   }
 
   getCurrentUser(): User | null {
-    // Intenta obtener del BehaviorSubject primero
     const user = this.currentUserSubject.value;
     if (user) return user;
-    
-    // Si no hay en BehaviorSubject, busca en localStorage
-    if(typeof localStorage != 'undefined'){
+
+    if (typeof localStorage != 'undefined') {
       const storedUser = localStorage.getItem('currentUser');
       if (storedUser) {
         const parsedUser = JSON.parse(storedUser);
@@ -50,7 +47,7 @@ export class UserService {
         return parsedUser;
       }
     }
-    
+
     return null;
   }
 

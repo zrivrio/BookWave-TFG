@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { Book } from '../models/Book';
 
 @Injectable({
@@ -10,30 +10,27 @@ export class BookService {
 
   private apiUrl = 'http://localhost:8080/books'
 
-  constructor(private http : HttpClient) { }
+  constructor(private http: HttpClient) { }
 
   //Usuario
   getUserBooks(userId: number): Observable<Book[]> {
     return this.http.get<Book[]>(`${this.apiUrl}/user/${userId}`);
-}
+  }
 
-getRecommendedBooks(userId: number): Observable<Book[]> {
+  getRecommendedBooks(userId: number): Observable<Book[]> {
     return this.http.get<Book[]>(`${this.apiUrl}/recommendedBooks/${userId}`);
-}
+  }
 
-getBooksInProgress(userId: number): Observable<Book[]> {
+  getBooksInProgress(userId: number): Observable<Book[]> {
     return this.http.get<Book[]>(`${this.apiUrl}/progress/${userId}`);
-}
+  }
 
-getBooksBySearch(searchTerm: string): Observable<Book[]> {
-  return this.http.get<Book[]>(`${this.apiUrl}/search/${searchTerm}`);
-}
-
-
-
+  getBooksBySearch(searchTerm: string): Observable<Book[]> {
+    return this.http.get<Book[]>(`${this.apiUrl}/search/${searchTerm}`);
+  }
 
   //Administrador
-  getBooks() : Observable<Book[]>{
+  getBooks(): Observable<Book[]> {
     return this.http.get<Book[]>(this.apiUrl);
   }
   getBookById(id: number): Observable<Book> {

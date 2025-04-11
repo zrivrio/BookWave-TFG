@@ -4,7 +4,6 @@ import com.BookWave.bookstreaming.domain.Book;
 import com.BookWave.bookstreaming.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -24,7 +23,6 @@ public class BookController {
     public List<Book> getBooksBySearch(@PathVariable String searchTerm) {
         return bookService.getBooksBySearch(searchTerm);
     }
-
 
     //Administrador
     @GetMapping({"", "/"})
