@@ -89,9 +89,13 @@
   <app-review-form 
     *ngIf="currentUser"
     [bookId]="book.id" 
+    [bookTitle]="book.title"
     [currentUser]="currentUser"
-    (reviewSubmitted)="onReviewSubmitted()"
+    (reviewSubmitted)="reviewList.refreshReviews($event)"
   ></app-review-form>
 
-  <app-review-list [bookId]="book.id"></app-review-list>
+  <app-review-list 
+    #reviewList
+    [bookId]="book.id">
+  </app-review-list>
 </div>

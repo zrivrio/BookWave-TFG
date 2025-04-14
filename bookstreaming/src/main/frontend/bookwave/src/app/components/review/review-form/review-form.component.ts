@@ -66,7 +66,6 @@ export class ReviewFormComponent {
     const reviewToSend: Review = {
         book: { 
             id: this.bookId,
-            // other required book properties set to null/empty
         },
         user: { 
             id: this.currentUser.id,

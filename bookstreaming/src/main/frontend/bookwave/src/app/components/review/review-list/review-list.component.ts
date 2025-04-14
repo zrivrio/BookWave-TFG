@@ -42,7 +42,8 @@ export class ReviewListComponent implements OnInit {
     this.loadReviews();
   }
 
-  loadReviews(): void {
+  refreshReviews(newReview?: Review): void {
+    this.loading = true;
     this.reviewService.getReviewsByBook(this.bookId).subscribe({
       next: (reviews) => {
         this.reviews = reviews;
@@ -54,5 +55,10 @@ export class ReviewListComponent implements OnInit {
         console.error(err);
       }
     });
+  }
+
+  loadReviews(): void {
+    this.loading = true;
+    this.refreshReviews();
   }
 }
