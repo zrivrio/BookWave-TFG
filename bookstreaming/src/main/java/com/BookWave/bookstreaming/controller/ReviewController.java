@@ -2,10 +2,12 @@ package com.BookWave.bookstreaming.controller;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.BookWave.bookstreaming.domain.Review;
+import com.BookWave.bookstreaming.domain.User;
 import com.BookWave.bookstreaming.service.ReviewService;
-
+import com.BookWave.bookstreaming.service.UserService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
@@ -14,15 +16,30 @@ public class ReviewController {
 
     @Autowired
     private ReviewService reviewService;
+    
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/book/{bookId}")
     public List<Review> getReviewsByBook(@PathVariable Long bookId) {
-        return reviewService.getReviewsByBook(bookId);
+        List<Review> reviews = reviewService.getReviewsByBook(bookId);
+        reviews.forEach(review -> {
+            User user = userService.getUserById(review.getUser().getId());
+            review.setUser(user);
+        });
+        return reviews;
     }
 
     @PostMapping
-    public Review createReview(@RequestBody Review review) {
-        return reviewService.createReview(review);
+    public ResponseEntity<Review> createReview(@RequestBody Review review) {
+        try {
+            User user = userService.getUserById(review.getUser().getId());
+            review.setUser(user);
+            Review savedReview = reviewService.createReview(review);
+            return ResponseEntity.ok(savedReview);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @PutMapping("/{id}")

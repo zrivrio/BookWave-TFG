@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { Book } from '../../../models/Book';
 import { BookService } from '../../../service/book.service';
 import { UserService } from '../../../service/user.service';
+import { ReviewService } from '../../../service/review.service';
 
 @Component({
   selector: 'app-review-form',
@@ -22,7 +23,11 @@ export class ReviewFormComponent {
   usuario: User = {} as User;
   libro: Book = {} as Book;
 
-  constructor(private bookService: BookService, private userService: UserService) {
+  constructor(
+    private bookService: BookService, 
+    private userService: UserService,
+    private reviewService: ReviewService
+  ) {
     this.usuario = userService.getCurrentUser()!;
     bookService.getBookById(this.bookId).subscribe(
       book => {
@@ -54,25 +59,38 @@ export class ReviewFormComponent {
 
   submitReview(): void {
     if (!this.newReview.comment || this.newReview.comment.trim().length < 10) {
-      this.error = 'El comentario debe tener al menos 10 caracteres';
-      return;
+        this.error = 'El comentario debe tener al menos 10 caracteres';
+        return;
     }
-  
-    // Crear objeto simplificado para el backend
-    const reviewToSend = {
-      bookid: this.libro.id , // Solo enviar el ID del libro
-      userid:this.usuario.id, // Solo enviar el ID del usuario
-      rating: this.newReview.rating,
-      comment: this.newReview.comment.trim()
+
+    const reviewToSend: Review = {
+        book: { 
+            id: this.bookId,
+            // other required book properties set to null/empty
+        },
+        user: { 
+            id: this.currentUser.id,
+            username: this.currentUser.username
+        },
+        rating: this.newReview.rating,
+        comment: this.newReview.comment.trim()
     };
-  
-    this.reviewSubmitted.emit(reviewToSend);
-    this.resetForm();
-  }
+
+    this.reviewService.createReview(reviewToSend).subscribe({
+        next: (savedReview) => {
+            this.reviewSubmitted.emit(savedReview);
+            this.resetForm();
+        },
+        error: (error) => {
+            this.error = 'Error al guardar la reseña. Por favor, inténtalo de nuevo.';
+            console.error('Error saving review:', error);
+        }
+    });
+}
 
   private resetForm(): void {
     this.newReview = {
-      rating: 5,
+      rating: 5 as 1 | 2 | 3 | 4 | 5,
       comment: ''
     };
     this.showForm = false;
