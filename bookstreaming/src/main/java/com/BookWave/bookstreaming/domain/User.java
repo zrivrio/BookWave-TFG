@@ -40,5 +40,15 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<ReadingList> readingLists = new ArrayList<>();
 
+    public void addReadingList(ReadingList list) {
+        this.readingLists.add(list);
+        list.setUser(this);
+    }
+    
+    public void removeReadingList(ReadingList list) {
+        this.readingLists.remove(list);
+        list.setUser(null);
+    }
+
 }
 

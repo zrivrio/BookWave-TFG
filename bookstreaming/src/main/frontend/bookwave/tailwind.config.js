@@ -1,41 +1,40 @@
-/** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    "./src/**/*.{html,ts}", // Rutas donde buscar las clases
-  ],
   theme: {
     extend: {
       colors: {
-        // Base
-        white: "#FFFFFF",
-        light: "#F8F8F8",
-        lighter: "#F5F5F5",
-        lightest: "#F4F4F4",
-
-        // Primary colors
-        primary: "#1965B3",
-        "primary-light": "#3785D8",
-        "primary-dark": "#1C1DAB",
-        "primary-deep": "#1E0F75",
-
-        // Grayscale
-        gray: "#CCCCCC",
-        "gray-dark": "#999999",
-        "gray-darker": "#333333",
-        "gray-deep": "#2A2A2A",
-
-        // Accent Blues
-        "blue-100": "#E6F0F7",
-        "blue-200": "#E0E9F5",
-        "blue-300": "#CBD8E8",
-        "blue-400": "#ADC6E5",
-
-        // Accent Pinks / Purples
-        "pink-light": "#EBB2C3",
-        pink: "#E893C5",
-        purple: "#BF8CE1",
+        primary: {
+          50: "#E6F0F7",
+          100: "#E0E9F5",
+          200: "#CBD8E8",
+          300: "#ADC6E5",
+          400: "#3785D8",
+          500: "#1965B3",
+          600: "#1C1DAB",
+          700: "#1E0F75",
+          DEFAULT: "#1965B3"
+        },
+        secondary: {
+          pink: "#EBB2C3",
+          purple: "#BF8CE1",
+          light: "#E893C5"
+        },
+        gray: {
+          50: "#F8F8F8",
+          100: "#F5F5F5",
+          200: "#F4F4F4",
+          300: "#E0E0E0",
+          400: "#CCCCCC",
+          500: "#999999",
+          600: "#666666",
+          700: "#333333",
+          800: "#2A2A2A",
+          DEFAULT: "#CCCCCC"
+        }
+      },
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
       },
     },
   },
   plugins: [],
-};
+}

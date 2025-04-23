@@ -4,12 +4,11 @@
   routerLinkActive="active"
   (click)="onClick($event)"
 >
-  <!-- Icon Container -->
   <div
     class="flex items-center justify-center w-10 h-10 rounded-lg transition-all duration-200"
     [ngClass]="{
-      'bg-[#1E0F75] text-white': isActiveRoute(),
-      'bg-[#E6F0F7] text-[#1965B3] group-hover:bg-[#ADC6E5]': !isActiveRoute()
+      'bg-[#1C1DAB] text-white': isActiveRoute(),
+      'bg-[#E0E9F5] text-[#3785D8] group-hover:bg-[#ADC6E5]': !isActiveRoute()
     }"
   >
     <span
@@ -23,20 +22,18 @@
     </span>
   </div>
 
-  <!-- Label -->
   <span 
     class="text-sm font-medium transition-all duration-200"
     [ngClass]="{
-      'text-[#1E0F75] font-semibold': isActiveRoute(),
-      'text-[#2A2A2A] group-hover:text-[#1E0F75]': !isActiveRoute()
+      'text-[#1C1DAB] font-semibold': isActiveRoute(),
+      'text-[#2A2A2A] group-hover:text-[#1C1DAB]': !isActiveRoute()
     }"
   >
     {{ label }}
   </span>
 
-  <!-- Active indicator -->
   <span 
     *ngIf="isActiveRoute()"
-    class="ml-auto w-1 h-8 bg-[#1E0F75] rounded-full"
+    class="ml-auto w-1 h-8 bg-[#1C1DAB] rounded-full"
   ></span>
 </a>

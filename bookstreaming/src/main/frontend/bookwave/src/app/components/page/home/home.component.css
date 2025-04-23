@@ -2,14 +2,17 @@
     width: 6px;
     height: 6px;
   }
+
   .custom-scrollbar::-webkit-scrollbar-track {
-    background: #F5F5F5;
+    background: #F4F4F4;
     border-radius: 10px;
   }
+
   .custom-scrollbar::-webkit-scrollbar-thumb {
     background: #CBD8E8;
     border-radius: 10px;
   }
+
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: #ADC6E5;
   }

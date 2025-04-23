@@ -1,0 +1,25 @@
+/* library.component.css */
+.search-container {
+    margin-bottom: 1rem;
+  }
+  
+  .modal-content {
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .books-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+  
+  .book-card {
+    transition: all 0.2s ease;
+  }
+  
+  .book-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }

@@ -1,26 +1,25 @@
-<div class="flex gap-3 px-4 py-3 overflow-x-auto scrollbar-hide">
-    <!-- Botón "Todos" -->
-    <button type="button"
-            class="shrink-0 px-4 py-2 text-sm font-medium rounded-full border transition-all duration-150
-                   hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-[#1E0f75] focus:ring-opacity-50"
-            [ngClass]="{
-              'bg-[#1E0f75] text-white border-[#1E0f75] shadow-sm': selectedCategory === 'all',
-              'bg-white text-[#333333] border-[#E0E0E0] hover:border-[#1E0f75] hover:text-[#1E0f75]': selectedCategory !== 'all'
-            }"
-            (click)="selectCategory('all')">
-        Todos
-    </button>
+<div class="flex gap-2 px-4 py-3 overflow-x-auto scrollbar-hide">
+  <!-- Botón "Todos" -->
+  <button type="button"
+          class="shrink-0 px-4 py-2 text-sm font-medium rounded-full border transition-all duration-200
+                 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-[#1C1DAB] focus:ring-opacity-50"
+          [ngClass]="{
+            'bg-[#1C1DAB] text-white border-transparent': selectedCategory === 'all',
+            'bg-white text-[#2A2A2A] border-[#E0E9F5] hover:bg-[#E6F0F7]': selectedCategory !== 'all'
+          }"
+          (click)="selectCategory('all')">
+      Todos
+  </button>
 
-    <!-- Botones de categorías -->
-    <button type="button"
-            *ngFor="let category of categories"
-            class="shrink-0 px-4 py-2 text-sm font-medium rounded-full border transition-all duration-150
-                   hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-[#1E0f75] focus:ring-opacity-50"
-            [ngClass]="{
-              'bg-[#1E0f75] text-white border-[#1E0f75] shadow-sm': selectedCategory === category.id,
-              'bg-white text-[#333333] border-[#E0E0E0] hover:border-[#1E0f75] hover:text-[#1E0f75]': selectedCategory !== category.id
-            }"
-            (click)="selectCategory(category.id)">
-        {{ category.nombre }}
-    </button>
+  <button type="button"
+          *ngFor="let category of categories"
+          class="shrink-0 px-4 py-2 text-sm font-medium rounded-full border transition-all duration-200
+                 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-[#1C1DAB] focus:ring-opacity-50"
+          [ngClass]="{
+            'bg-[#1C1DAB] text-white border-transparent': selectedCategory === category.id,
+            'bg-white text-[#2A2A2A] border-[#E0E9F5] hover:bg-[#E6F0F7]': selectedCategory !== category.id
+          }"
+          (click)="selectCategory(category.id)">
+      {{ category.nombre }}
+  </button>
 </div>

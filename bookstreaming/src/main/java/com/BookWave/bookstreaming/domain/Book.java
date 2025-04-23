@@ -45,5 +45,15 @@ public class Book {
     @JsonIgnore
     private Set<ReadingList> readingLists = new HashSet<>();
 
+    public void addToReadingList(ReadingList list) {
+        this.readingLists.add(list);
+        list.getBooks().add(this);
+    }
+    
+    public void removeFromReadingList(ReadingList list) {
+        this.readingLists.remove(list);
+        list.getBooks().remove(this);
+    }
+
 }
 

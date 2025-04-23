@@ -1,75 +1,89 @@
-<div class="space-y-4">
+<div class="space-y-6">
   <div class="flex justify-between items-center">
-    <h2 class="text-xl font-semibold text-gray-800">Continuar Leyendo</h2>
+    <h2 class="text-xl font-bold text-[#1C1DAB]">Continuar Leyendo</h2>
     <a *ngIf="books.length > 0" 
        routerLink="/progress" 
-       class="text-sm text-indigo-900 hover:text-indigo-700">
+       class="text-sm font-medium text-[#3785D8] hover:text-[#1E0F75] transition-colors flex items-center gap-1">
       Ver todos
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+      </svg>
     </a>
   </div>
 
+  <!-- Loading State -->
   <div *ngIf="isLoading" class="flex flex-col items-center justify-center h-64 space-y-4">
-    <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-indigo-900"></div>
-    <p class="text-gray-600">Cargando tus libros...</p>
+    <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#1C1DAB]"></div>
+    <p class="text-[#999999]">Cargando tus libros...</p>
   </div>
 
-  <div *ngIf="!isLoggedIn && !isLoading" class="max-w-md mx-auto p-8 text-center">
-    <p class="text-gray-600">Inicia sesión para ver tus libros en progreso</p>
+  <!-- Not Logged In State -->
+  <div *ngIf="!isLoggedIn && !isLoading" class="max-w-md mx-auto p-8 text-center bg-[#F8F8F8] rounded-xl">
+    <p class="text-[#666666]">Inicia sesión para ver tus libros en progreso</p>
+    <a routerLink="/login" class="text-[#3785D8] hover:text-[#1E0F75] font-medium mt-2 inline-block transition-colors">
+      Iniciar sesión
+    </a>
   </div>
 
-  <div *ngIf="isLoggedIn && !isLoading && !error && books.length > 0" class="space-y-6">
-    <div *ngFor="let book of books" class="bg-white p-4 rounded-xl shadow-xs border border-gray-100 hover:shadow-sm transition-all">
-      <div class="flex space-x-4">
-        <div class="relative">
+  <!-- Book List -->
+  <div *ngIf="isLoggedIn && !isLoading && !error && books.length > 0" class="space-y-4">
+    <div *ngFor="let book of books" class="bg-white p-5 rounded-xl shadow-xs border border-[#E0E9F5] hover:shadow-sm transition-all">
+      <div class="flex gap-4">
+        <!-- Book Cover -->
+        <div class="relative shrink-0">
           <img [src]="book.cover || 'assets/images/placeholder.png'" 
                [alt]="book.title || 'Book cover'" 
-               class="w-20 h-28 object-cover rounded-lg border border-gray-100">
-          <div class="absolute -bottom-2 -right-2 bg-indigo-900 text-white text-xs px-2 py-1 rounded-full">
+               class="w-20 h-28 object-cover rounded-lg border border-[#F4F4F4]">
+          <div class="absolute -bottom-2 -right-2 bg-[#1C1DAB] text-white text-xs px-2 py-1 rounded-full font-medium">
             {{ getProgressPercentage(book) }}%
           </div>
         </div>
         
+        <!-- Book Details -->
         <div class="flex-1 min-w-0">
-          <h4 class="text-md font-semibold text-gray-800 truncate">{{ book.title || 'Título no disponible' }}</h4>
-          <p class="text-sm text-gray-600 mb-2">{{ book.author || 'Autor desconocido' }}</p>
+          <h4 class="text-md font-bold text-[#2A2A2A] truncate">{{ book.title || 'Título no disponible' }}</h4>
+          <p class="text-sm text-[#666666] mb-3">{{ book.author || 'Autor desconocido' }}</p>
           
-          <div class="mb-3">
-            <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
+          <!-- Progress Bar -->
+          <div class="mb-4">
+            <div class="h-2 bg-[#F4F4F4] rounded-full overflow-hidden">
               <div class="h-2 rounded-full transition-all duration-500 ease-in-out" 
                    [ngClass]="getProgressColor(getProgressPercentage(book))"
                    [style.width.%]="getProgressPercentage(book)"></div>
             </div>
           </div>
           
-          <div class="flex flex-col space-y-2">
-            <div *ngIf="!editingProgress[book.id]" class="flex space-x-2">
+          <!-- Action Buttons -->
+          <div class="flex flex-col space-y-3">
+            <div *ngIf="!editingProgress[book.id]" class="flex items-center gap-3">
               <button (click)="toggleEditMode(book.id)" 
-                      class="text-xs text-indigo-900 hover:text-indigo-700 font-medium">
+                      class="text-xs font-medium text-[#3785D8] hover:text-[#1E0F75] transition-colors">
                 Actualizar Progreso
               </button>
-              <span class="text-gray-300">•</span>
+              <span class="text-[#CCCCCC]">•</span>
               <a [routerLink]="['/read', book.id]" 
-                 class="text-xs text-gray-600 hover:text-gray-800">
+                 class="text-xs text-[#666666] hover:text-[#2A2A2A] transition-colors">
                 Continuar Leyendo
               </a>
             </div>
             
+            <!-- Edit Progress Form -->
             <div *ngIf="editingProgress[book.id]" class="flex flex-col space-y-3">
-              <div class="flex items-center space-x-3">
+              <div class="flex items-center gap-3">
                 <input type="range" min="0" max="100" step="1" 
                        [(ngModel)]="currentProgress[book.id]"
-                       class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
-                <span class="text-sm font-medium text-gray-700 w-12 text-center">
+                       class="w-full h-2 bg-[#E0E9F5] rounded-lg appearance-none cursor-pointer accent-[#1C1DAB]">
+                <span class="text-sm font-medium text-[#2A2A2A] w-12 text-center">
                   {{ currentProgress[book.id] }}%
                 </span>
               </div>
-              <div class="flex space-x-2">
+              <div class="flex gap-2">
                 <button (click)="updateProgress(book)" 
-                        class="px-3 py-1 text-xs bg-indigo-900 text-white rounded hover:bg-indigo-700">
+                        class="px-3 py-1 text-xs bg-[#1C1DAB] text-white rounded hover:bg-[#1E0F75] transition-colors">
                   Guardar
                 </button>
                 <button (click)="toggleEditMode(book.id)" 
-                        class="px-3 py-1 text-xs bg-gray-200 text-gray-700 rounded hover:bg-gray-300">
+                        class="px-3 py-1 text-xs bg-[#F4F4F4] text-[#666666] rounded hover:bg-[#E0E9F5] transition-colors">
                   Cancelar
                 </button>
               </div>
@@ -80,11 +94,12 @@
     </div>
   </div>
 
+  <!-- Empty State -->
   <div *ngIf="isLoggedIn && !isLoading && !error && books.length === 0" 
-       class="max-w-md mx-auto p-8 text-center">
-    <p class="text-gray-600">No tienes libros en progreso</p>
+       class="max-w-md mx-auto p-8 text-center bg-[#F8F8F8] rounded-xl">
+    <p class="text-[#666666]">No tienes libros en progreso</p>
     <a routerLink="/books" 
-       class="text-indigo-900 hover:text-indigo-700 font-medium mt-2 inline-block">
+       class="text-[#3785D8] hover:text-[#1E0F75] font-medium mt-2 inline-block transition-colors">
       Explorar libros
     </a>
   </div>

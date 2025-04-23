@@ -1,32 +1,32 @@
-<div class="categories-page px-4 py-6 max-w-6xl mx-auto h-screen overflow-y-hidden">
+<div class="categories-page px-6 py-8 max-w-6xl mx-auto h-screen flex flex-col">
     <!-- Page Header -->
     <div class="mb-8 text-center">
-        <h1 class="text-3xl font-bold text-[#2A2A2A] mb-2">Explorar Categorías</h1>
+        <h1 class="text-3xl font-bold text-[#1C1DAB] mb-3">Explorar Categorías</h1>
         <p class="text-[#666666] max-w-2xl mx-auto">Descubre libros organizados por tus categorías favoritas</p>
     </div>
 
     <!-- Search Bar -->
-    <div class="mb-8">
+    <div class="mb-6">
         <app-search (searchTermChange)="onSearch($event)"></app-search>
     </div>
 
     <!-- Categories Selector -->
-    <div class="categories-container mb-10">
+    <div class="mb-8">
         <app-button-category 
             (categorySelected)="onCategorySelected($event)"
-            class="block"
         ></app-button-category>
     </div>
 
     <!-- Books Section -->
-    <div class="books-section h-[calc(100vh-360px)] overflow-y-hidden">
-        <h2 class="text-xl font-semibold text-[#2A2A2A] mb-4">
+    <div class="flex-1 overflow-hidden bg-white rounded-xl border border-[#E0E9F5] shadow-xs">
+        <h2 class="text-xl font-semibold text-[#2A2A2A] p-5 border-b border-[#E0E9F5]">
             {{ getHeaderText() }}
         </h2>
-        <app-libros 
-            [selectedCategoryId]="selectedCategoryId"
-            [searchTerm]="currentSearchTerm"
-            class="block h-full"
-        ></app-libros>
+        <div class="h-[calc(100%-60px)] overflow-y-auto">
+            <app-libros 
+                [selectedCategoryId]="selectedCategoryId"
+                [searchTerm]="currentSearchTerm"
+            ></app-libros>
+        </div>
     </div>
 </div>

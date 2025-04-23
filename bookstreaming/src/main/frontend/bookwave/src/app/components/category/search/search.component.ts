@@ -1,3 +1,4 @@
+// search.component.ts
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -5,9 +6,10 @@ import { debounceTime, distinctUntilChanged, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-search',
+  standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './search.component.html',
-  styleUrl: './search.component.css'
+  styleUrls: ['./search.component.css']
 })
 export class SearchComponent {
   @Output() searchTermChange = new EventEmitter<string>();
@@ -20,7 +22,7 @@ export class SearchComponent {
   constructor() {
     this.searchSubscription = this.searchForm.get('searchTerm')?.valueChanges
       .pipe(
-        debounceTime(500), // Aumenté el debounceTime
+        debounceTime(500),
         distinctUntilChanged()
       )
       .subscribe(value => {

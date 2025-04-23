@@ -1,56 +1,53 @@
-<div class="flex flex-col h-screen bg-[#F8F8F8] w-64 p-4 border-r border-[#E0E0E0]">
-  <!-- Logo Section -->
+<div class="flex flex-col h-screen bg-[#F5F5F5] w-64 p-4 border-r border-[#CCCCCC]">
   <div class="flex items-center mb-8 pl-2">
     <img src="assets/logo/logo.png" alt="Logo" class="h-10 w-10 rounded-lg">
     <h1 class="text-[#1E0f75] text-xl font-bold ml-3 tracking-tight">BookWave</h1>
   </div>
 
-  <!-- Main Navigation -->
   <nav class="flex flex-col space-y-1 flex-grow">
     <app-sidebar-link 
       icon="home" 
       label="Inicio" 
       route="/"
-      class="text-[#333333] hover:bg-[#E6F0F7] hover:text-[#1E0f75] transition-colors duration-200">
+      class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
     </app-sidebar-link>
     
     <app-sidebar-link 
       icon="category" 
       label="Categorías" 
       route="/categories"
-      class="text-[#333333] hover:bg-[#E6F0F7] hover:text-[#1E0f75] transition-colors duration-200">
+      class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
     </app-sidebar-link>
     
     <app-sidebar-link 
       icon="menu_book" 
       label="Mi Biblioteca" 
       route="/library"
-      class="text-[#333333] hover:bg-[#E6F0F7] hover:text-[#1E0f75] transition-colors duration-200">
+      class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
     </app-sidebar-link>
     
     <app-sidebar-link 
-    icon="trending_up" 
-    label="Progreso" 
-    route="/progress"
-    class="text-[#333333] hover:bg-[#E6F0F7] hover:text-[#1E0f75] transition-colors duration-200">
-  </app-sidebar-link>  
+      icon="trending_up" 
+      label="Progreso" 
+      route="/progress"
+      class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
+    </app-sidebar-link>  
   </nav>
 
-  <!-- User Section -->
-  <div class="mt-auto pt-4 border-t border-[#E0E0E0]">
+  <div class="mt-auto pt-4 border-t border-[#CCCCCC]">
     <ng-container *ngIf="isLoggedIn; else showLogin">
       <app-sidebar-link 
         icon="person" 
         label="Mi Perfil" 
         route="/profile"
-        class="text-[#333333] hover:bg-[#E6F0F7] hover:text-[#1E0f75] transition-colors duration-200">
+        class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
       </app-sidebar-link>
       
       <app-sidebar-link 
         icon="logout" 
         label="Cerrar Sesión" 
         (click)="logout()"
-        class="text-[#333333] hover:bg-[#EBB2C3] hover:text-[#D32F2F] transition-colors duration-200">
+        class="text-[#2A2A2A] hover:bg-[#EBB2C3] hover:text-[#1E0f75] transition-colors duration-200">
       </app-sidebar-link>
     </ng-container>
     
@@ -59,31 +56,30 @@
         icon="login" 
         label="Iniciar Sesión" 
         route="/login"
-        class="text-[#333333] hover:bg-[#E6F0F7] hover:text-[#1E0f75] transition-colors duration-200">
+        class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
       </app-sidebar-link>
       
       <app-sidebar-link 
         icon="person_add" 
         label="Registrarse" 
         route="/signup"
-        class="text-[#333333] hover:bg-[#E6F0F7] hover:text-[#1E0f75] transition-colors duration-200">
+        class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
       </app-sidebar-link>
     </ng-template>
 
-    <!-- Settings Section -->
-    <div class="mt-2 pt-2 border-t border-[#E0E0E0]">
+    <div class="mt-2 pt-2 border-t border-[#CCCCCC]">
       <app-sidebar-link 
         icon="settings" 
         label="Configuración" 
         route="/settings"
-        class="text-[#333333] hover:bg-[#E6F0F7] hover:text-[#1E0f75] transition-colors duration-200">
+        class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
       </app-sidebar-link>
       
       <app-sidebar-link 
         icon="help" 
         label="Centro de Ayuda" 
         route="/help"
-        class="text-[#333333] hover:bg-[#E6F0F7] hover:text-[#1E0f75] transition-colors duration-200">
+        class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
       </app-sidebar-link>
     </div>
   </div>
