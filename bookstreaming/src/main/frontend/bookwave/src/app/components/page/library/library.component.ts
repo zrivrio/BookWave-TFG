@@ -1,189 +1,147 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LibraryService } from '../../../service/library.service';
-import { UserService } from '../../../service/user.service';
-import { BookService } from '../../../service/book.service';
 import { ReadingList } from '../../../models/ReadingList';
 import { Book } from '../../../models/Book';
-import { User } from '../../../models/User';
-import { SubscriptionType } from '../../../models/SubscriptionType';
 import { RouterModule } from '@angular/router';
-import { SearchComponent } from '../../category/search/search.component';
+import { UserService } from '../../../service/user.service';
 
 @Component({
   selector: 'app-library',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule, SearchComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
   templateUrl: './library.component.html',
   styleUrls: ['./library.component.css']
 })
 export class LibraryComponent implements OnInit {
-  MAX_LISTS_FREE = 5;
-  MAX_BOOKS_PER_LIST = 10;
-  filteredBooks: Book[] = [];
-  searchTerm = '';
-  currentUser: User | null = null;
-  errorMessage: string | null = null;
-  successMessage: string | null = null;
-  lists: ReadingList[] = [];
+  readingLists: ReadingList[] = [];
   selectedList: ReadingList | null = null;
-  showAddListForm = false;
-  newListName = '';
-  availableBooks: Book[] = [];
-  showAddBookModal = false;
-  selectedBookToAdd: Book | null = null;
+  booksInSelectedList: Book[] = [];
+  newListForm: FormGroup;
+  loading = false;
+  error = '';
+  success = '';
+  userId: number | null = null;
 
   constructor(
+    private readingListService: LibraryService,
     private userService: UserService,
-    private libraryService: LibraryService,
-    private bookService: BookService
-  ) { }
-
-  ngOnInit(): void {
-    this.currentUser = this.userService.getCurrentUser();
-    if (this.currentUser) {
-      this.loadLists();
-      this.loadAvailableBooks();
-    }
-  }
-
-  loadLists(): void {
-    this.libraryService.getLists(this.currentUser!.id).subscribe({
-      next: (lists: ReadingList[]) => {
-        this.lists = lists;
-      },
-      error: (err: any) => this.errorMessage = 'Error al cargar listas: ' + err.message
+    private fb: FormBuilder
+  ) {
+    this.newListForm = this.fb.group({
+      name: ['', [Validators.required, Validators.minLength(3)]]
     });
   }
-  onSearchTermChange(term: string): void {
-    this.searchTerm = term;
-    this.filterBooks();
-  }
-  filterBooks(): void {
-    if (!this.searchTerm) {
-      this.filteredBooks = [...this.availableBooks];
-      return;
+
+  ngOnInit(): void {
+    const user = this.userService.getCurrentUser();
+    this.userId = user?.id || null;
+    if (this.userId) {
+      this.loadUserLists();
     }
-    
-    const term = this.searchTerm.toLowerCase();
-    this.filteredBooks = this.availableBooks.filter(book => 
-      book.title.toLowerCase().includes(term) || 
-      (book.author && book.author.toLowerCase().includes(term))
-    );
   }
 
-  loadAvailableBooks(): void {
-    this.bookService.getBooks().subscribe({
-      next: (books: Book[]) => {
-        this.availableBooks = books;
-        this.filteredBooks = [...books];
+  loadUserLists(): void {
+    if (!this.userId) return;
+    
+    this.loading = true;
+    this.readingListService.getLists(this.userId).subscribe({
+      next: (lists: ReadingList[]) => {
+        this.readingLists = lists;
+        this.loading = false;
+        console.log('Listas cargadas:', this.readingLists);
       },
-      error: (err: any) => this.errorMessage = 'Error al cargar libros: ' + err.message
+      error: (err: any) => {
+        this.error = 'Error al cargar las listas de lectura';
+        this.loading = false;
+        console.error(err);
+      }
     });
   }
 
   selectList(list: ReadingList): void {
+    console.log('Lista seleccionada:', list);
     this.selectedList = list;
+    this.loadBooksInList(list.id!);
   }
 
-  addList(): void {
-    if (!this.newListName.trim()) {
-      this.errorMessage = 'El nombre de la lista no puede estar vacío';
-      return;
-    }
-
-    if (this.currentUser?.subscriptionType !== SubscriptionType.Premium && 
-        this.lists.length >= this.MAX_LISTS_FREE) {
-      this.errorMessage = `Límite de ${this.MAX_LISTS_FREE} listas alcanzado. Actualiza a Premium para crear más.`;
-      return;
-    }
-
-    this.libraryService.createList(this.currentUser!.id, this.newListName).subscribe({
-      next: (createdList: ReadingList) => {
-        this.lists.push(createdList);
-        this.newListName = '';
-        this.showAddListForm = false;
-        this.successMessage = `Lista "${createdList.name}" creada con éxito`;
+  loadBooksInList(listId: number): void {
+    this.loading = true;
+    this.readingListService.getBooksInList(listId).subscribe({
+      next: (books: Book[]) => {
+        this.booksInSelectedList = books;
+        this.loading = false;
+        console.log('Libros en lista:', this.booksInSelectedList);
       },
-      error: (err: any) => this.errorMessage = 'Error al crear lista: ' + err.message
+      error: (err: any) => {
+        this.error = 'Error al cargar los libros de la lista';
+        this.loading = false;
+        console.error(err);
+      }
     });
   }
 
-  removeList(list: ReadingList): void {
-    this.libraryService.deleteList(list.id, this.currentUser!.id).subscribe({
-      next: () => {
-        this.lists = this.lists.filter(l => l.id !== list.id);
-        if (this.selectedList?.id === list.id) {
-          this.selectedList = null;
+  createNewList(): void {
+    if (this.newListForm.invalid || !this.userId) return;
+    
+    const name = this.newListForm.get('name')?.value;
+    this.loading = true;
+    
+    this.readingListService.createList(this.userId, name).subscribe({
+      next: (list: ReadingList) => {
+        this.readingLists.push(list);
+        this.newListForm.reset();
+        this.success = 'Lista creada con éxito';
+        this.loading = false;
+      },
+      error: (err: any) => {
+        this.error = err.error || 'Error al crear la lista';
+        this.loading = false;
+        console.error(err);
+      }
+    });
+  }
+
+  deleteList(list: ReadingList): void {
+    if (!this.userId || !list.id) return;
+    
+    if (confirm(`¿Estás seguro de que deseas eliminar la lista "${list.name}"?`)) {
+      this.loading = true;
+      this.readingListService.deleteList(list.id, this.userId).subscribe({
+        next: () => {
+          this.readingLists = this.readingLists.filter(l => l.id !== list.id);
+          if (this.selectedList?.id === list.id) {
+            this.selectedList = null;
+            this.booksInSelectedList = [];
+          }
+          this.success = 'Lista eliminada con éxito';
+          this.loading = false;
+        },
+        error: (err: any) => {
+          this.error = err.error || 'Error al eliminar la lista';
+          this.loading = false;
+          console.error(err);
         }
-        this.successMessage = `Lista "${list.name}" eliminada con éxito`;
-      },
-      error: (err: any) => this.errorMessage = 'Error al eliminar lista: ' + err.message
-    });
-  }
-
-  openAddBookModal(): void {
-    if (!this.selectedList) {
-      this.errorMessage = 'Selecciona una lista primero';
-      return;
+      });
     }
-    this.showAddBookModal = true;
-  }
-
-  addBookToList(): void {
-    if (!this.selectedList || !this.selectedBookToAdd) {
-      this.errorMessage = 'Selecciona un libro para añadir';
-      return;
-    }
-
-    if (this.currentUser?.subscriptionType !== SubscriptionType.Premium && 
-        this.selectedList.books.length >= this.MAX_BOOKS_PER_LIST) {
-      this.errorMessage = `Límite de ${this.MAX_BOOKS_PER_LIST} libros por lista alcanzado. Actualiza a Premium para más.`;
-      return;
-    }
-
-    this.libraryService.addBookToList(
-      this.selectedList.id, 
-      this.selectedBookToAdd.id, 
-      this.currentUser!.id
-    ).subscribe({
-      next: () => {
-        if (this.selectedList) {
-          this.selectedList.books.push(this.selectedBookToAdd!);
-        }
-        this.successMessage = `Libro "${this.selectedBookToAdd!.title}" añadido a la lista`;
-        this.showAddBookModal = false;
-        this.selectedBookToAdd = null;
-      },
-      error: (err: any) => this.errorMessage = 'Error al añadir libro: ' + err.message
-    });
   }
 
   removeBookFromList(book: Book): void {
-    if (!this.selectedList) return;
-
-    this.libraryService.removeBookFromList(
-      this.selectedList.id, 
-      book.id, 
-      this.currentUser!.id
-    ).subscribe({
+    if (!this.userId || !this.selectedList?.id || !book.id) return;
+    
+    this.loading = true;
+    this.readingListService.removeBookFromList(this.selectedList.id, book.id, this.userId).subscribe({
       next: () => {
-        if (this.selectedList) {
-          this.selectedList.books = this.selectedList.books.filter(b => b.id !== book.id);
-        }
-        this.successMessage = `Libro "${book.title}" eliminado de la lista`;
+        this.booksInSelectedList = this.booksInSelectedList.filter(b => b.id !== book.id);
+        this.success = 'Libro eliminado de la lista';
+        this.loading = false;
       },
-      error: (err: any) => this.errorMessage = 'Error al eliminar libro: ' + err.message
+      error: (err: any) => {
+        this.error = err.error || 'Error al eliminar el libro de la lista';
+        this.loading = false;
+        console.error(err);
+      }
     });
-  }
-
-  clearMessages(): void {
-    this.errorMessage = null;
-    this.successMessage = null;
-  }
-
-  isPremiumUser(): boolean {
-    return this.currentUser?.subscriptionType === SubscriptionType.Premium;
   }
 }

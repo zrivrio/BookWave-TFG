@@ -17,15 +17,14 @@ export class LibraryService {
   }
 
   createList(userId: number, name: string): Observable<ReadingList> {
-    return this.http.post<ReadingList>(`${this.apiUrl}/create`, { name }, {
-      params: { userId: userId.toString() }
-    });
+    return this.http.post<ReadingList>(
+      `${this.apiUrl}/create?name=${encodeURIComponent(name)}&userId=${userId}`, 
+      {}
+    );
   }
 
   deleteList(listId: number, userId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${listId}`, {
-      params: { userId: userId.toString() }
-    });
+    return this.http.delete<void>(`${this.apiUrl}/${listId}?userId=${userId}`);
   }
 
   getBooksInList(listId: number): Observable<Book[]> {
@@ -33,20 +32,15 @@ export class LibraryService {
   }
 
   addBookToList(listId: number, bookId: number, userId: number): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/${listId}/add-book`, null, {
-      params: { 
-        bookId: bookId.toString(),
-        userId: userId.toString()
-      }
-    });
+    return this.http.post<void>(
+      `${this.apiUrl}/${listId}/add-book?bookId=${bookId}&userId=${userId}`,
+      {}
+    );
   }
 
   removeBookFromList(listId: number, bookId: number, userId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${listId}/remove-book`, {
-      params: { 
-        bookId: bookId.toString(),
-        userId: userId.toString()
-      }
-    });
+    return this.http.delete<void>(
+      `${this.apiUrl}/${listId}/remove-book?bookId=${bookId}&userId=${userId}`
+    );
   }
 }

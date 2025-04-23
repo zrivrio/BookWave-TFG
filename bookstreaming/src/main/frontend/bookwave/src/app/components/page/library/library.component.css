@@ -1,25 +1,31 @@
-/* library.component.css */
-.search-container {
-    margin-bottom: 1rem;
+.reading-list-container {
+  padding: 20px;
+}
+
+.card {
+  margin-bottom: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  background-color: #f8f9fa;
+}
+
+.list-group-item {
+  cursor: pointer;
+  transition: background-color 0.2s;
+  
+  &:hover {
+    background-color: #f8f9fa;
   }
   
-  .modal-content {
-    max-height: 80vh;
-    display: flex;
-    flex-direction: column;
+  &.active {
+    background-color: #007bff;
+    border-color: #007bff;
   }
-  
-  .books-grid {
-    display: grid;
-    gap: 1rem;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  }
-  
-  .book-card {
-    transition: all 0.2s ease;
-  }
-  
-  .book-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
+}
+
+.card-img-top {
+  height: 200px;
+  object-fit: cover;
+}

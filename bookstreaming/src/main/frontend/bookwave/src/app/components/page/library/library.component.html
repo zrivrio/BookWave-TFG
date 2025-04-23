@@ -1,156 +1,101 @@
-<div class="flex flex-col h-screen p-6 gap-6 bg-gradient-to-br from-[#E0E9F5] to-[#CBD8E8]">
-  <!-- Mensajes de estado -->
-  <div *ngIf="errorMessage" class="p-4 mb-4 text-red-700 bg-red-100 rounded-lg flex justify-between items-center">
-    <span>{{errorMessage}}</span>
-    <button (click)="clearMessages()" class="text-red-700 hover:text-red-900">×</button>
-  </div>
-  
-  <div *ngIf="successMessage" class="p-4 mb-4 text-green-700 bg-green-100 rounded-lg flex justify-between items-center">
-    <span>{{successMessage}}</span>
-    <button (click)="clearMessages()" class="text-green-700 hover:text-green-900">×</button>
-  </div>
+<div class="reading-list-container">
+  <div class="row">
+    <!-- Columna de listas -->
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header">
+          <h3>Mis listas de lectura</h3>
+        </div>
+        <div class="card-body">
+          <!-- Formulario para crear nueva lista -->
+          <form [formGroup]="newListForm" (ngSubmit)="createNewList()">
+            <div class="input-group mb-3">
+              <input 
+                type="text" 
+                class="form-control" 
+                placeholder="Nombre de la lista" 
+                formControlName="name">
+              <button 
+                class="btn btn-primary" 
+                type="submit" 
+                [disabled]="newListForm.invalid || loading">
+                Crear
+              </button>
+            </div>
+            <div *ngIf="newListForm.get('name')?.invalid && newListForm.get('name')?.touched" class="text-danger">
+              El nombre debe tener al menos 3 caracteres
+            </div>
+          </form>
 
-  <!-- Contenido principal -->
-  <div *ngIf="currentUser; else authTemplate" class="flex gap-6 h-full">
-    <!-- Sección de listas existentes -->
-    <div class="w-1/3 bg-white rounded-lg shadow p-4 overflow-y-auto">
-      <div class="flex justify-between items-center mb-4">
-        <h2 class="text-xl font-semibold text-[#1E0f75]">Tus listas</h2>
-        <span class="text-sm text-gray-500">
-          {{isPremiumUser() ? 'Premium' : 'Free'}}: {{lists.length}}/{{isPremiumUser() ? '∞' : MAX_LISTS_FREE}}
-        </span>
-      </div>
-      
-      <div *ngFor="let list of lists" 
-           class="mb-4 p-3 border-b border-gray-200 hover:bg-gray-50 cursor-pointer flex justify-between items-center"
-           [class.bg-blue-50]="selectedList?.id === list.id"
-           (click)="selectList(list)">
-        <div>
-          <h3 class="font-medium">{{list.name}}</h3>
-          <p class="text-sm text-gray-500">{{list.books.length}}/{{isPremiumUser() ? '∞' : MAX_BOOKS_PER_LIST}} libros</p>
-        </div>
-        <button (click)="$event.stopPropagation(); removeList(list)" class="text-red-500 hover:text-red-700">
-          ×
-        </button>
-      </div>
-      
-      <!-- Botón para añadir nueva lista -->
-      <button *ngIf="isPremiumUser() || lists.length < MAX_LISTS_FREE"
-              (click)="showAddListForm = true" 
-              class="mt-4 w-full py-2 bg-[#1E0f75] text-white rounded-lg hover:bg-[#160b52]">
-        + Nueva lista
-      </button>
-      
-      <div *ngIf="!isPremiumUser() && lists.length >= MAX_LISTS_FREE" class="mt-4 p-3 bg-yellow-50 text-yellow-700 rounded-lg text-sm">
-        Límite de listas alcanzado. <a routerLink="/premium" class="font-bold underline">Actualiza a Premium</a> para crear más.
-      </div>
-      
-      <!-- Formulario para añadir lista -->
-      <div *ngIf="showAddListForm" class="mt-4 p-3 bg-gray-50 rounded-lg">
-        <input [(ngModel)]="newListName" placeholder="Nombre de la lista" 
-               class="w-full p-2 border rounded mb-2">
-        <div class="flex gap-2">
-          <button (click)="addList()" class="flex-1 py-1 bg-green-600 text-white rounded">Guardar</button>
-          <button (click)="showAddListForm = false; newListName = ''" class="flex-1 py-1 bg-gray-400 text-white rounded">Cancelar</button>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Sección de libros de la lista seleccionada -->
-    <div class="flex-1 bg-white rounded-lg shadow p-4 overflow-y-auto">
-      <div *ngIf="selectedList" class="flex flex-col h-full">
-        <div class="flex justify-between items-center mb-4">
-          <h2 class="text-xl font-semibold text-[#1E0f75]">{{selectedList.name}}</h2>
-          <button (click)="openAddBookModal()" 
-                  [disabled]="!isPremiumUser() && selectedList.books.length >= MAX_BOOKS_PER_LIST"
-                  class="px-4 py-1 bg-[#1E0f75] text-white rounded-lg hover:bg-[#160b52] disabled:bg-gray-400">
-            + Añadir libro
-          </button>
-        </div>
-        
-        <div *ngIf="!isPremiumUser() && selectedList.books.length >= MAX_BOOKS_PER_LIST" class="mb-4 p-3 bg-yellow-50 text-yellow-700 rounded-lg text-sm">
-          Límite de libros alcanzado. <a routerLink="/premium" class="font-bold underline">Actualiza a Premium</a> para añadir más.
-        </div>
-        
-        <div *ngIf="selectedList.books.length > 0; else emptyList" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 flex-grow">
-          <div *ngFor="let book of selectedList.books" class="border rounded-lg p-3 hover:shadow relative">
-            <button (click)="removeBookFromList(book)" class="absolute top-1 right-1 text-red-500 hover:text-red-700 bg-white rounded-full w-6 h-6 flex items-center justify-center">
-              ×
-            </button>
-            <img [src]="book.cover" alt="Portada" class="w-full h-40 object-cover mb-2 rounded">
-            <h4 class="font-medium text-sm">{{book.title}}</h4>
-            <p class="text-xs text-gray-500">{{book.author}}</p>
+          <!-- Mensajes de éxito/error -->
+          <div *ngIf="success" class="alert alert-success">{{ success }}</div>
+          <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+          <!-- Lista de listas de lectura -->
+          <div *ngIf="loading" class="text-center">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Cargando...</span>
+            </div>
           </div>
-        </div>
-        
-        <ng-template #emptyList>
-          <div class="flex items-center justify-center h-full text-gray-400">
-            Esta lista no tiene libros aún. Añade algunos haciendo clic en el botón "+ Añadir libro".
+
+          <div *ngIf="!loading && readingLists.length === 0" class="text-center">
+            <p>No tienes listas de lectura. ¡Crea una!</p>
           </div>
-        </ng-template>
-      </div>
-      
-      <div *ngIf="!selectedList" class="flex items-center justify-center h-full text-gray-400">
-        Selecciona una lista para ver sus libros
-      </div>
-    </div>
-  </div>
-  
-  <ng-template #authTemplate>
-    <div class="flex flex-col items-center justify-center h-full">
-      <h2 class="text-2xl font-semibold text-[#1E0f75] mb-4">¡Bienvenido a BookWave!</h2>
-      <p class="text-gray-600 mb-6">Inicia sesión para acceder a tus listas de lectura</p>
-      <div class="space-x-4">
-        <a routerLink="/login" class="px-6 py-2 bg-[#1E0f75] text-white rounded-lg hover:bg-[#160b52]">Iniciar Sesión</a>
-        <a routerLink="/signup" class="px-6 py-2 border border-[#1E0f75] text-[#1E0f75] rounded-lg hover:bg-[#E0E9F5]">Registrarse</a>
-      </div>
-    </div>
-  </ng-template>
-  
-  <!-- Modal para añadir libros -->
-  <div *ngIf="showAddBookModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-    <div class="bg-white rounded-lg shadow-lg w-full max-w-2xl max-h-[80vh] flex flex-col">
-      <div class="p-4 border-b flex justify-between items-center">
-        <h3 class="text-lg font-semibold">Añadir libro a {{selectedList?.name}}</h3>
-        <button (click)="showAddBookModal = false; selectedBookToAdd = null" class="text-gray-500 hover:text-gray-700">
-          ×
-        </button>
-      </div>
-      
-      <div class="p-4 border-b">
-        <app-search 
-          (searchTermChange)="onSearchTermChange($event)">
-        </app-search>
-      </div>
-      
-      <div class="p-4 overflow-y-auto flex-grow">
-        <div *ngIf="filteredBooks.length === 0" class="text-center py-8 text-gray-500">
-          No se encontraron libros
+
+          <ul class="list-group mt-3">
+            <li *ngFor="let list of readingLists" 
+                class="list-group-item d-flex justify-content-between align-items-center"
+                [class.active]="selectedList?.id === list.id"
+                (click)="selectList(list)">
+              {{ list.name }}
+              <button class="btn btn-sm btn-danger" (click)="deleteList(list); $event.stopPropagation()">
+                <i class="bi bi-trash"></i>
+              </button>
+            </li>
+          </ul>
         </div>
-        
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div *ngFor="let book of filteredBooks" 
-               [class.bg-blue-50]="selectedBookToAdd?.id === book.id"
-               class="border rounded-lg p-3 hover:shadow cursor-pointer flex items-center gap-3"
-               (click)="selectedBookToAdd = book">
-            <img [src]="book.cover" alt="Portada" class="w-16 h-16 object-cover rounded">
-            <div>
-              <h4 class="font-medium text-sm">{{book.title}}</h4>
-              <p class="text-xs text-gray-500">{{book.author}}</p>
+      </div>
+    </div>
+
+    <!-- Columna de libros en la lista seleccionada -->
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header">
+          <h3 *ngIf="selectedList">Libros en "{{ selectedList.name }}"</h3>
+          <h3 *ngIf="!selectedList">Selecciona una lista</h3>
+        </div>
+        <div class="card-body">
+          <div *ngIf="loading" class="text-center">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Cargando...</span>
+            </div>
+          </div>
+
+          <div *ngIf="!loading && selectedList && booksInSelectedList.length === 0" class="text-center">
+            <p>No hay libros en esta lista.</p>
+          </div>
+
+          <div *ngIf="!loading && !selectedList" class="text-center">
+            <p>Selecciona una lista para ver sus libros.</p>
+          </div>
+
+          <div class="row row-cols-1 row-cols-md-3 g-4">
+            <div *ngFor="let book of booksInSelectedList" class="col">
+              <div class="card h-100">
+                <img [src]="book.cover" class="card-img-top" alt="{{ book.title }}">
+                <div class="card-body">
+                  <h5 class="card-title">{{ book.title }}</h5>
+                  <p class="card-text">{{ book.author }}</p>
+                </div>
+                <div class="card-footer">
+                  <button class="btn btn-danger btn-sm" (click)="removeBookFromList(book)">
+                    Eliminar de la lista
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      
-      <div class="p-4 border-t flex justify-end gap-2">
-        <button (click)="showAddBookModal = false; selectedBookToAdd = null" class="px-4 py-2 border border-gray-300 rounded-lg">
-          Cancelar
-        </button>
-        <button (click)="addBookToList()" 
-                [disabled]="!selectedBookToAdd"
-                class="px-4 py-2 bg-[#1E0f75] text-white rounded-lg hover:bg-[#160b52] disabled:bg-gray-400">
-          Añadir libro
-        </button>
       </div>
     </div>
   </div>

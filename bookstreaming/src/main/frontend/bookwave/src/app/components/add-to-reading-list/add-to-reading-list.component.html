@@ -1,0 +1,30 @@
+<div class="add-to-list-container">
+    <h4>Añadir a lista de lectura</h4>
+    
+    <div *ngIf="loading" class="text-center">
+      <div class="spinner-border" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+    </div>
+    
+    <div *ngIf="success" class="alert alert-success">{{ success }}</div>
+    <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+    
+    <div *ngIf="!loading && readingLists.length === 0" class="text-center">
+      <p>No tienes listas de lectura. Crea una primero.</p>
+    </div>
+    
+    <div *ngIf="!loading && readingLists.length > 0" class="form-group">
+      <select class="form-control" [(ngModel)]="selectedListId">
+        <option [ngValue]="null">Selecciona una lista</option>
+        <option *ngFor="let list of readingLists" [ngValue]="list.id">{{ list.name }}</option>
+      </select>
+      
+      <button 
+        class="btn btn-primary mt-2" 
+        [disabled]="!selectedListId || loading"
+        (click)="addToList()">
+        Añadir a lista
+      </button>
+    </div>
+  </div>
