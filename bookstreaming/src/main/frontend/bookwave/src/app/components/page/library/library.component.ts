@@ -6,7 +6,6 @@ import { ReadingList } from '../../../models/ReadingList';
 import { Book } from '../../../models/Book';
 import { RouterModule } from '@angular/router';
 import { UserService } from '../../../service/user.service';
-import { AddToReadingListComponent } from '../../add-to-reading-list/add-to-reading-list.component';
 
 @Component({
   selector: 'app-library',
@@ -24,6 +23,8 @@ export class LibraryComponent implements OnInit {
   error = '';
   success = '';
   userId: number | null = null;
+  isPremiumUser = false;
+
 
   constructor(
     private readingListService: LibraryService,
@@ -35,9 +36,12 @@ export class LibraryComponent implements OnInit {
     });
   }
 
+
   ngOnInit(): void {
     const user = this.userService.getCurrentUser();
     this.userId = user?.id || null;
+    this.isPremiumUser = user?.subscriptionType === 'Premium';
+    
     if (this.userId) {
       this.loadUserLists();
     }
@@ -47,20 +51,43 @@ export class LibraryComponent implements OnInit {
     if (!this.userId) return;
     
     this.loading = true;
+    this.error = '';
+    
     this.readingListService.getLists(this.userId).subscribe({
       next: (lists: ReadingList[]) => {
-        this.readingLists = lists;
+        this.readingLists = lists.map(list => ({
+          ...list,
+          books: list.books || []
+        }));
+        
+        // Load books for each list
+        this.readingLists.forEach(list => {
+          if (list.id) {
+            this.readingListService.getBooksInList(list.id).subscribe({
+              next: (books: Book[]) => {
+                list.books = books;
+              },
+              error: (err) => {
+                console.error('Error loading books for list:', err);
+                list.books = [];
+              }
+            });
+          }
+        });
+        
+        if (this.readingLists.length > 0) {
+          this.selectList(this.readingLists[0]);
+        }
+        
         this.loading = false;
-        console.log('Listas cargadas:', this.readingLists);
       },
       error: (err: any) => {
         this.error = 'Error al cargar las listas de lectura';
         this.loading = false;
-        console.error(err);
+        console.error('Error:', err);
       }
     });
   }
-
   selectList(list: ReadingList): void {
     console.log('Lista seleccionada:', list);
     this.selectedList = list;
@@ -84,10 +111,7 @@ export class LibraryComponent implements OnInit {
   }
 
   createNewList(): void {
-    if (this.newListForm.invalid || !this.userId) {
-        this.error = 'Datos inválidos o usuario no identificado';
-        return;
-    }
+    if (this.newListForm.invalid || !this.userId) return;
     
     const name = this.newListForm.get('name')?.value;
     this.loading = true;
@@ -101,10 +125,10 @@ export class LibraryComponent implements OnInit {
             this.success = 'Lista creada con éxito';
             this.loading = false;
         },
-        error: (err: any) => {
-            this.error = err.error?.message || 'Error al crear la lista';
+        error: (err) => {
+            this.error = err.error?.message || err.message || 'Error al crear la lista';
             this.loading = false;
-            console.error('Error creating list:', err);
+            console.error(err);
         }
     });
 }

@@ -38,8 +38,9 @@ export class LibraryService {
 
   addBookToList(listId: number, bookId: number, userId: number): Observable<void> {
     return this.http.post<void>(
-      `${this.apiUrl}/${listId}/add-book?bookId=${bookId}&userId=${userId}`,
-      {}
+      `${this.apiUrl}/${listId}/add-book`,
+      null,
+      { params: { bookId: bookId.toString(), userId: userId.toString() } }
     );
   }
 

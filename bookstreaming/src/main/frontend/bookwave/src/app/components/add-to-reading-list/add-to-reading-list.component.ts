@@ -61,33 +61,33 @@ export class AddToReadingListComponent implements OnInit {
     });
   }
 
-  addToList(listId?: number): void {
-    const targetListId = listId || this.selectedListId;
-    
-    if (!this.userId || !targetListId || !this.bookId) {
+ // Actualiza el método addToList
+addToList(listId?: number): void {
+  const targetListId = listId || this.selectedListId;
+  
+  if (!this.userId || !targetListId || !this.bookId) {
       this.error = 'Selecciona una lista para añadir el libro';
       return;
-    }
-    
-    this.loading = true;
-    this.error = '';
-    this.success = '';
-    
-    this.readingListService.addBookToList(targetListId, this.bookId, this.userId).subscribe({
+  }
+  
+  this.loading = true;
+  this.error = '';
+  this.success = '';
+  
+  this.readingListService.addBookToList(targetListId, this.bookId, this.userId).subscribe({
       next: () => {
-        this.success = 'Libro añadido a la lista con éxito';
-        this.loading = false;
-        this.selectedListId = null;
-        this.showDropdown = false;
-        setTimeout(() => this.success = '', 3000);
+          this.success = 'Libro añadido a la lista con éxito';
+          this.loading = false;
+          this.selectedListId = null;
+          setTimeout(() => this.success = '', 3000);
       },
       error: (err) => {
-        this.error = err.error?.message || 'Error al añadir el libro a la lista';
-        this.loading = false;
-        console.error(err);
+          this.error = err.error?.message || err.message || 'Error al añadir el libro a la lista';
+          this.loading = false;
+          console.error(err);
       }
-    });
-  }
+  });
+}
 
   createNewList(): void {
     if (this.newListForm.invalid || !this.userId) return;
