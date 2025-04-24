@@ -34,22 +34,26 @@ public class ReadingListController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createList(@RequestBody Map<String, Object> payload) {
-        String name = (String) payload.get("name");
-        Long userId = Long.valueOf(payload.get("userId").toString());
+public ResponseEntity<?> createList(@RequestBody Map<String, Object> payload) {
+    try {
+        String name = payload.containsKey("name") ? payload.get("name").toString() : null;
+        Long userId = payload.containsKey("userId") ? Long.valueOf(payload.get("userId").toString()) : null;
+        
+        if (name == null || userId == null) {
+            return ResponseEntity.badRequest().body("Se requieren 'name' y 'userId'");
+        }
         
         User user = userService.getUserById(userId);
         if (user == null) {
             return ResponseEntity.badRequest().body("Usuario no encontrado");
         }
         
-        try {
-            ReadingList newList = readingListService.createReadingList(name, user);
-            return ResponseEntity.ok(newList);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        ReadingList newList = readingListService.createReadingList(name, user);
+        return ResponseEntity.ok(newList);
+    } catch (Exception e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
     }
+}
 
     @DeleteMapping("/{listId}")
     public ResponseEntity<?> deleteList(

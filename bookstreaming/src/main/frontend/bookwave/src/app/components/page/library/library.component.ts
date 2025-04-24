@@ -11,7 +11,7 @@ import { AddToReadingListComponent } from '../../add-to-reading-list/add-to-read
 @Component({
   selector: 'app-library',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule,AddToReadingListComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
   templateUrl: './library.component.html',
   styleUrls: ['./library.component.css']
 })
@@ -24,7 +24,6 @@ export class LibraryComponent implements OnInit {
   error = '';
   success = '';
   userId: number | null = null;
-  currentBook: Book | null = null; 
 
   constructor(
     private readingListService: LibraryService,
@@ -85,25 +84,30 @@ export class LibraryComponent implements OnInit {
   }
 
   createNewList(): void {
-    if (this.newListForm.invalid || !this.userId) return;
+    if (this.newListForm.invalid || !this.userId) {
+        this.error = 'Datos inválidos o usuario no identificado';
+        return;
+    }
     
     const name = this.newListForm.get('name')?.value;
     this.loading = true;
+    this.error = '';
+    this.success = '';
     
     this.readingListService.createList(this.userId, name).subscribe({
-      next: (list: ReadingList) => {
-        this.readingLists.push(list);
-        this.newListForm.reset();
-        this.success = 'Lista creada con éxito';
-        this.loading = false;
-      },
-      error: (err: any) => {
-        this.error = err.error || 'Error al crear la lista';
-        this.loading = false;
-        console.error(err);
-      }
+        next: (list: ReadingList) => {
+            this.readingLists.push(list);
+            this.newListForm.reset();
+            this.success = 'Lista creada con éxito';
+            this.loading = false;
+        },
+        error: (err: any) => {
+            this.error = err.error?.message || 'Error al crear la lista';
+            this.loading = false;
+            console.error('Error creating list:', err);
+        }
     });
-  }
+}
 
   deleteList(list: ReadingList): void {
     if (!this.userId || !list.id) return;

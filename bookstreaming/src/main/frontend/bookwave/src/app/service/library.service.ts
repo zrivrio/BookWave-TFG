@@ -17,11 +17,16 @@ export class LibraryService {
   }
 
   createList(userId: number, name: string): Observable<ReadingList> {
+    const list = {
+        name: name,
+        userId: userId
+    };
+    
     return this.http.post<ReadingList>(
-      `${this.apiUrl}/create?name=${encodeURIComponent(name)}&userId=${userId}`, 
-      {}
+        `${this.apiUrl}/create`,
+        list
     );
-  }
+}
 
   deleteList(listId: number, userId: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${listId}?userId=${userId}`);

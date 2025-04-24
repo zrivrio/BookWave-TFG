@@ -1,15 +1,15 @@
+// add-to-reading-list.component.ts
 import { Component, Input, OnInit } from '@angular/core';
 import { ReadingList } from '../../models/ReadingList';
 import { LibraryService } from '../../service/library.service';
 import { UserService } from '../../service/user.service';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Book } from '../../models/Book';
-import { BookService } from '../../service/book.service';
 
 @Component({
   selector: 'app-add-to-reading-list',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule ],
+  standalone: true,
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './add-to-reading-list.component.html',
   styleUrls: ['./add-to-reading-list.component.scss']
 })
@@ -24,14 +24,11 @@ export class AddToReadingListComponent implements OnInit {
   userId: number | null = null;
   showModal = false;
   newListForm: FormGroup;
-  searchTerm = '';
-  searchResults: Book[] = [];
-  isSearching = false;
+  showDropdown = false;
 
   constructor(
     private readingListService: LibraryService,
     private userService: UserService,
-    private bookService: BookService,
     private fb: FormBuilder
   ) {
     this.newListForm = this.fb.group({
@@ -64,8 +61,10 @@ export class AddToReadingListComponent implements OnInit {
     });
   }
 
-  addToList(): void {
-    if (!this.userId || !this.selectedListId || !this.bookId) {
+  addToList(listId?: number): void {
+    const targetListId = listId || this.selectedListId;
+    
+    if (!this.userId || !targetListId || !this.bookId) {
       this.error = 'Selecciona una lista para añadir el libro';
       return;
     }
@@ -74,11 +73,12 @@ export class AddToReadingListComponent implements OnInit {
     this.error = '';
     this.success = '';
     
-    this.readingListService.addBookToList(this.selectedListId, this.bookId, this.userId).subscribe({
+    this.readingListService.addBookToList(targetListId, this.bookId, this.userId).subscribe({
       next: () => {
         this.success = 'Libro añadido a la lista con éxito';
         this.loading = false;
         this.selectedListId = null;
+        this.showDropdown = false;
         setTimeout(() => this.success = '', 3000);
       },
       error: (err) => {
@@ -112,36 +112,17 @@ export class AddToReadingListComponent implements OnInit {
     });
   }
 
-  searchBooks(): void {
-    if (!this.searchTerm.trim()) {
-      this.searchResults = [];
-      return;
+  toggleDropdown(): void {
+    if (this.readingLists.length > 0) {
+      this.showDropdown = !this.showDropdown;
     }
-    
-    this.isSearching = true;
-    this.bookService.getBooksBySearch(this.searchTerm).subscribe({
-      next: (books: Book[]) => {
-        this.searchResults = books;
-        this.isSearching = false;
-      },
-      error: (err) => {
-        this.error = 'Error al buscar libros';
-        this.isSearching = false;
-        console.error(err);
-      }
-    });
-  }
-
-  selectBookFromSearch(book: Book): void {
-    this.bookId = book.id;
-    this.searchTerm = book.title;
-    this.searchResults = [];
   }
 
   openModal(): void {
     this.showModal = true;
     this.newListForm.reset();
     this.error = '';
+    this.showDropdown = false;
   }
 
   closeModal(): void {

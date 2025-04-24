@@ -1,106 +1,86 @@
 <!-- add-to-reading-list.component.html -->
-<div class="add-to-list-container">
-  <h4>Añadir a lista de lectura</h4>
+<div class="add-to-list-container relative">
+  <!-- Main Button -->
+  <button 
+    class="px-4 py-2 bg-[#1C1DAB] hover:bg-[#1E0F75] text-white rounded-lg font-medium transition-colors flex items-center gap-2"
+    (click)="toggleDropdown()"
+    [disabled]="loading">
+    <span>Añadir a lista</span>
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+    </svg>
+  </button>
   
-  <!-- Search for books (only shown if no bookId input) -->
-  <div *ngIf="!bookId" class="mb-3">
-    <div class="input-group">
-      <input 
-        type="text" 
-        class="form-control" 
-        [(ngModel)]="searchTerm"
-        (input)="searchBooks()"
-        placeholder="Buscar libro...">
-    </div>
-    
-    <!-- Search results dropdown -->
-    <div *ngIf="searchResults.length > 0" class="search-results-dropdown">
-      <ul class="list-group">
-        <li *ngFor="let book of searchResults" 
-            class="list-group-item list-group-item-action"
-            (click)="selectBookFromSearch(book)">
-          {{ book.title }} - {{ book.author || 'Autor desconocido' }}
-        </li>
-      </ul>
-    </div>
-  </div>
-  
-  <!-- Loading indicator -->
-  <div *ngIf="loading" class="text-center">
-    <div class="spinner-border" role="status">
-      <span class="visually-hidden">Cargando...</span>
+  <!-- Dropdown Menu -->
+  <div *ngIf="showDropdown" class="absolute z-10 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200">
+    <div class="p-2">
+      <!-- Quick Add to Existing Lists -->
+      <div *ngFor="let list of readingLists" class="p-2 hover:bg-gray-100 rounded cursor-pointer"
+           (click)="addToList(list.id)">
+        {{ list.name }}
+      </div>
+      
+      <!-- Divider -->
+      <div class="border-t border-gray-200 my-1"></div>
+      
+      <!-- Create New List Option -->
+      <div class="p-2 hover:bg-gray-100 rounded cursor-pointer text-[#1C1DAB] font-medium"
+           (click)="openModal()">
+        + Crear nueva lista
+      </div>
     </div>
   </div>
   
   <!-- Messages -->
-  <div *ngIf="success" class="alert alert-success">{{ success }}</div>
-  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
-  
-  <!-- Empty state -->
-  <div *ngIf="!loading && readingLists.length === 0" class="text-center">
-    <p>No tienes listas de lectura. Crea una primero.</p>
-    <button class="btn btn-primary" (click)="openModal()">
-      Crear nueva lista
-    </button>
+  <div *ngIf="success" class="mt-2 p-2 bg-green-100 text-green-800 rounded text-sm">
+    {{ success }}
+  </div>
+  <div *ngIf="error" class="mt-2 p-2 bg-red-100 text-red-800 rounded text-sm">
+    {{ error }}
   </div>
   
-  <!-- Lists dropdown -->
-  <div *ngIf="!loading && readingLists.length > 0" class="form-group">
-    <div class="d-flex align-items-center mb-2">
-      <select class="form-control" [(ngModel)]="selectedListId">
-        <option [ngValue]="null">Selecciona una lista</option>
-        <option *ngFor="let list of readingLists" [ngValue]="list.id">{{ list.name }}</option>
-      </select>
-      <button class="btn btn-outline-primary ms-2" (click)="openModal()">
-        <i class="bi bi-plus-lg"></i>
-      </button>
-    </div>
-    
-    <div class="d-flex gap-2">
-      <button 
-        class="btn btn-primary flex-grow-1" 
-        [disabled]="!selectedListId || !bookId || loading"
-        (click)="addToList()">
-        Añadir a lista
-      </button>
-    </div>
+  <!-- Loading indicator -->
+  <div *ngIf="loading" class="mt-2 text-center">
+    <div class="inline-block h-4 w-4 border-2 border-[#1C1DAB] border-t-transparent rounded-full animate-spin"></div>
   </div>
   
-  <!-- Create new list modal -->
-  <div *ngIf="showModal" class="modal-backdrop fade show" (click)="closeModal()"></div>
-  <div *ngIf="showModal" class="modal fade show d-block" tabindex="-1">
-    <div class="modal-dialog" (click)="$event.stopPropagation()">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Crear nueva lista</h5>
-          <button type="button" class="btn-close" (click)="closeModal()"></button>
-        </div>
-        <div class="modal-body">
-          <form [formGroup]="newListForm" (ngSubmit)="createNewList()">
-            <div class="mb-3">
-              <label for="listName" class="form-label">Nombre de la lista</label>
-              <input 
-                type="text" 
-                class="form-control" 
-                id="listName"
-                formControlName="name">
-              <div *ngIf="newListForm.get('name')?.invalid && newListForm.get('name')?.touched" 
-                   class="text-danger mt-1">
-                El nombre debe tener al menos 3 caracteres
-              </div>
-            </div>
-            <div class="d-flex justify-content-end gap-2">
-              <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancelar</button>
-              <button 
-                type="submit" 
-                class="btn btn-primary"
-                [disabled]="newListForm.invalid || loading">
-                Crear lista
-              </button>
-            </div>
-          </form>
-        </div>
+  <!-- Create New List Modal -->
+  <div *ngIf="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
+    <div class="bg-white rounded-lg p-6 w-96" (click)="$event.stopPropagation()">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-semibold">Crear nueva lista</h3>
+        <button (click)="closeModal()" class="text-gray-500 hover:text-gray-700">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
       </div>
+      
+      <form [formGroup]="newListForm" (ngSubmit)="createNewList()">
+        <div class="mb-4">
+          <label class="block text-gray-700 mb-2">Nombre de la lista</label>
+          <input 
+            type="text" 
+            class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-[#1C1DAB]"
+            formControlName="name">
+          <div *ngIf="newListForm.get('name')?.invalid && newListForm.get('name')?.touched" 
+               class="text-red-500 text-sm mt-1">
+            El nombre debe tener al menos 3 caracteres
+          </div>
+        </div>
+        
+        <div class="flex justify-end gap-2">
+          <button type="button" (click)="closeModal()" class="px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-100">
+            Cancelar
+          </button>
+          <button 
+            type="submit" 
+            class="px-4 py-2 bg-[#1C1DAB] text-white rounded-lg hover:bg-[#1E0F75] disabled:opacity-50"
+            [disabled]="newListForm.invalid || loading">
+            Crear
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

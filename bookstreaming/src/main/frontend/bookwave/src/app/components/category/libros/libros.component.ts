@@ -5,11 +5,12 @@ import { CategoryService } from '../../../service/category.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { AddToReadingListComponent } from '../../add-to-reading-list/add-to-reading-list.component';
 
 @Component({
   selector: 'app-libros',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, AddToReadingListComponent],
   templateUrl: './libros.component.html',
   styleUrl: './libros.component.css'
 })
