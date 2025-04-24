@@ -1,30 +1,106 @@
+<!-- add-to-reading-list.component.html -->
 <div class="add-to-list-container">
-    <h4>Añadir a lista de lectura</h4>
-    
-    <div *ngIf="loading" class="text-center">
-      <div class="spinner-border" role="status">
-        <span class="visually-hidden">Cargando...</span>
-      </div>
+  <h4>Añadir a lista de lectura</h4>
+  
+  <!-- Search for books (only shown if no bookId input) -->
+  <div *ngIf="!bookId" class="mb-3">
+    <div class="input-group">
+      <input 
+        type="text" 
+        class="form-control" 
+        [(ngModel)]="searchTerm"
+        (input)="searchBooks()"
+        placeholder="Buscar libro...">
     </div>
     
-    <div *ngIf="success" class="alert alert-success">{{ success }}</div>
-    <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
-    
-    <div *ngIf="!loading && readingLists.length === 0" class="text-center">
-      <p>No tienes listas de lectura. Crea una primero.</p>
+    <!-- Search results dropdown -->
+    <div *ngIf="searchResults.length > 0" class="search-results-dropdown">
+      <ul class="list-group">
+        <li *ngFor="let book of searchResults" 
+            class="list-group-item list-group-item-action"
+            (click)="selectBookFromSearch(book)">
+          {{ book.title }} - {{ book.author || 'Autor desconocido' }}
+        </li>
+      </ul>
     </div>
-    
-    <div *ngIf="!loading && readingLists.length > 0" class="form-group">
+  </div>
+  
+  <!-- Loading indicator -->
+  <div *ngIf="loading" class="text-center">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </div>
+  
+  <!-- Messages -->
+  <div *ngIf="success" class="alert alert-success">{{ success }}</div>
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+  
+  <!-- Empty state -->
+  <div *ngIf="!loading && readingLists.length === 0" class="text-center">
+    <p>No tienes listas de lectura. Crea una primero.</p>
+    <button class="btn btn-primary" (click)="openModal()">
+      Crear nueva lista
+    </button>
+  </div>
+  
+  <!-- Lists dropdown -->
+  <div *ngIf="!loading && readingLists.length > 0" class="form-group">
+    <div class="d-flex align-items-center mb-2">
       <select class="form-control" [(ngModel)]="selectedListId">
         <option [ngValue]="null">Selecciona una lista</option>
         <option *ngFor="let list of readingLists" [ngValue]="list.id">{{ list.name }}</option>
       </select>
-      
+      <button class="btn btn-outline-primary ms-2" (click)="openModal()">
+        <i class="bi bi-plus-lg"></i>
+      </button>
+    </div>
+    
+    <div class="d-flex gap-2">
       <button 
-        class="btn btn-primary mt-2" 
-        [disabled]="!selectedListId || loading"
+        class="btn btn-primary flex-grow-1" 
+        [disabled]="!selectedListId || !bookId || loading"
         (click)="addToList()">
         Añadir a lista
       </button>
     </div>
   </div>
+  
+  <!-- Create new list modal -->
+  <div *ngIf="showModal" class="modal-backdrop fade show" (click)="closeModal()"></div>
+  <div *ngIf="showModal" class="modal fade show d-block" tabindex="-1">
+    <div class="modal-dialog" (click)="$event.stopPropagation()">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Crear nueva lista</h5>
+          <button type="button" class="btn-close" (click)="closeModal()"></button>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="newListForm" (ngSubmit)="createNewList()">
+            <div class="mb-3">
+              <label for="listName" class="form-label">Nombre de la lista</label>
+              <input 
+                type="text" 
+                class="form-control" 
+                id="listName"
+                formControlName="name">
+              <div *ngIf="newListForm.get('name')?.invalid && newListForm.get('name')?.touched" 
+                   class="text-danger mt-1">
+                El nombre debe tener al menos 3 caracteres
+              </div>
+            </div>
+            <div class="d-flex justify-content-end gap-2">
+              <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancelar</button>
+              <button 
+                type="submit" 
+                class="btn btn-primary"
+                [disabled]="newListForm.invalid || loading">
+                Crear lista
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

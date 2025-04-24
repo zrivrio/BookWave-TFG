@@ -34,7 +34,6 @@ public class ReadingListService {
         return readingListRepository.findByUserId(userId);
     }
 
-    @Transactional
     public ReadingList createReadingList(String name, User user) {
         if (user.getSubscriptionType() != SubscriptionType.Premium) {
             long listCount = readingListRepository.countByUserId(user.getId());
@@ -50,7 +49,6 @@ public class ReadingListService {
         return readingListRepository.save(newList);
     }
 
-    @Transactional
     public void deleteReadingList(Long listId, Long userId) {
         ReadingList list = readingListRepository.findById(listId)
                 .orElseThrow(() -> new RuntimeException("Lista no encontrada"));
@@ -66,7 +64,6 @@ public class ReadingListService {
         return readingListRepository.findById(listId).orElse(null);
     }
 
-    @Transactional
     public void addBookToList(Long listId, Long bookId, Long userId) {
         ReadingList list = readingListRepository.findById(listId)
                 .orElseThrow(() -> new RuntimeException("Lista no encontrada"));

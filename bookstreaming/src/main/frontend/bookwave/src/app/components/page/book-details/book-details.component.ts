@@ -10,11 +10,12 @@ import { UserService } from '../../../service/user.service';
 import { User } from '../../../models/User';
 import { ReadingProgressService } from '../../../service/reading-progress.service';
 import { ReadingProgress } from '../../../models/ReadinProgress';
+import { AddToReadingListComponent } from '../../add-to-reading-list/add-to-reading-list.component';
 
 @Component({
   selector: 'app-book-details',
   standalone: true,
-  imports: [CommonModule, ReviewFormComponent, ReviewListComponent, FormsModule],
+  imports: [CommonModule, ReviewFormComponent, ReviewListComponent, FormsModule, AddToReadingListComponent],
   templateUrl: './book-details.component.html',
   styleUrls: ['./book-details.component.css']
 })

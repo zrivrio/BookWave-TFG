@@ -6,11 +6,12 @@ import { ReadingList } from '../../../models/ReadingList';
 import { Book } from '../../../models/Book';
 import { RouterModule } from '@angular/router';
 import { UserService } from '../../../service/user.service';
+import { AddToReadingListComponent } from '../../add-to-reading-list/add-to-reading-list.component';
 
 @Component({
   selector: 'app-library',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule,AddToReadingListComponent],
   templateUrl: './library.component.html',
   styleUrls: ['./library.component.css']
 })
@@ -23,6 +24,7 @@ export class LibraryComponent implements OnInit {
   error = '';
   success = '';
   userId: number | null = null;
+  currentBook: Book | null = null; 
 
   constructor(
     private readingListService: LibraryService,
