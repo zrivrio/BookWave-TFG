@@ -1,0 +1,129 @@
+<div class="reading-list-container px-6 py-8 max-w-7xl mx-auto">
+  <!-- Estado no autenticado -->
+  <div *ngIf="!userId" class="text-center py-12">
+    <h2 class="text-2xl font-bold text-[#2A2A2A] mb-4">Accede a tu biblioteca personal</h2>
+    <p class="text-[#666666] mb-6">Necesitas iniciar sesión para ver y gestionar tus listas de lectura</p>
+    <a routerLink="/login" 
+       class="inline-block px-6 py-3 bg-[#1C1DAB] hover:bg-[#1E0F75] text-white rounded-lg font-medium transition-colors">
+      Iniciar Sesión
+    </a>
+  </div>
+
+  <!-- Contenido de la biblioteca para usuarios autenticados -->
+  <div *ngIf="userId" class="flex flex-col md:flex-row gap-6">
+    <!-- Column for reading lists -->
+    <div class="w-full md:w-1/3">
+      <div class="bg-white rounded-xl shadow-xs border border-[#E0E9F5]">
+        <div class="p-4 border-b border-[#E0E9F5]">
+          <h3 class="text-xl font-bold text-[#2A2A2A]">Mis listas de lectura</h3>
+          <p *ngIf="readingLists.length > 0" class="text-sm text-[#666666] mt-1">
+            {{ readingLists.length }} de {{ isPremiumUser ? 'ilimitadas' : '5' }} listas
+          </p>
+        </div>
+
+        <div class="p-4">
+          <!-- Form to create new list -->
+          <form [formGroup]="newListForm" (ngSubmit)="createNewList()" class="mb-4">
+            <div class="flex gap-2">
+              <input type="text"
+                class="flex-1 px-4 py-2 rounded-lg border border-[#E0E9F5] focus:outline-none focus:border-[#1C1DAB] focus:ring-2 focus:ring-[#E6F0F7]"
+                placeholder="Nombre de la lista" formControlName="name">
+              <button type="submit"
+                class="px-4 py-2 bg-[#1C1DAB] hover:bg-[#1E0F75] text-white rounded-lg font-medium transition-colors disabled:opacity-50"
+                [disabled]="newListForm.invalid || loading">
+                Crear
+              </button>
+            </div>
+            <div *ngIf="newListForm.get('name')?.invalid && newListForm.get('name')?.touched"
+              class="text-sm text-[#EBB2C3] mt-1">
+              El nombre debe tener al menos 3 caracteres
+            </div>
+          </form>
+
+          <!-- Messages -->
+          <div *ngIf="success" class="p-3 mb-4 bg-[#E6F0F7] text-[#1C1DAB] rounded-lg">{{ success }}</div>
+          <div *ngIf="error" class="p-3 mb-4 bg-[#EBB2C3] text-[#1E0F75] rounded-lg">{{ error }}</div>
+
+          <!-- Loading state -->
+          <div *ngIf="loading" class="flex justify-center py-4">
+            <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#1C1DAB]"></div>
+          </div>
+
+          <!-- Empty state -->
+          <div *ngIf="!loading && readingLists.length === 0" class="text-center py-6 text-[#666666]">
+            <p>No tienes listas de lectura. ¡Crea una!</p>
+          </div>
+
+          <!-- Lists -->
+          <ul class="space-y-2">
+            <li *ngFor="let list of readingLists" 
+                class="p-3 rounded-lg cursor-pointer transition-colors duration-200 flex justify-between items-center"
+                [class.bg-[#E6F0F7]]="selectedList?.id === list.id"
+                [class.hover:bg-[#F4F4F4]]="selectedList?.id !== list.id"
+                (click)="selectList(list)">
+              <div class="flex-1"> <!-- Añade flex-1 aquí para que ocupe el espacio disponible -->
+                <div class="font-medium">{{ list.name }}</div>
+                <div class="text-xs text-[#666666] mt-1">
+                  {{ list.books.length }} libros ({{ isPremiumUser ? 'ilimitados' : 'límite 10' }})
+                </div>
+              </div>
+              <button class="text-[#EBB2C3] hover:text-[#E893C5] p-1 ml-2" 
+                      (click)="deleteList(list); $event.stopPropagation()">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Column for books in selected list -->
+    <div class="w-full md:w-2/3">
+      <div class="bg-white rounded-xl shadow-xs border border-[#E0E9F5]">
+        <div class="p-4 border-b border-[#E0E9F5]">
+          <h3 *ngIf="selectedList" class="text-xl font-bold text-[#2A2A2A]">Libros en "{{ selectedList.name }}"</h3>
+          <h3 *ngIf="!selectedList" class="text-xl font-bold text-[#2A2A2A]">Selecciona una lista</h3>
+        </div>
+
+        <div class="p-4">
+          <!-- Loading state -->
+          <div *ngIf="loading" class="flex justify-center py-8">
+            <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#1C1DAB]"></div>
+          </div>
+
+          <!-- Empty states -->
+          <div *ngIf="!loading && selectedList && booksInSelectedList.length === 0"
+            class="text-center py-8 text-[#666666]">
+            <p>No hay libros en esta lista.</p>
+          </div>
+
+          <div *ngIf="!loading && !selectedList" class="text-center py-8 text-[#666666]">
+            <p>Selecciona una lista para ver sus libros.</p>
+          </div>
+
+          <!-- Books grid -->
+          <div *ngIf="!loading && selectedList && booksInSelectedList.length > 0"
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div *ngFor="let book of booksInSelectedList"
+              class="bg-white rounded-lg border border-[#E0E9F5] overflow-hidden hover:shadow-sm transition-shadow">
+              <img [src]="book.cover || 'assets/images/default-book-cover.jpg'" [alt]="book.title"
+                class="w-full h-48 object-cover" onerror="this.src='assets/images/default-book-cover.jpg'">
+              <div class="p-3">
+                <h4 class="font-semibold text-[#2A2A2A] truncate">{{ book.title }}</h4>
+                <p class="text-sm text-[#666666] truncate">{{ book.author || 'Autor desconocido' }}</p>
+                <button
+                  class="mt-3 w-full text-xs py-2 bg-[#EBB2C3] hover:bg-[#E893C5] text-white rounded-lg transition-colors"
+                  (click)="removeBookFromList(book)">
+                  Eliminar de la lista
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

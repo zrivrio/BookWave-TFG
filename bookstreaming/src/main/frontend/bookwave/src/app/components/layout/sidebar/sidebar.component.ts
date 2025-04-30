@@ -16,6 +16,7 @@ export class SidebarComponent {
   @Input() label!: string;
   @Input() route!: string;
   isLoggedIn: boolean = false;
+  isAdmin: boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -24,7 +25,10 @@ export class SidebarComponent {
 
   ngOnInit() {
     this.authService.currentUser.subscribe(
-      user => this.isLoggedIn = !!user
+      user => {
+        this.isLoggedIn = !!user;
+        this.isAdmin = user?.role === 'Admin';
+      }
     );
   }
   logout() {

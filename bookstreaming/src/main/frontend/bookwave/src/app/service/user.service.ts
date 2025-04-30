@@ -55,4 +55,20 @@ export class UserService {
     this.currentUserSubject.next(null);
     localStorage.removeItem('currentUser');
   }
+
+  // En user.service.ts
+  updateUser(user: User): Observable<User> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+    return this.http.put<User>(`${this.baseUrl}/${user.id}`, user, { headers })
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    console.error('Error:', error);
+    return throwError(() => new Error('Something bad happened; please try again later.'));
+  }
 }

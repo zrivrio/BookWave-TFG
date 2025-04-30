@@ -28,10 +28,10 @@ public class User {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private Role role = Role.User;
 
     @Enumerated(EnumType.STRING)
-    private SubscriptionType subscriptionType;
+    private SubscriptionType subscriptionType = SubscriptionType.Free; 
 
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)

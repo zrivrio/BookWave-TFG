@@ -27,4 +27,9 @@ public class UserController {
     public User upgradeToPremium(@PathVariable Long userId) {
         return userService.upgradeUserToPremium(userId);
     }
+
+    @PutMapping("/{userId}")
+    public User updateUser(@PathVariable Long userId, @RequestBody User userDetails) {
+        return userService.updateUser(userId, userDetails);
+    }
 }
