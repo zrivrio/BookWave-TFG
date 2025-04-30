@@ -2,7 +2,6 @@ package com.BookWave.bookstreaming.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.NaturalId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,9 +16,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NaturalId
-    @Column(nullable = false, unique = true)
-    private String username;
+    @Column(nullable = false, unique = true, length = 50)
+    private String username; 
 
     @Column(nullable = false, unique = true)
     private String email;

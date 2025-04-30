@@ -3,6 +3,9 @@ package com.BookWave.bookstreaming.controller;
 import com.BookWave.bookstreaming.domain.LoginRequest;
 import com.BookWave.bookstreaming.domain.User;
 import com.BookWave.bookstreaming.service.UserService;
+
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,7 +32,8 @@ public class UserController {
     }
 
     @PutMapping("/{userId}")
-    public User updateUser(@PathVariable Long userId, @RequestBody User userDetails) {
-        return userService.updateUser(userId, userDetails);
+    public User updateUser(  @PathVariable Long userId,
+    @RequestBody Map<String, Object> updates) {
+        return userService.updateUser(userId, updates);
     }
 }

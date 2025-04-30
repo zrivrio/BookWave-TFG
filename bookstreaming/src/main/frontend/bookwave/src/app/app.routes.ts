@@ -8,6 +8,8 @@ import { SignupComponent } from './components/user/page/signup/signup.component'
 import { ProgressComponent } from './components/user/page/progress/progress.component';
 import { HelpPComponent } from './components/user/page/help-p/help-p.component';
 import { ProfileComponent } from './components/user/page/profile/profile.component';
+import { EditProfileComponent } from './components/user/edit-profile/edit-profile.component';
+
 
 
 
@@ -21,5 +23,6 @@ export const routes: Routes = [
     { path: 'progress', component: ProgressComponent},
     { path: 'help', component: HelpPComponent},
     { path: 'profile', component: ProfileComponent},
+    { path: 'profile/edit', component: EditProfileComponent},
     { path: '**', redirectTo: '' }
 ];

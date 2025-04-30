@@ -3,9 +3,10 @@ package com.BookWave.bookstreaming.service;
 import com.BookWave.bookstreaming.domain.SubscriptionType;
 import com.BookWave.bookstreaming.domain.User;
 import com.BookWave.bookstreaming.repository.UserRepository;
+import java.security.NoSuchAlgorithmException;
+import java.util.Map;
 
-import java.util.Objects;
-
+import com.BookWave.bookstreaming.util.util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,13 +16,26 @@ public class UserService {
     private UserRepository userRepository;
 
     public User registerUser(User user) {
-        return userRepository.save(user);
+        try {
+            String hashedPassword = util.hashPassword(user.getPassword());
+            user.setPassword(hashedPassword);
+            return userRepository.save(user);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("Error al hashear la contraseña", e);
+        }
     }
 
     public User loginUser(String username, String password) {
         User user = userRepository.findByUsername(username);
-        if (user != null && user.getPassword().equals(password)) {
-            return user;
+        if (user != null) {
+            try {
+                String hashedInput = util.hashPassword(password);
+                if (hashedInput.equals(user.getPassword())) {
+                    return user;
+                }
+            } catch (NoSuchAlgorithmException e) {
+                throw new RuntimeException("Error al verificar la contraseña", e);
+            }
         }
         return null;
     }
@@ -38,23 +52,43 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User updateUser(Long userId, User userDetails) {
+    public User updateUser(Long userId, Map<String, Object> updates) {
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new RuntimeException("Usuario no encontrado con id: " + userId));
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        if (Objects.nonNull(userDetails.getUsername()) && !"".equalsIgnoreCase(userDetails.getUsername())) {
-            user.setUsername(userDetails.getUsername());
+        // Actualizar username si se proporciona y es diferente
+        if (updates.containsKey("username")) {
+            String newUsername = (String) updates.get("username");
+            if (!newUsername.equals(user.getUsername())) {
+                if (userRepository.existsByUsernameAndIdNot(newUsername, userId)) {
+                    throw new IllegalArgumentException("El nombre de usuario ya está en uso");
+                }
+                user.setUsername(newUsername);
+            }
         }
 
-        if (Objects.nonNull(userDetails.getEmail()) && !"".equalsIgnoreCase(userDetails.getEmail())) {
-            user.setEmail(userDetails.getEmail());
+        // Actualizar email si se proporciona y es diferente
+        if (updates.containsKey("email")) {
+            String newEmail = (String) updates.get("email");
+            if (!newEmail.equals(user.getEmail())) {
+                if (userRepository.existsByEmailAndIdNot(newEmail, userId)) {
+                    throw new IllegalArgumentException("El email ya está en uso");
+                }
+                user.setEmail(newEmail);
+            }
         }
 
-        if (Objects.nonNull(userDetails.getSubscriptionType())) {
-            user.setSubscriptionType(userDetails.getSubscriptionType());
+        // Actualizar contraseña si se proporciona
+        if (updates.containsKey("password")) {
+            try {
+                String newPassword = (String) updates.get("password");
+                String hashedPassword = util.hashPassword(newPassword);
+                user.setPassword(hashedPassword);
+            } catch (NoSuchAlgorithmException e) {
+                throw new RuntimeException("Error al hashear la contraseña", e);
+            }
         }
 
         return userRepository.save(user);
     }
-
 }

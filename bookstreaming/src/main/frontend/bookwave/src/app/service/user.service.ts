@@ -56,12 +56,11 @@ export class UserService {
     localStorage.removeItem('currentUser');
   }
 
-  // En user.service.ts
-  updateUser(user: User): Observable<User> {
+  updateUser(userId: number, userData: any): Observable<User> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
-    return this.http.put<User>(`${this.baseUrl}/${user.id}`, user, { headers })
+    return this.http.put<User>(`${this.baseUrl}/${userId}`, userData, { headers })
       .pipe(
         catchError(this.handleError)
       );
@@ -69,6 +68,6 @@ export class UserService {
 
   private handleError(error: HttpErrorResponse) {
     console.error('Error:', error);
-    return throwError(() => new Error('Something bad happened; please try again later.'));
+    return throwError(() => new Error('Algo esta mal; prueba más tarde.'));
   }
 }

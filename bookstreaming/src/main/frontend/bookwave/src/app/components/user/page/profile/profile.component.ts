@@ -3,6 +3,7 @@ import { AuthService } from '../../../../service/auth.service';
 import { UserService } from '../../../../service/user.service';
 import { SubscriptionType } from '../../../../models/SubscriptionType';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -20,7 +21,8 @@ export class ProfileComponent {
 
   constructor(
     private authService: AuthService,
-    private userService: UserService
+    private userService: UserService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -34,13 +36,16 @@ export class ProfileComponent {
     });
   }
 
+  navigateToEdit() {
+    this.router.navigate(['/profile/edit']);
+  }
+
   upgradeToPremium(): void {
     if (!this.currentUser) return;
     
     this.isUpgrading = true;
     this.upgradeError = null;
     
-    // Simulación de llamada al servicio
     setTimeout(() => {
       const updatedUser = {
         ...this.currentUser,
