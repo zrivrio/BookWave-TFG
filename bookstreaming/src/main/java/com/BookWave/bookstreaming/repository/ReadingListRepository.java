@@ -25,8 +25,4 @@ public interface ReadingListRepository extends JpaRepository<ReadingList, Long> 
     @Query("SELECT COUNT(r) FROM ReadingList r WHERE r.user.id = :userId")
     long countByUserId(@Param("userId") Long userId);
 
-    // Método para encontrar listas con sus libros cargados
-    @Query("SELECT DISTINCT r FROM ReadingList r LEFT JOIN FETCH r.books WHERE r.user.id = :userId")
-    List<ReadingList> findByUserIdWithBooks(@Param("userId") Long userId);
-
 }

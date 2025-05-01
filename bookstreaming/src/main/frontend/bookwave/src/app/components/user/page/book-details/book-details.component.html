@@ -1,104 +1,98 @@
 <div class="max-w-7xl mx-auto px-6 py-8" *ngIf="!loading">
-  <div *ngIf="book; else noBook">
-      <div class="flex flex-col md:flex-row gap-8">
-          <!-- Book Cover -->
-          <div class="w-full md:w-1/3 lg:w-1/4">
-              <div class="bg-white rounded-xl shadow-xs overflow-hidden border border-[#E0E9F5] hover:shadow-sm transition-shadow duration-200">
-                  <img 
-                      [src]="book.cover || 'assets/images/default-book-cover.jpg'" 
-                      [alt]="book.title" 
-                      class="w-full h-auto object-cover aspect-[2/3]"
-                      onerror="this.src='assets/images/default-book-cover.jpg'"
-                  >
-              </div>
+    <div *ngIf="book; else noBook" class="space-y-10">
+  
+      <!-- 🔹 Parte superior más compacta -->
+      <div class="bg-white rounded-xl shadow-md p-6 border border-[#E0E9F5]">
+        <div class="flex flex-col md:flex-row gap-6">
+          <!-- Portada reducida -->
+          <div class="w-full md:w-1/5">
+            <img 
+              [src]="book.cover || 'assets/images/default-book-cover.jpg'" 
+              [alt]="book.title" 
+              class="w-full h-auto object-cover aspect-[2/3]"
+              onerror="this.src='assets/images/default-book-cover.jpg'">
           </div>
-          
-          <!-- Book Details -->
-          <div class="w-full md:w-2/3 lg:w-3/4">
-              <div class="space-y-6">
-                  <!-- Title and Author -->
-                  <div>
-                      <h1 class="text-3xl font-bold text-[#2A2A2A]">{{ book.title }}</h1>
-                      <h2 class="text-xl text-[#666666] mt-1">por {{ book.author || 'Autor desconocido' }}</h2>
-                  </div>
-                  
-                  <!-- Metadata -->
-                  <div class="flex flex-wrap gap-3 items-center">
-                      <span class="px-3 py-1 rounded-full bg-[#E6F0F7] text-[#1C1DAB] text-sm font-medium">
-                          {{ book.language || 'Idioma no especificado' }}
-                      </span>
-                      <span class="px-3 py-1 rounded-full bg-[#F4F4F4] text-[#666666] text-sm font-medium">
-                          {{ book.year || 'Año desconocido' }}
-                      </span>
-                      <span *ngIf="book.averageRating" class="px-3 py-1 rounded-full bg-[#FFC107] text-[#2A2A2A] text-sm font-medium flex items-center">
-                          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                          </svg>
-                          {{ book.averageRating | number:'1.1-1' }}
-                      </span>
-                  </div>
-                  
-                  <!-- Description -->
-                  <div class="border-t border-[#E0E9F5] pt-4">
-                      <h3 class="text-lg font-semibold text-[#1C1DAB] mb-3">Descripción</h3>
-                      <p class="text-[#666666] leading-relaxed">{{ book.description || 'No hay descripción disponible para este libro.' }}</p>
-                  </div>
-                  
-                  <!-- Actions -->
-                  <div class="flex flex-wrap gap-4 pt-6">
-                      <button 
-                          (click)="onReadNow()"
-                          [disabled]="!currentUser"
-                          class="px-6 py-2.5 bg-[#1C1DAB] hover:bg-[#1E0F75] text-white rounded-lg shadow-xs hover:shadow-sm transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-                          [title]="!currentUser ? 'Debes iniciar sesión para leer' : 'Comenzar a leer'">
-                          Leer ahora
-                      </button>
-                      <button class="px-6 py-2.5 border border-[#1C1DAB] text-[#1C1DAB] hover:bg-[#E6F0F7] rounded-lg transition-colors font-medium">
-                          Añadir a lista
-                      </button>
-                      <app-add-to-reading-list [bookId]="book.id"></app-add-to-reading-list>
-                  </div>
-              </div>
+  
+          <!-- Detalles más pequeños -->
+          <div class="w-full md:w-4/5 space-y-3">
+            <div>
+              <h1 class="text-2xl font-semibold text-[#2A2A2A]">{{ book.title }}</h1>
+              <h2 class="text-lg text-[#666666] mt-1">por {{ book.author || 'Autor desconocido' }}</h2>
+            </div>
+  
+            <div class="flex flex-wrap gap-2 items-center text-sm">
+              <span class="px-3 py-1 rounded-full bg-[#E6F0F7] text-[#1C1DAB] font-medium">
+                {{ book.language || 'Idioma no especificado' }}
+              </span>
+              <span class="px-3 py-1 rounded-full bg-[#F4F4F4] text-[#666666] font-medium">
+                {{ book.year || 'Año desconocido' }}
+              </span>
+              <span *ngIf="book.averageRating" class="px-3 py-1 rounded-full bg-[#FFC107] text-[#2A2A2A] font-medium flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="..." />
+                </svg>
+                {{ book.averageRating | number:'1.1-1' }}
+              </span>
+            </div>
+  
+            <div>
+              <h3 class="text-md font-semibold text-[#1C1DAB] mb-1">Descripción</h3>
+              <p class="text-sm text-[#666666] leading-relaxed">
+                {{ book.description || 'No hay descripción disponible para este libro.' }}
+              </p>
+            </div>
+  
+            <div class="pt-2">
+              <button 
+                (click)="onReadNow()"
+                [disabled]="!currentUser"
+                class="px-5 py-2 bg-[#1C1DAB] hover:bg-[#1E0F75] text-white rounded-lg shadow-sm transition disabled:opacity-50 text-sm"
+                [title]="!currentUser ? 'Debes iniciar sesión para leer' : 'Comenzar a leer'">
+                Leer ahora
+              </button>
+              <app-add-to-reading-list [bookId]="book.id"></app-add-to-reading-list>
+            </div>
           </div>
+        </div>
       </div>
+  
+      <!-- 🔸 Parte inferior más amplia -->
+      <div class="flex flex-col lg:flex-row gap-8 min-h-[500px]">
+        
+        <!-- Formulario (más estrecho) -->
+        <div class="w-full lg:w-1/4">
+          <app-review-form 
+            *ngIf="currentUser"
+            [bookId]="book.id" 
+            [bookTitle]="book.title"
+            [currentUser]="currentUser"
+            (reviewSubmitted)="reviewList.refreshReviews($event)">
+          </app-review-form>
+        </div>
+  
+        <!-- Reseñas (más alto y ancho con scroll) -->
+        <div class="w-full lg:w-3/4 max-h-[600px] overflow-y-auto border border-[#E0E9F5] rounded-lg p-4 bg-white">
+          <app-review-list 
+            #reviewList
+            [bookId]="book.id">
+          </app-review-list>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Loading y errores -->
+    <ng-template #noBook>
+      <div *ngIf="error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg">
+        {{ error }}
+      </div>
+      <div *ngIf="!error" class="bg-blue-100 border border-blue-300 text-blue-800 px-4 py-3 rounded-lg">
+        Libro no encontrado
+      </div>
+    </ng-template>
   </div>
   
-  <ng-template #noBook>
-      <div *ngIf="error" class="bg-[#EBB2C3] border border-[#E893C5] text-[#1E0F75] px-4 py-3 rounded-lg mb-6 flex items-start">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <div>{{ error }}</div>
-      </div>
-      <div *ngIf="!error" class="bg-[#E6F0F7] border border-[#ADC6E5] text-[#1C1DAB] px-4 py-3 rounded-lg flex items-start">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-          </svg>
-          <div>Libro no encontrado</div>
-      </div>
-  </ng-template>
-</div>
-
-<!-- Loading State -->
-<div *ngIf="loading" class="flex flex-col items-center justify-center min-h-[300px]">
-  <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-[#1C1DAB] border-opacity-50 mb-4"></div>
-  <p class="text-[#666666]">Cargando detalles del libro...</p>
-</div>
-
-
-
-<!-- Sección de reseñas -->
-<div *ngIf="book && book.id" class="d-flex col">
-  <app-review-form 
-      *ngIf="currentUser"
-      [bookId]="book.id" 
-      [bookTitle]="book.title"
-      [currentUser]="currentUser"
-      (reviewSubmitted)="reviewList.refreshReviews($event)"
-  ></app-review-form>
-
-  <app-review-list 
-      #reviewList
-      [bookId]="book.id">
-  </app-review-list>
-</div>
+  <div *ngIf="loading" class="flex flex-col items-center justify-center min-h-[300px]">
+    <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-[#1C1DAB] border-opacity-50 mb-4"></div>
+    <p class="text-[#666666]">Cargando detalles del libro...</p>
+  </div>
+  

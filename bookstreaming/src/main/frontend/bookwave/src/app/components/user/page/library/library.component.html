@@ -109,11 +109,19 @@
             class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <div *ngFor="let book of booksInSelectedList"
               class="bg-white rounded-lg border border-[#E0E9F5] overflow-hidden hover:shadow-sm transition-shadow">
-              <img [src]="book.cover || 'assets/images/default-book-cover.jpg'" [alt]="book.title"
-                class="w-full h-48 object-cover" onerror="this.src='assets/images/default-book-cover.jpg'">
+              <a [routerLink]="['/book', book.id]" class="block">
+                <img [src]="book.cover || 'assets/images/default-book-cover.jpg'" [alt]="book.title"
+                  class="w-full h-48 object-cover hover:opacity-80 transition-opacity" 
+                  onerror="this.src='assets/images/default-book-cover.jpg'">
+              </a>
               <div class="p-3">
-                <h4 class="font-semibold text-[#2A2A2A] truncate">{{ book.title }}</h4>
-                <p class="text-sm text-[#666666] truncate">{{ book.author || 'Autor desconocido' }}</p>
+                <a [routerLink]="['/book', book.id]" 
+                   class="block group">
+                  <h4 class="font-semibold text-[#2A2A2A] truncate group-hover:text-[#1C1DAB] transition-colors">
+                    {{ book.title }}
+                  </h4>
+                  <p class="text-sm text-[#666666] truncate">{{ book.author || 'Autor desconocido' }}</p>
+                </a>
                 <button
                   class="mt-3 w-full text-xs py-2 bg-[#EBB2C3] hover:bg-[#E893C5] text-white rounded-lg transition-colors"
                   (click)="removeBookFromList(book)">
