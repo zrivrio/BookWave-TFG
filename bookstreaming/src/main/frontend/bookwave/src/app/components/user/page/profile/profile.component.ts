@@ -14,9 +14,6 @@ import { Router } from '@angular/router';
 export class ProfileComponent {
   currentUser: any = null;
   showUpgradeMessage: boolean = false;
-  isUpgrading: boolean = false;
-  upgradeSuccess: boolean = false;
-  upgradeError: string | null = null;
   isLoading: boolean = true;
 
   constructor(
@@ -40,25 +37,12 @@ export class ProfileComponent {
     this.router.navigate(['/profile/edit']);
   }
 
-  upgradeToPremium(): void {
-    if (!this.currentUser) return;
-    
-    this.isUpgrading = true;
-    this.upgradeError = null;
-    
-    setTimeout(() => {
-      const updatedUser = {
-        ...this.currentUser,
-        subscriptionType: SubscriptionType.Premium
-      };
-      
-      this.currentUser = updatedUser;
-      this.authService.setCurrentUser(updatedUser);
-      this.showUpgradeMessage = false;
-      this.upgradeSuccess = true;
-      this.isUpgrading = false;
-      
-      setTimeout(() => this.upgradeSuccess = false, 3000);
-    }, 1500);
+  navigateToCheckout() {
+    this.router.navigate(['/checkout'], { 
+      state: { 
+        product: 'premium_subscription',
+        price: 9.99
+      }
+    });
   }
 }
