@@ -21,7 +21,7 @@ export class ContinueReadingComponent implements OnInit {
   error: string = '';
   isLoggedIn: boolean = false;
   editingProgress: { [key: number]: boolean } = {};
-  currentProgress: { [key: number]: number } = {};
+  currentPages: { [key: number]: number } = {};  // Cambiado de currentProgress a currentPages
   readingProgresses: { [bookId: number]: ReadingProgress } = {};
   
   constructor(
@@ -65,7 +65,7 @@ export class ContinueReadingComponent implements OnInit {
         .subscribe({
           next: (progress) => {
             this.readingProgresses[book.id] = progress;
-            this.currentProgress[book.id] = progress.percentageRead;
+            this.currentPages[book.id] = progress.currentPage;  // Almacenamos páginas leídas
           },
           error: (err) => {
             this.readingProgresses[book.id] = {
@@ -74,14 +74,16 @@ export class ContinueReadingComponent implements OnInit {
               currentPage: 0,
               percentageRead: 0
             };
-            this.currentProgress[book.id] = 0;
+            this.currentPages[book.id] = 0;
           }
         });
     });
   }
 
   getProgressPercentage(book: Book): number {
-    return this.readingProgresses[book.id]?.percentageRead || 0;
+    const progress = this.readingProgresses[book.id];
+    if (!progress || !book.totalPages || book.totalPages === 0) return 0;
+    return Math.min(Math.round((progress.currentPage / book.totalPages) * 100), 100);
   }
 
   toggleEditMode(bookId: number): void {
@@ -92,18 +94,20 @@ export class ContinueReadingComponent implements OnInit {
     const currentUser = this.authService.currentUserValue;
     if (!currentUser) return;
 
-    const newPercentage = this.currentProgress[book.id];
-    const existingProgress = this.readingProgresses[book.id];
+    const currentPage = this.currentPages[book.id] || 0;
+    const totalPages = book.totalPages || 1;
+    const percentageRead = this.calculatePercentage(currentPage, totalPages);
     
     this.isLoading = true;
 
     const progressData: Partial<ReadingProgress> = {
       user: { id: currentUser.id },
       book: { id: book.id },
-      currentPage: Math.round((newPercentage * (book.totalPages || 0)) / 100),
-      percentageRead: newPercentage
+      currentPage: currentPage,
+      percentageRead: percentageRead
     };
 
+    const existingProgress = this.readingProgresses[book.id];
     const request$ = existingProgress?.id 
       ? this.readingProgressService.updateReadingProgress({ 
           ...existingProgress, 
@@ -114,11 +118,16 @@ export class ContinueReadingComponent implements OnInit {
     request$.subscribe({
       next: (savedProgress) => {
         this.readingProgresses[book.id] = savedProgress;
-        this.currentProgress[book.id] = savedProgress.percentageRead;
+        this.currentPages[book.id] = savedProgress.currentPage;
         this.handleUpdateSuccess(book);
       },
       error: (err) => this.handleUpdateError()
     });
+  }
+
+  calculatePercentage(currentPage: number, totalPages: number): number {
+    if (!totalPages || totalPages === 0) return 0;
+    return Math.min(Math.round((currentPage / totalPages) * 100), 100);
   }
 
   private handleUpdateSuccess(book: Book): void {
@@ -130,7 +139,6 @@ export class ContinueReadingComponent implements OnInit {
     this.error = 'Error al actualizar el progreso';
     this.isLoading = false;
   }
-
 
   getProgressColor(percentage: number): string {
     if (percentage < 25) return 'bg-red-500';

@@ -51,6 +51,9 @@
                    [ngClass]="getProgressColor(getProgressPercentage(book))"
                    [style.width.%]="getProgressPercentage(book)"></div>
             </div>
+            <div class="text-xs text-[#666666] mt-1">
+              {{ currentPages[book.id] || 0 }} de {{ book.totalPages || '?' }} páginas
+            </div>
           </div>
           
           <!-- Action Buttons -->
@@ -70,12 +73,17 @@
             <!-- Edit Progress Form -->
             <div *ngIf="editingProgress[book.id]" class="flex flex-col space-y-3">
               <div class="flex items-center gap-3">
-                <input type="range" min="0" max="100" step="1" 
-                       [(ngModel)]="currentProgress[book.id]"
-                       class="w-full h-2 bg-[#E0E9F5] rounded-lg appearance-none cursor-pointer accent-[#1C1DAB]">
-                <span class="text-sm font-medium text-[#2A2A2A] w-12 text-center">
-                  {{ currentProgress[book.id] }}%
-                </span>
+                <input type="number" 
+                       [(ngModel)]="currentPages[book.id]"
+                       (keyup.enter)="updateProgress(book)"
+                       class="w-24 border rounded px-2 py-1 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                       [min]="0" 
+                       [max]="book.totalPages || 0"
+                       placeholder="Páginas leídas">
+                <span class="text-sm text-[#666666]">/ {{ book.totalPages || '?' }} páginas</span>
+              </div>
+              <div class="text-xs text-blue-600">
+                Progreso: {{ calculatePercentage(currentPages[book.id] || 0, book.totalPages || 0) }}%
               </div>
               <div class="flex gap-2">
                 <button (click)="updateProgress(book)" 
