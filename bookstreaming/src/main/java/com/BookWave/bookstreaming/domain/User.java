@@ -43,10 +43,5 @@ public class User {
         list.setUser(this);
     }
     
-    public void removeReadingList(ReadingList list) {
-        this.readingLists.remove(list);
-        list.setUser(null);
-    }
-
 }
 

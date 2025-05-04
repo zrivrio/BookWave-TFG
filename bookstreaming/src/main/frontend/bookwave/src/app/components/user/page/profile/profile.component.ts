@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../../../../service/auth.service';
-import { UserService } from '../../../../service/user.service';
+import { SubscriptionCartService } from '../../../../service/subscription-cart.service';
 import { SubscriptionType } from '../../../../models/SubscriptionType';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -14,11 +14,12 @@ import { Router } from '@angular/router';
 export class ProfileComponent {
   currentUser: any = null;
   showUpgradeMessage: boolean = false;
+  showDowngradeMessage: boolean = false;
   isLoading: boolean = true;
 
   constructor(
     private authService: AuthService,
-    private userService: UserService,
+    private subscriptionCartService: SubscriptionCartService,
     private router: Router
   ) {}
 
@@ -29,6 +30,7 @@ export class ProfileComponent {
       
       if (this.currentUser) {
         this.showUpgradeMessage = this.currentUser.subscriptionType !== SubscriptionType.Premium;
+        this.showDowngradeMessage = this.currentUser.subscriptionType === SubscriptionType.Premium;
       }
     });
   }
@@ -37,11 +39,24 @@ export class ProfileComponent {
     this.router.navigate(['/profile/edit']);
   }
 
-  navigateToCheckout() {
-    this.router.navigate(['/checkout'], { 
-      state: { 
-        product: 'premium_subscription',
-        price: 9.99
+  upgradeToPremium() {
+    this.subscriptionCartService.selectSubscription(SubscriptionType.Premium).subscribe({
+      next: (cart) => {
+        this.router.navigate(['/checkout']);
+      },
+      error: (err) => {
+        console.error('Error selecting subscription:', err);
+      }
+    });
+  }
+  
+  cancelSubscription() {
+    this.subscriptionCartService.selectSubscription(SubscriptionType.Free).subscribe({
+      next: (cart) => {
+        this.router.navigate(['/checkout']);
+      },
+      error: (err) => {
+        console.error('Error selecting subscription:', err);
       }
     });
   }
