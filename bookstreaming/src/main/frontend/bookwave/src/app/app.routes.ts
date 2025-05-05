@@ -10,21 +10,38 @@ import { HelpPComponent } from './components/user/page/help-p/help-p.component';
 import { ProfileComponent } from './components/user/page/profile/profile.component';
 import { EditProfileComponent } from './components/user/page/edit-profile/edit-profile.component';
 import { CheckoutComponent } from './components/user/page/checkout/checkout.component';
-
-
-
+import { PanelControlComponent } from './components/admin/page/panel-control/panel-control.component';
+import { ControlUsuariosComponent } from './components/admin/page/control-usuarios/control-usuarios.component';
+import { ControlLibrosComponent } from './components/admin/page/control-libros/control-libros.component';
+import { ControlProgresosComponent } from './components/admin/page/control-progresos/control-progresos.component';
+import { ControlReviewsComponent } from './components/admin/page/control-reviews/control-reviews.component';
+import { ControlReportsComponent } from './components/admin/page/control-reports/control-reports.component';
 
 export const routes: Routes = [
-    { path: '', component: HomeComponent, pathMatch: 'full' },
-    { path: 'book/:id', component: BookDetailsComponent},
-    { path: 'categories', component: CategoriesComponent },
+    { path: '', component: HomeComponent, pathMatch: 'full'},
+    { path: 'book/:id', component: BookDetailsComponent },
+    { path: 'categories', component: CategoriesComponent},
     { path: 'library', component: LibraryComponent},
-    { path: 'login', component: LoginComponent},
-    { path: 'signup', component: SignupComponent},
+    { path: 'login', component: LoginComponent },
+    { path: 'signup', component: SignupComponent },
     { path: 'progress', component: ProgressComponent},
-    { path: 'help', component: HelpPComponent},
+    { path: 'help', component: HelpPComponent },
     { path: 'profile', component: ProfileComponent},
     { path: 'profile/edit', component: EditProfileComponent},
-    { path: 'checkout', component: CheckoutComponent },
+    { path: 'checkout', component: CheckoutComponent},
+    // Rutas de administrador
+    { 
+        path: 'admin', 
+        children: [
+            { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+            { path: 'dashboard', component: PanelControlComponent },
+            { path: 'users', component: ControlUsuariosComponent },
+            { path: 'books', component: ControlLibrosComponent },
+            { path: 'lists', component: ControlLibrosComponent },
+            { path: 'progress', component: ControlProgresosComponent },
+            { path: 'reviews', component: ControlReviewsComponent },
+            { path: 'reports', component: ControlReportsComponent }
+        ]
+    },
     { path: '**', redirectTo: '' }
 ];

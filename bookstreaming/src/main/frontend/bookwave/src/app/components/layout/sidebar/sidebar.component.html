@@ -48,6 +48,13 @@
         route="/admin/reviews"
         class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
       </app-sidebar-link>
+
+      <app-sidebar-link 
+      icon="bar_chart" 
+      label="Reportes" 
+      route="/admin/reports"
+      class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
+    </app-sidebar-link>
     </ng-container>
 
     <!-- Menú de Usuario Normal -->
@@ -79,6 +86,15 @@
         route="/progress"
         class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
       </app-sidebar-link>
+
+      <div class="mt-2 pt-2 border-t border-[#CCCCCC]">
+        <app-sidebar-link 
+          icon="help" 
+          label="Centro de Ayuda" 
+          route="/help"
+          class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
+        </app-sidebar-link>
+      </div>
     </ng-container>
   </nav>
 
@@ -114,14 +130,5 @@
         class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
       </app-sidebar-link>
     </ng-template>
-
-    <div class="mt-2 pt-2 border-t border-[#CCCCCC]">
-      <app-sidebar-link 
-        icon="help" 
-        label="Centro de Ayuda" 
-        route="/help"
-        class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
-      </app-sidebar-link>
-    </div>
   </div>
 </div>

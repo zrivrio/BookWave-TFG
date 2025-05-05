@@ -5,6 +5,8 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "users")
 @Data
@@ -37,6 +39,10 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<ReadingList> readingLists = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<HelpRequest> helpRequests = new ArrayList<>();
 
     public void addReadingList(ReadingList list) {
         this.readingLists.add(list);
