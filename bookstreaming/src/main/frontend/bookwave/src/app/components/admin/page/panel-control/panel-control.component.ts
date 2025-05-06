@@ -8,10 +8,13 @@ import { VistaListasComponent } from '../../panel-control/vista-listas/vista-lis
 import { VistaProgresosComponent } from '../../panel-control/vista-progresos/vista-progresos.component';
 import { VistaReportesComponent } from '../../panel-control/vista-reportes/vista-reportes.component';
 import { VistaReviewsComponent } from '../../panel-control/vista-reviews/vista-reviews.component';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-panel-control',
-  imports: [VistaUsuariosComponent, VistaCarritoComponent, VistaCategoriasComponent, VistaLibrosComponent, VistaListasComponent, VistaProgresosComponent, VistaReportesComponent, VistaReviewsComponent],
+  imports: [VistaUsuariosComponent, VistaCarritoComponent, 
+    VistaCategoriasComponent, VistaLibrosComponent, VistaListasComponent, 
+    VistaProgresosComponent, VistaReportesComponent, VistaReviewsComponent, RouterModule],
   templateUrl: './panel-control.component.html',
   styleUrl: './panel-control.component.css'
 })

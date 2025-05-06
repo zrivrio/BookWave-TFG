@@ -1,1 +1,132 @@
-<p>control-libros works!</p>
+<div class="max-w-7xl mx-auto p-6">
+  <h2 class="text-2xl font-bold text-[#1E0f75] mb-6">Gestión de Libros</h2>
+
+  <!-- Mensaje de error -->
+  <div *ngIf="error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+    {{ error }}
+  </div>
+
+  <!-- Formulario de creación/edición -->
+  <div class="bg-white rounded-xl shadow-sm p-6 border border-[#F4F4F4] mb-6">
+    <h3 class="text-lg font-semibold text-[#1E0f75] mb-4">
+      {{ isEditing ? 'Editar Libro' : 'Añadir Nuevo Libro' }}
+    </h3>
+    
+    <form (ngSubmit)="isEditing ? updateBook() : createBook()" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="space-y-2">
+        <label class="block text-sm font-medium text-[#2A2A2A]">Título</label>
+        <input 
+          type="text" 
+          [ngModel]="getBookValue('title')"
+          (ngModelChange)="setBookValue('title', $event)"
+          name="title"
+          class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-[#1C1DAB] focus:border-transparent"
+          required
+        >
+      </div>
+
+      <div class="space-y-2">
+        <label class="block text-sm font-medium text-[#2A2A2A]">Autor</label>
+        <input 
+          type="text" 
+          [ngModel]="getBookValue('author')"
+          (ngModelChange)="setBookValue('author', $event)"
+          name="author"
+          class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-[#1C1DAB] focus:border-transparent"
+          required
+        >
+      </div>
+
+      <div class="space-y-2">
+        <label class="block text-sm font-medium text-[#2A2A2A]">Descripción</label>
+        <textarea 
+          [ngModel]="getBookValue('description')"
+          (ngModelChange)="setBookValue('description', $event)"
+          name="description"
+          class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-[#1C1DAB] focus:border-transparent"
+          rows="3"
+        ></textarea>
+      </div>
+
+      <div class="space-y-2">
+        <label class="block text-sm font-medium text-[#2A2A2A]">URL de la Portada</label>
+        <input 
+          type="text" 
+          [ngModel]="getBookValue('cover')"
+          (ngModelChange)="setBookValue('cover', $event)"
+          name="cover"
+          class="w-full p-2 border rounded-lg focus:ring-2 focus:ring-[#1C1DAB] focus:border-transparent"
+        >
+      </div>
+
+      <div class="md:col-span-2 flex justify-end gap-3">
+        <button 
+          *ngIf="isEditing"
+          type="button"
+          (click)="cancelEdit()"
+          class="px-4 py-2 text-[#666666] hover:text-[#2A2A2A] transition-colors"
+        >
+          Cancelar
+        </button>
+        <button 
+          type="submit"
+          class="px-6 py-2 bg-[#1C1DAB] hover:bg-[#1E0F75] text-white rounded-lg transition-colors"
+        >
+          {{ isEditing ? 'Actualizar' : 'Crear' }}
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Lista de libros -->
+  <div class="bg-white rounded-xl shadow-sm border border-[#F4F4F4]">
+    <div class="p-6">
+      <h3 class="text-lg font-semibold text-[#1E0f75] mb-4">Libros Existentes</h3>
+
+      <!-- Loading state -->
+      <div *ngIf="isLoading" class="flex justify-center py-8">
+        <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#1C1DAB]"></div>
+      </div>
+
+      <!-- Empty state -->
+      <div *ngIf="!isLoading && books.length === 0" class="text-center py-8 text-[#666666]">
+        No hay libros disponibles.
+      </div>
+
+      <!-- Books table -->
+      <div *ngIf="!isLoading && books.length > 0" class="overflow-x-auto">
+        <table class="w-full">
+          <thead class="bg-[#F8F8F8]">
+            <tr>
+              <th class="px-4 py-3 text-left text-sm font-medium text-[#2A2A2A]">Título</th>
+              <th class="px-4 py-3 text-left text-sm font-medium text-[#2A2A2A]">Autor</th>
+              <th class="px-4 py-3 text-left text-sm font-medium text-[#2A2A2A]">Acciones</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-[#F4F4F4]">
+            <tr *ngFor="let book of books">
+              <td class="px-4 py-3 text-sm text-[#2A2A2A]">{{ book.title }}</td>
+              <td class="px-4 py-3 text-sm text-[#666666]">{{ book.author }}</td>
+              <td class="px-4 py-3 text-sm">
+                <div class="flex gap-2">
+                  <button 
+                    (click)="editBook(book)"
+                    class="text-[#3785D8] hover:text-[#1E0F75] transition-colors"
+                  >
+                    Editar
+                  </button>
+                  <button 
+                    (click)="deleteBook(book.id!)"
+                    class="text-red-600 hover:text-red-800 transition-colors"
+                  >
+                    Eliminar
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
