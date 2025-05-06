@@ -5,6 +5,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.BookWave.bookstreaming.domain.Book;
+import com.BookWave.bookstreaming.domain.Category;
 import com.BookWave.bookstreaming.repository.BookRepository;
 import com.BookWave.bookstreaming.repository.CategoryRepository;
 
@@ -28,5 +29,23 @@ public class CategoryService {
     }
 
     //Metodos Admin
+    public List<Category> gCategories() {
+        return categoryRepository.findAll();
+    }
 
+    public Category gCategoryById(long id) {
+        return categoryRepository.findById(id).orElse(null);
+    }
+
+    public Category saveCategory(Category category) {
+        return categoryRepository.save(category);
+    }
+
+    public void deleteCategoryById(long id) {
+       this.categoryRepository.deleteById(id);
+    }
+
+    public Category updateCategory(Category category) {
+        return this.categoryRepository.save(category);
+    }
 }

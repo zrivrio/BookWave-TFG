@@ -1,6 +1,7 @@
 package com.BookWave.bookstreaming.service;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -80,6 +81,27 @@ public class SubscriptionCartService {
         userRepository.save(user);
         cart.setStatus(CartStatus.COMPLETED);
         cart.setUpdatedAt(new Date());
+        return cartRepository.save(cart);
+    }
+
+    //Métodos de Administrador
+    public List<SubscriptionCart> getAllCarts() {
+        return cartRepository.findAll();
+    }
+
+    public SubscriptionCart getCartById(Long id) {
+        return cartRepository.findById(id).orElse(null);
+    }
+
+    public SubscriptionCart saveCart(SubscriptionCart cart) {
+        return cartRepository.save(cart);
+    }
+
+    public void deleteCartById(Long id) {
+        cartRepository.deleteById(id);
+    }
+
+    public SubscriptionCart updateCart(SubscriptionCart cart) {
         return cartRepository.save(cart);
     }
 }

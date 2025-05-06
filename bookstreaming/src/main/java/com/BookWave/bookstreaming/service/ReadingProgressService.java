@@ -73,4 +73,21 @@ public class ReadingProgressService {
                 .map(ReadingProgress::getBook)
                 .collect(Collectors.toList());
     }
+
+    //Métodos de Administrador
+    public List<ReadingProgress> getAllReadingProgress() {
+        return readingProgressRepository.findAll();
+    }
+
+    public ReadingProgress getReadingProgressById(Long id) {
+        return readingProgressRepository.findById(id).orElse(null);
+    }
+
+    public ReadingProgress createReadingProgress(ReadingProgress readingProgress) {
+        return readingProgressRepository.save(readingProgress);
+    }
+
+    public ReadingProgress updateReadingProgress(ReadingProgress readingProgress) {
+        return readingProgressRepository.save(readingProgress);
+    }
 }

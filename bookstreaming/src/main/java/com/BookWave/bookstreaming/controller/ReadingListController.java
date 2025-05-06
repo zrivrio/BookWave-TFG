@@ -104,4 +104,30 @@ public ResponseEntity<?> createList(@RequestBody Map<String, Object> payload) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    //Métodos de Administrador
+    @GetMapping("/admin")
+    public List<ReadingList> getAllReadingLists() {
+        return readingListService.getAllReadingLists();
+    }
+
+    @GetMapping("/admin/{id}")
+    public ReadingList getReadingListByIdAdmin(@PathVariable Long id) {
+        return readingListService.getReadingListByIdAdmin(id);
+    }
+
+    @PostMapping("/admin")
+    public ReadingList saveReadingList(@RequestBody ReadingList readingList) {
+        return readingListService.saveReadingList(readingList);
+    }
+
+    @DeleteMapping("/admin/{id}")
+    public void deleteReadingList(@PathVariable Long id) {
+        readingListService.deleteReadingListById(id);
+    }
+
+    @PutMapping("/admin")
+    public ReadingList updateReadingList(@RequestBody ReadingList readingList) {
+        return readingListService.updateReadingList(readingList);
+    }
 }

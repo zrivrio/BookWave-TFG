@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ControlUsuariosComponent } from './control-usuarios.component';
+import { VistaCategoriasComponent } from './vista-categorias.component';
 
-describe('ControlUsuariosComponent', () => {
-  let component: ControlUsuariosComponent;
-  let fixture: ComponentFixture<ControlUsuariosComponent>;
+describe('VistaCategoriasComponent', () => {
+  let component: VistaCategoriasComponent;
+  let fixture: ComponentFixture<VistaCategoriasComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ControlUsuariosComponent]
+      imports: [VistaCategoriasComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ControlUsuariosComponent);
+    fixture = TestBed.createComponent(VistaCategoriasComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

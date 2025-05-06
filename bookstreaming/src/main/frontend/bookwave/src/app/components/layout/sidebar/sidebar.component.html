@@ -27,6 +27,13 @@
         route="/admin/books"
         class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
       </app-sidebar-link>
+
+      <app-sidebar-link 
+      icon="category" 
+      label="Gestión de Categorías" 
+      route="/admin/categories"
+      class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
+    </app-sidebar-link>
       
       <app-sidebar-link 
         icon="format_list_bulleted" 
@@ -46,6 +53,13 @@
         icon="rate_review" 
         label="Gestión de Reviews" 
         route="/admin/reviews"
+        class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
+      </app-sidebar-link>
+
+      <app-sidebar-link 
+        icon="shopping_cart" 
+        label="Gestión de Carritos" 
+        route="/admin/carts"
         class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
       </app-sidebar-link>
 
@@ -101,8 +115,9 @@
   <div class="mt-auto pt-4 border-t border-[#CCCCCC]">
     <ng-container *ngIf="isLoggedIn; else showLogin">
       <app-sidebar-link 
+        *ngIf="!isAdmin"
         icon="person" 
-        [label]="isAdmin ? 'Perfil Admin' : 'Mi Perfil'" 
+        label="Mi Perfil" 
         route="/profile"
         class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
       </app-sidebar-link>

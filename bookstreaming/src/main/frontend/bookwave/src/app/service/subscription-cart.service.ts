@@ -37,4 +37,25 @@ export class SubscriptionCartService {
       {}
     );
   }
+
+  // Métodos de Administrador
+  getAllCarts(): Observable<SubscriptionCart[]> {
+    return this.http.get<SubscriptionCart[]>(`${this.apiUrl}/admin`);
+  }
+
+  getCartById(id: number): Observable<SubscriptionCart> {
+    return this.http.get<SubscriptionCart>(`${this.apiUrl}/admin/${id}`);
+  }
+
+  saveCart(cart: SubscriptionCart): Observable<SubscriptionCart> {
+    return this.http.post<SubscriptionCart>(`${this.apiUrl}/admin`, cart);
+  }
+
+  deleteCart(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/admin/${id}`);
+  }
+
+  updateCart(cart: SubscriptionCart): Observable<SubscriptionCart> {
+    return this.http.put<SubscriptionCart>(`${this.apiUrl}/admin`, cart);
+  }
 }

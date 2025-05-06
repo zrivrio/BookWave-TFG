@@ -4,6 +4,7 @@ import com.BookWave.bookstreaming.domain.SubscriptionType;
 import com.BookWave.bookstreaming.domain.User;
 import com.BookWave.bookstreaming.repository.UserRepository;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 import java.util.Map;
 
 import com.BookWave.bookstreaming.util.util;
@@ -89,6 +90,19 @@ public class UserService {
             }
         }
 
+        return userRepository.save(user);
+    }
+
+    //Métodos de Administrador
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    public void deleteUserById(Long id) {
+        userRepository.deleteById(id);
+    }
+
+    public User saveUser(User user) {
         return userRepository.save(user);
     }
 }

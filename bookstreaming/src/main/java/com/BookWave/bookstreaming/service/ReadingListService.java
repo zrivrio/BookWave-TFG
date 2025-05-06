@@ -100,4 +100,29 @@ public class ReadingListService {
         list.getBooks().remove(book);
         readingListRepository.save(list);
     }
+
+    // Métodos de Administrador
+    public List<ReadingList> getAllReadingLists() {
+        return readingListRepository.findAll();
+    }
+
+    public ReadingList getReadingListByIdAdmin(Long listId) {
+        return readingListRepository.findById(listId)
+                .orElseThrow(() -> new RuntimeException("Lista de lectura no encontrada"));
+    }
+
+    public ReadingList saveReadingList(ReadingList readingList) {
+        return readingListRepository.save(readingList);
+    }
+
+    public void deleteReadingListById(Long listId) {
+        readingListRepository.deleteById(listId);
+    }
+
+    public ReadingList updateReadingList(ReadingList readingList) {
+        if (!readingListRepository.existsById(readingList.getId())) {
+            throw new RuntimeException("Lista de lectura no encontrada");
+        }
+        return readingListRepository.save(readingList);
+    }
 }

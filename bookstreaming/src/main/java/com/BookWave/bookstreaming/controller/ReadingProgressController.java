@@ -48,4 +48,24 @@ public class ReadingProgressController {
         readingProgressService.deleteReadingProgress(id);
     }
 
+    //Métodos de Administrador
+    @GetMapping("/admin")
+    public List<ReadingProgress> getAllReadingProgress() {
+        return readingProgressService.getAllReadingProgress();
+    }
+
+    @GetMapping("/admin/{id}")
+    public ReadingProgress getReadingProgressById(@PathVariable Long id) {
+        return readingProgressService.getReadingProgressById(id);
+    }
+
+    @PostMapping("/admin")
+    public ReadingProgress createReadingProgressAdmin(@RequestBody ReadingProgress readingProgress) {
+        return readingProgressService.createReadingProgress(readingProgress);
+    }
+
+    @PutMapping("/admin")
+    public ReadingProgress updateReadingProgressAdmin(@RequestBody ReadingProgress readingProgress) {
+        return readingProgressService.updateReadingProgress(readingProgress);
+    }
 }

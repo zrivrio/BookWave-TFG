@@ -4,6 +4,7 @@ import com.BookWave.bookstreaming.domain.LoginRequest;
 import com.BookWave.bookstreaming.domain.User;
 import com.BookWave.bookstreaming.service.UserService;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,5 +36,21 @@ public class UserController {
     public User updateUser(  @PathVariable Long userId,
     @RequestBody Map<String, Object> updates) {
         return userService.updateUser(userId, updates);
+    }
+
+    //Métodos de Administrador
+    @GetMapping("/admin/users")
+    public List<User> getAllUsers() {
+        return userService.getAllUsers();
+    }
+
+    @DeleteMapping("/admin/{id}")
+    public void deleteUser(@PathVariable Long id) {
+        userService.deleteUserById(id);
+    }
+
+    @PostMapping("/admin/save")
+    public User saveUser(@RequestBody User user) {
+        return userService.saveUser(user);
     }
 }

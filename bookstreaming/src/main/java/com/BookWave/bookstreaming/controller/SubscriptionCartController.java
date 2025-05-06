@@ -1,5 +1,7 @@
 package com.BookWave.bookstreaming.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,5 +33,31 @@ public class SubscriptionCartController {
     @PostMapping("/checkout")
     public SubscriptionCart checkout(@RequestParam Long cartId) {
         return cartService.processCheckout(cartId);
+    }
+
+    //Métodos de Administrador
+    @GetMapping("/admin")
+    public List<SubscriptionCart> getAllCarts() {
+        return cartService.getAllCarts();
+    }
+
+    @GetMapping("/admin/{id}")
+    public SubscriptionCart getCartById(@PathVariable Long id) {
+        return cartService.getCartById(id);
+    }
+
+    @PostMapping("/admin")
+    public SubscriptionCart saveCart(@RequestBody SubscriptionCart cart) {
+        return cartService.saveCart(cart);
+    }
+
+    @DeleteMapping("/admin/{id}")
+    public void deleteCart(@PathVariable Long id) {
+        cartService.deleteCartById(id);
+    }
+
+    @PutMapping("/admin")
+    public SubscriptionCart updateCart(@RequestBody SubscriptionCart cart) {
+        return cartService.updateCart(cart);
     }
 }

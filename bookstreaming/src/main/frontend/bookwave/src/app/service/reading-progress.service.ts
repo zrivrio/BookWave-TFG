@@ -32,4 +32,20 @@ export class ReadingProgressService {
     return this.http.get<Book[]>(`${this.apiUrl}/user/${userId}/books`);
   }
 
+  // Métodos de Administrador
+  getAllReadingProgress(): Observable<ReadingProgress[]> {
+    return this.http.get<ReadingProgress[]>(`${this.apiUrl}/admin`);
+  }
+
+  getReadingProgressById(id: number): Observable<ReadingProgress> {
+    return this.http.get<ReadingProgress>(`${this.apiUrl}/admin/${id}`);
+  }
+
+  createReadingProgressAdmin(readingProgress: ReadingProgress): Observable<ReadingProgress> {
+    return this.http.post<ReadingProgress>(`${this.apiUrl}/admin`, readingProgress);
+  }
+
+  updateReadingProgressAdmin(readingProgress: ReadingProgress): Observable<ReadingProgress> {
+    return this.http.put<ReadingProgress>(`${this.apiUrl}/admin`, readingProgress);
+  }
 }

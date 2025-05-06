@@ -70,4 +70,17 @@ export class UserService {
     console.error('Error:', error);
     return throwError(() => new Error('Algo esta mal; prueba más tarde.'));
   }
+
+  // Métodos de Administrador
+  getAllUsers(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.baseUrl}/admin/users`);
+  }
+
+  deleteUser(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/admin/${id}`);
+  }
+
+  saveUser(user: User): Observable<User> {
+    return this.http.post<User>(`${this.baseUrl}/admin/save`, user);
+  }
 }
