@@ -101,8 +101,4 @@ public class UserService {
     public void deleteUserById(Long id) {
         userRepository.deleteById(id);
     }
-
-    public User saveUser(User user) {
-        return userRepository.save(user);
-    }
 }

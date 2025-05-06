@@ -79,8 +79,4 @@ export class UserService {
   deleteUser(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/admin/${id}`);
   }
-
-  saveUser(user: User): Observable<User> {
-    return this.http.post<User>(`${this.baseUrl}/admin/save`, user);
-  }
 }

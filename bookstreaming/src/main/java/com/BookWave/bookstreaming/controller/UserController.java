@@ -49,8 +49,4 @@ public class UserController {
         userService.deleteUserById(id);
     }
 
-    @PostMapping("/admin/save")
-    public User saveUser(@RequestBody User user) {
-        return userService.saveUser(user);
-    }
 }
