@@ -1,23 +1,34 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { BookService } from '../../../../service/book.service';
 import { Book } from '../../../../models/Book';
 
 @Component({
   selector: 'app-control-libros',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './control-libros.component.html',
-  styleUrl: './control-libros.component.css'
+  styleUrls: ['./control-libros.component.css']
 })
 export class ControlLibrosComponent implements OnInit {
   books: Book[] = [];
-  selectedBook: Book | null = null;
-  newBook: Book = {} as Book;
+  filteredBooks: Book[] = [];
+  currentYear = new Date().getFullYear();
+  currentBook: Partial<Book> = {
+    title: '',
+    author: '',
+    description: '',
+    cover: '',
+    language: 'es',
+    year: this.currentYear,
+    totalPages: undefined
+  };
   isLoading = false;
   isEditing = false;
-  error: string = '';
+  showForm = false;
+  error: string | null = null;
+  searchTerm = '';
 
   constructor(private bookService: BookService) {}
 
@@ -30,45 +41,81 @@ export class ControlLibrosComponent implements OnInit {
     this.bookService.getBooks().subscribe({
       next: (books) => {
         this.books = books;
+        this.filteredBooks = [...books];
         this.isLoading = false;
       },
       error: (error) => {
         this.error = 'Error al cargar los libros';
         this.isLoading = false;
+        console.error(error);
       }
     });
   }
 
+  filterBooks(): void {
+    if (!this.searchTerm) {
+      this.filteredBooks = [...this.books];
+      return;
+    }
+
+    const term = this.searchTerm.toLowerCase();
+    this.filteredBooks = this.books.filter(book => 
+      book.title.toLowerCase().includes(term) || 
+      book.author.toLowerCase().includes(term) ||
+      (book.description && book.description.toLowerCase().includes(term)) ||
+      (book.language && this.getLanguageName(book.language).toLowerCase().includes(term)) ||
+      book.year.toString().includes(term));
+  }
+
+  showCreateForm(): void {
+    this.currentBook = {
+      title: '',
+      author: '',
+      description: '',
+      cover: '',
+      language: 'es',
+      year: this.currentYear,
+      totalPages: undefined
+    };
+    this.isEditing = false;
+    this.showForm = true;
+  }
+
   createBook(): void {
-    this.bookService.createBook(this.newBook).subscribe({
+    if (!this.validateBookFields()) return;
+
+    this.bookService.createBook(this.currentBook as Book).subscribe({
       next: (book) => {
         this.books.push(book);
-        this.newBook = {} as Book;
-        this.error = '';
+        this.filterBooks(); // Actualizar la lista filtrada
+        this.showForm = false;
+        this.error = null;
       },
       error: (error) => {
         this.error = 'Error al crear el libro';
+        console.error(error);
       }
     });
   }
 
   updateBook(): void {
-    if (this.selectedBook && this.selectedBook.id) {
-      this.bookService.updateBook(this.selectedBook.id, this.selectedBook).subscribe({
-        next: (updatedBook) => {
-          const index = this.books.findIndex(b => b.id === updatedBook.id);
-          if (index !== -1) {
-            this.books[index] = updatedBook;
-          }
-          this.selectedBook = null;
-          this.isEditing = false;
-          this.error = '';
-        },
-        error: (error) => {
-          this.error = 'Error al actualizar el libro';
+    if (!this.currentBook.id || !this.validateBookFields()) return;
+
+    this.bookService.updateBook(this.currentBook.id, this.currentBook as Book).subscribe({
+      next: (updatedBook) => {
+        const index = this.books.findIndex(b => b.id === updatedBook.id);
+        if (index !== -1) {
+          this.books[index] = updatedBook;
         }
-      });
-    }
+        this.filterBooks(); // Actualizar la lista filtrada
+        this.showForm = false;
+        this.error = null;
+      },
+      error: (error) => {
+        this.error = 'Error al actualizar el libro';
+        console.error(error);
+      }
+    });
   }
 
   deleteBook(id: number): void {
@@ -76,37 +123,43 @@ export class ControlLibrosComponent implements OnInit {
       this.bookService.deleteBook(id).subscribe({
         next: () => {
           this.books = this.books.filter(b => b.id !== id);
-          this.error = '';
+          this.filterBooks(); // Actualizar la lista filtrada
+          this.error = null;
         },
         error: (error) => {
           this.error = 'Error al eliminar el libro';
+          console.error(error);
         }
       });
     }
   }
 
   editBook(book: Book): void {
-    this.selectedBook = { ...book };
+    this.currentBook = { ...book };
     this.isEditing = true;
+    this.showForm = true;
   }
 
   cancelEdit(): void {
-    this.selectedBook = null;
-    this.isEditing = false;
+    this.showForm = false;
   }
 
-  getBookValue(field: keyof Book): string {
-    if (this.isEditing && this.selectedBook) {
-      return (this.selectedBook[field] as string) || '';
+  validateBookFields(): boolean {
+    if (!this.currentBook.title || !this.currentBook.author || !this.currentBook.language || !this.currentBook.year) {
+      this.error = 'Título, autor, idioma y año son campos obligatorios';
+      return false;
     }
-    return (this.newBook[field] as string) || '';
+    return true;
   }
 
-  setBookValue(field: keyof Book, value: string): void {
-    if (this.isEditing && this.selectedBook) {
-      (this.selectedBook as any)[field] = value;
-    } else {
-      (this.newBook as any)[field] = value;
-    }
+  getLanguageName(code: string): string {
+    const languages: {[key: string]: string} = {
+      'es': 'Español',
+      'en': 'Inglés',
+      'fr': 'Francés',
+      'de': 'Alemán',
+      'it': 'Italiano'
+    };
+    return languages[code] || code;
   }
 }
