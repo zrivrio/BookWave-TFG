@@ -27,12 +27,6 @@ public class CategoryController {
         return categoryService.getBooksByCategory(id);
     }
 
-    //Métodos de Administrador
-    @GetMapping("/admin")
-    public List<Category> getAllCategories() {
-        return categoryService.gCategories();
-    }
-
     @GetMapping("/admin/{id}")
     public Category getCategoryById(@PathVariable long id) {
         return categoryService.gCategoryById(id);

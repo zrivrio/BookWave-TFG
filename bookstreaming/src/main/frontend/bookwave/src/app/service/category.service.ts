@@ -14,8 +14,8 @@ export class CategoryService {
 
   constructor(private http : HttpClient) { }
 
-  getCategories() : Observable<Mapa[]>{
-    return this.http.get<Mapa[]>(`${this.apiUrl}/names`);
+  getCategories() : Observable<Category[]>{
+    return this.http.get<Category[]>(`${this.apiUrl}/names`);
   }
 
   getBooksByCategory(id: number): Observable<Book[]> {
@@ -23,10 +23,6 @@ export class CategoryService {
   }
 
   // Métodos de Administrador
-  getAllCategories(): Observable<Category[]> {
-    return this.http.get<Category[]>(`${this.apiUrl}/admin`);
-  }
-
   getCategoryById(id: number): Observable<Category> {
     return this.http.get<Category>(`${this.apiUrl}/admin/${id}`);
   }
@@ -40,6 +36,10 @@ export class CategoryService {
   }
 
   updateCategory(category: Category): Observable<Category> {
-    return this.http.put<Category>(`${this.apiUrl}/admin`, category);
+    const categoryToUpdate = {
+      id: category.id,
+      nombre: category.nombre
+    };
+    return this.http.put<Category>(`${this.apiUrl}/admin`, categoryToUpdate);
   }
 }

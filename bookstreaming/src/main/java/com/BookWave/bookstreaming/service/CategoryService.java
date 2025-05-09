@@ -1,5 +1,5 @@
 package com.BookWave.bookstreaming.service;
-
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +46,17 @@ public class CategoryService {
     }
 
     public Category updateCategory(Category category) {
-        return this.categoryRepository.save(category);
+        Category existingCategory = categoryRepository.findById(category.getId())
+            .orElseThrow(() -> new RuntimeException("Category not found"));
+        
+        // Update basic properties
+        existingCategory.setNombre(category.getNombre());
+        
+        // Safely handle books collection
+        if (category.getBooks() != null) {
+            existingCategory.setBooks(new HashSet<>(category.getBooks()));
+        }
+        
+        return categoryRepository.save(existingCategory);
     }
 }

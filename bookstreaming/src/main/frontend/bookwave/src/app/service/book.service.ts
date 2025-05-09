@@ -31,7 +31,7 @@ export class BookService {
 
   //Administrador
   getBooks(): Observable<Book[]> {
-    return this.http.get<Book[]>(this.apiUrl);
+    return this.http.get<Book[]>(`${this.apiUrl}?includeCategories=true`);
   }
   getBookById(id: number): Observable<Book> {
     return this.http.get<Book>(`${this.apiUrl}/${id}`);
