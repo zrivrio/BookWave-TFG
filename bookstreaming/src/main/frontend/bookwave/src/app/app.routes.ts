@@ -17,6 +17,7 @@ import { ControlProgresosComponent } from './components/admin/page/control-progr
 import { ControlReportsComponent } from './components/admin/page/control-reports/control-reports.component';
 import { ControlCategoriasComponent } from './components/admin/page/control-categorias/control-categorias.component';
 import { ControlCarritoComponent } from './components/admin/page/control-carrito/control-carrito.component';
+import { ControlListasComponent } from './components/admin/page/control-listas/control-listas.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent, pathMatch: 'full'},
@@ -38,7 +39,7 @@ export const routes: Routes = [
             { path: 'dashboard', component: PanelControlComponent },
             { path: 'users', component: ControlUsuariosComponent },
             { path: 'books', component: ControlLibrosComponent },
-            { path: 'lists', component: ControlLibrosComponent },
+            { path: 'lists', component: ControlListasComponent },
             { path: 'progress', component: ControlProgresosComponent },
             { path: 'categories', component: ControlCategoriasComponent },
             { path: 'carts', component: ControlCarritoComponent },

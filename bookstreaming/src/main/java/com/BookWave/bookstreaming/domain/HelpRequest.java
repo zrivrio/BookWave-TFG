@@ -1,6 +1,6 @@
 package com.BookWave.bookstreaming.domain;
 
-import java.util.Date;
+import java.time.LocalDate;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,6 +22,21 @@ public class HelpRequest {
     
     private String subject;
     private String message;
-    private Date createdAt;
-    private boolean isResolved = false;
+    
+    @Enumerated(EnumType.STRING)
+    private HelpStatus status = HelpStatus.PENDING;
+    
+    private LocalDate createdAt;
+    private LocalDate updatedAt;
+    
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDate.now();
+        updatedAt = LocalDate.now();
+    }
+    
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDate.now();
+    }
 }

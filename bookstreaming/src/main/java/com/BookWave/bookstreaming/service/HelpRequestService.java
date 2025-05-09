@@ -5,7 +5,10 @@ import org.springframework.stereotype.Service;
 import com.BookWave.bookstreaming.repository.HelpRequestRepository;
 import com.BookWave.bookstreaming.repository.UserRepository;
 import com.BookWave.bookstreaming.domain.HelpRequest;
+import com.BookWave.bookstreaming.domain.HelpStatus;
 import com.BookWave.bookstreaming.domain.User;
+
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -22,8 +25,8 @@ public class HelpRequestService {
             .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
             
         helpRequest.setUser(user);
-        helpRequest.setCreatedAt(new Date());
-        helpRequest.setResolved(false);
+        helpRequest.setCreatedAt(LocalDate.now());
+        helpRequest.setStatus(HelpStatus.PENDING);
         return helpRequestRepository.save(helpRequest);
     }
 
