@@ -15,6 +15,9 @@ export class HelpService {
   sendHelpRequest(data: Partial<Help>): Observable<Help> {
     return this.http.post<Help>(this.apiUrl, data);
   }
+  getHelpRequestsByUser(userId: number): Observable<Help[]> {
+    return this.http.get<Help[]>(`${this.apiUrl}/user/${userId}`);
+  }
 
   // Métodos de Administrador
   getAllHelpRequests(): Observable<Help[]> {

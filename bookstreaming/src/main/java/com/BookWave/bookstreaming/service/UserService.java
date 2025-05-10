@@ -1,5 +1,6 @@
 package com.BookWave.bookstreaming.service;
 
+import com.BookWave.bookstreaming.domain.Role;
 import com.BookWave.bookstreaming.domain.SubscriptionType;
 import com.BookWave.bookstreaming.domain.User;
 import com.BookWave.bookstreaming.repository.UserRepository;
@@ -77,6 +78,16 @@ public class UserService {
                 }
                 user.setEmail(newEmail);
             }
+        }
+
+        // Actualizar role si se proporciona
+        if (updates.containsKey("role")) {
+            user.setRole(Role.valueOf((String) updates.get("role")));
+        }
+
+        // Actualizar subscriptionType si se proporciona
+        if (updates.containsKey("subscriptionType")) {
+            user.setSubscriptionType(SubscriptionType.valueOf((String) updates.get("subscriptionType")));
         }
 
         // Actualizar contraseña si se proporciona

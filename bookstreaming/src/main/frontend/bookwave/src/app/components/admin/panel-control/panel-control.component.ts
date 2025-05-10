@@ -2,9 +2,9 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { HelpService } from '../../../../service/help.service';
-import { Help } from '../../../../models/Help';
-import { HelpStatus } from '../../../../models/HelpStatus';
+import { HelpService } from '../../../service/help.service';
+import { Help } from '../../../models/Help';
+import { HelpStatus } from '../../../models/HelpStatus';
 
 @Component({
   selector: 'app-panel-control',

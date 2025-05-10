@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { CategoryService } from '../../../../service/category.service';
-import { Category } from '../../../../models/Category';
+import { CategoryService } from '../../../service/category.service';
+import { Category } from '../../../models/Category';
 
 @Component({
   selector: 'app-control-categorias',

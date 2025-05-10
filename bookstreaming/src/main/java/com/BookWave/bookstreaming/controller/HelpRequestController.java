@@ -20,6 +20,11 @@ public class HelpRequestController {
         return helpRequestService.create(helpRequest);
     }
 
+    @GetMapping("/user/{userId}")
+public List<HelpRequest> getHelpRequestsByUser(@PathVariable Long userId) {
+    return helpRequestService.getHelpRequestsByUser(userId);
+}
+
     //Métodos de Administrador
     @GetMapping("/admin")
     public List<HelpRequest> getAllHelpRequests() {

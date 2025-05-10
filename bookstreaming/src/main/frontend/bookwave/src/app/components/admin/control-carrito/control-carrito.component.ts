@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
-import { SubscriptionCartService } from '../../../../service/subscription-cart.service';
-import { SubscriptionCart } from '../../../../models/SubscriptionCart';
+import { SubscriptionCartService } from '../../../service/subscription-cart.service';
+import { SubscriptionCart } from '../../../models/SubscriptionCart';
 
 @Component({
   selector: 'app-control-carrito',

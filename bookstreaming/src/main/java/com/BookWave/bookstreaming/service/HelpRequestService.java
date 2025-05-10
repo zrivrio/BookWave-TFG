@@ -9,7 +9,6 @@ import com.BookWave.bookstreaming.domain.HelpStatus;
 import com.BookWave.bookstreaming.domain.User;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -28,6 +27,10 @@ public class HelpRequestService {
         helpRequest.setCreatedAt(LocalDate.now());
         helpRequest.setStatus(HelpStatus.PENDING);
         return helpRequestRepository.save(helpRequest);
+    }
+    
+    public List<HelpRequest> getHelpRequestsByUser(Long userId) {
+        return helpRequestRepository.findByUserId(userId);
     }
 
     //Métodos de Administrador

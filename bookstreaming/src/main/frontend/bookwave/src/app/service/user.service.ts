@@ -68,7 +68,7 @@ export class UserService {
 
   private handleError(error: HttpErrorResponse) {
     console.error('Error:', error);
-    return throwError(() => new Error('Algo esta mal; prueba más tarde.'));
+    return throwError(() => error);
   }
 
   // Métodos de Administrador
