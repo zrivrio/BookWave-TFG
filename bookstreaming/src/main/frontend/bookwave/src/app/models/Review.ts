@@ -2,6 +2,7 @@ export interface Review {
     id?: number;
     book: {
         id: number;
+        title: string;
     };
     user: {
         id: number;
@@ -9,5 +10,4 @@ export interface Review {
     };
     rating: number;
     comment: string;
-    createdAt?: string;
 }

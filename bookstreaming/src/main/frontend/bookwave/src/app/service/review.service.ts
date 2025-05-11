@@ -18,4 +18,12 @@ export class ReviewService {
     createReview(review: Review): Observable<Review> {
         return this.http.post<Review>(this.apiUrl, review);
     }
+
+    getAllReviews(): Observable<Review[]> {
+        return this.http.get<Review[]>(this.apiUrl);
+    }
+
+    deleteReview(id: number): Observable<void> {
+        return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    }
 }

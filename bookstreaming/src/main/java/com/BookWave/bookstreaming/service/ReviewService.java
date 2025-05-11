@@ -15,6 +15,10 @@ public class ReviewService {
         return reviewRepository.findByBookId(bookId);
     }
 
+    public List<Review> getAllReviews() {
+        return reviewRepository.findAll();
+    }
+
     public Review createReview(Review review) {
         return reviewRepository.save(review);
     }

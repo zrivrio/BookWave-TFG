@@ -30,6 +30,16 @@ public class ReviewController {
         return reviews;
     }
 
+    @GetMapping
+    public List<Review> getAllReviews() {
+        List<Review> reviews = reviewService.getAllReviews();
+        reviews.forEach(review -> {
+            User user = userService.getUserById(review.getUser().getId());
+            review.setUser(user);
+        });
+        return reviews;
+    }
+
     @PostMapping
     public ResponseEntity<Review> createReview(@RequestBody Review review) {
         try {

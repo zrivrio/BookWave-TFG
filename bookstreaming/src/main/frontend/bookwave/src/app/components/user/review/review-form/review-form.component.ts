@@ -65,6 +65,7 @@ export class ReviewFormComponent {
 
     const reviewToSend: Review = {
         book: { 
+            title: this.bookTitle,
             id: this.bookId,
         },
         user: { 
