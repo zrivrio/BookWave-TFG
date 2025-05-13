@@ -54,40 +54,44 @@ export class LibraryComponent implements OnInit {
     this.error = '';
     
     this.readingListService.getLists(this.userId).subscribe({
-      next: (lists: ReadingList[]) => {
-        this.readingLists = lists.map(list => ({
-          ...list,
-          books: list.books || []
-        }));
-        
-        // Load books for each list
-        this.readingLists.forEach(list => {
-          if (list.id) {
-            this.readingListService.getBooksInList(list.id).subscribe({
-              next: (books: Book[]) => {
-                list.books = books;
-              },
-              error: (err) => {
-                console.error('Error loading books for list:', err);
-                list.books = [];
-              }
+        next: (lists: ReadingList[]) => {
+            this.readingLists = lists;
+            
+            // Cargar los libros para cada lista de manera secuencial
+            lists.forEach(list => {
+                if (list.id) {
+                    this.readingListService.getBooksInList(list.id).subscribe({
+                        next: (books: Book[]) => {
+                            const index = this.readingLists.findIndex(l => l.id === list.id);
+                            if (index !== -1) {
+                                this.readingLists[index].books = books;
+                                
+                                // Si es la primera lista, seleccionarla automáticamente
+                                if (index === 0 && !this.selectedList) {
+                                    this.selectList(this.readingLists[index]);
+                                }
+                            }
+                        },
+                        error: (err) => {
+                            console.error('Error al cargar los libros de la lista:', err);
+                            const index = this.readingLists.findIndex(l => l.id === list.id);
+                            if (index !== -1) {
+                                this.readingLists[index].books = [];
+                            }
+                        }
+                    });
+                }
             });
-          }
-        });
-        
-        if (this.readingLists.length > 0) {
-          this.selectList(this.readingLists[0]);
+            
+            this.loading = false;
+        },
+        error: (err: any) => {
+            this.error = 'Error al cargar las listas de lectura';
+            this.loading = false;
+            console.error('Error:', err);
         }
-        
-        this.loading = false;
-      },
-      error: (err: any) => {
-        this.error = 'Error al cargar las listas de lectura';
-        this.loading = false;
-        console.error('Error:', err);
-      }
     });
-  }
+}
   selectList(list: ReadingList): void {
     console.log('Lista seleccionada:', list);
     this.selectedList = list;
