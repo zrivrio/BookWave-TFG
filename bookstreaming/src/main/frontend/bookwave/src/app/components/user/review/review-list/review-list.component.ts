@@ -2,7 +2,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Review } from '../../../../models/Review';
 import { ReviewService } from '../../../../service/review.service';
 import { CommonModule } from '@angular/common';
-import { DatePipe } from '@angular/common';
 import { UserService } from '../../../../service/user.service';
 import { User } from '../../../../models/User';
 import { Role } from '../../../../models/Role'; 
@@ -11,7 +10,7 @@ import { SubscriptionType } from '../../../../models/SubscriptionType';
 @Component({
   selector: 'app-review-list',
   standalone: true,
-  imports: [CommonModule, DatePipe], 
+  imports: [CommonModule], 
   templateUrl: './review-list.component.html',
   styleUrls: ['./review-list.component.css']
 })

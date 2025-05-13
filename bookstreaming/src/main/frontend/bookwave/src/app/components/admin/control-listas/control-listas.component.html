@@ -1,0 +1,89 @@
+<div class="max-w-7xl mx-auto p-4 md:p-8">
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-2xl font-bold text-[#1E0f75]">Administración de Listas de Lectura</h2>
+    <div class="flex gap-2">
+      <span class="px-3 py-1 bg-[#E6F0F7] text-[#1E0f75] rounded-full text-sm">
+        Total: {{readingLists.length}}
+      </span>
+    </div>
+  </div>
+
+  <!-- Mensajes de estado -->
+  <div *ngIf="loading" class="mb-4 p-4 bg-blue-50 text-blue-700 rounded-lg">
+    Cargando listas...
+  </div>
+  <div *ngIf="error" class="mb-4 p-4 bg-red-50 text-red-700 rounded-lg">
+    {{error}}
+  </div>
+  <div *ngIf="success" class="mb-4 p-4 bg-green-50 text-green-700 rounded-lg">
+    {{success}}
+  </div>
+
+  <!-- Lista de todas las listas de lectura -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div class="bg-white rounded-xl shadow-sm border border-[#F4F4F4] p-4">
+      <h3 class="text-xl font-semibold text-[#2A2A2A] mb-4">Listas de Lectura</h3>
+      <div class="space-y-3">
+        <div *ngFor="let list of readingLists" 
+             class="bg-white p-4 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow"
+             [class.bg-[#E6F0F7]]="selectedList?.id === list.id">
+          <div class="flex justify-between items-center">
+            <div class="cursor-pointer" (click)="selectList(list)">
+              <h4 class="font-medium text-[#2A2A2A]">{{ list.name }}</h4>
+              <small class="text-[#666666]">Usuario: {{ list.user.username || 'No disponible' }}</small>
+            </div>
+            <button class="px-3 py-1 text-red-600 hover:bg-red-50 rounded-lg transition-colors" 
+                    (click)="deleteList(list)">
+              Eliminar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Formulario de edición -->
+    <div class="bg-white rounded-xl shadow-sm border border-[#F4F4F4] p-4" *ngIf="selectedList">
+      <h3 class="text-xl font-semibold text-[#2A2A2A] mb-4">Editar Lista</h3>
+      <form [formGroup]="editForm" (ngSubmit)="updateList()" class="space-y-4">
+        <div>
+          <label for="name" class="block text-sm font-medium text-[#666666] mb-1">Nombre de la lista</label>
+          <input type="text" 
+                 class="w-full px-4 py-2 border border-[#E0E0E0] rounded-lg focus:ring-2 focus:ring-[#1E0f75] focus:border-[#1E0f75] transition"
+                 id="name" 
+                 formControlName="name" 
+                 [class.border-red-500]="editForm.get('name')?.invalid && editForm.get('name')?.touched">
+          <div class="text-red-500 text-sm mt-1" *ngIf="editForm.get('name')?.errors?.['required'] && editForm.get('name')?.touched">
+            El nombre es requerido
+          </div>
+          <div class="text-red-500 text-sm mt-1" *ngIf="editForm.get('name')?.errors?.['minlength'] && editForm.get('name')?.touched">
+            El nombre debe tener al menos 3 caracteres
+          </div>
+        </div>
+
+        <div>
+          <button type="submit" 
+                  class="px-4 py-2 bg-[#1C1DAB] hover:bg-[#1E0F75] text-white rounded-lg transition-colors disabled:opacity-50"
+                  [disabled]="editForm.invalid || loading">
+            Actualizar Lista
+          </button>
+        </div>
+      </form>
+
+      <!-- Información de los libros en la lista -->
+      <div class="mt-6">
+        <h4 class="text-lg font-semibold text-[#2A2A2A] mb-3">Libros en la lista</h4>
+        <div class="space-y-2">
+          <div *ngFor="let book of selectedList.books" 
+               class="p-3 bg-[#F8FAFC] rounded-lg border border-[#E0E9F5]">
+            <div class="font-medium text-[#2A2A2A]">{{ book.title }}</div>
+            <div class="text-sm text-[#666666]">{{ book.author }}</div>
+          </div>
+          <div *ngIf="selectedList.books?.length === 0" 
+               class="p-3 text-center text-[#666666] bg-[#F8FAFC] rounded-lg border border-[#E0E9F5]">
+            No hay libros en esta lista
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
