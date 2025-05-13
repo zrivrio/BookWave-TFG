@@ -65,12 +65,18 @@ export class ContinueReadingComponent implements OnInit {
         .subscribe({
           next: (progress) => {
             this.readingProgresses[book.id] = progress;
-            this.currentPages[book.id] = progress.currentPage;  // Almacenamos páginas leídas
+            this.currentPages[book.id] = progress.currentPage;
           },
           error: (err) => {
             this.readingProgresses[book.id] = {
-              user: { id: userId },
-              book: { id: book.id },
+              user: { 
+                id: userId,
+                username: this.authService.currentUserValue?.username || ''
+              },
+              book: { 
+                id: book.id,
+                title: book.title || ''
+              },
               currentPage: 0,
               percentageRead: 0
             };
@@ -101,8 +107,14 @@ export class ContinueReadingComponent implements OnInit {
     this.isLoading = true;
 
     const progressData: Partial<ReadingProgress> = {
-      user: { id: currentUser.id },
-      book: { id: book.id },
+      user: { 
+        id: currentUser.id,
+        username: currentUser.username
+      },
+      book: { 
+        id: book.id,
+        title: book.title
+      },
       currentPage: currentPage,
       percentageRead: percentageRead
     };

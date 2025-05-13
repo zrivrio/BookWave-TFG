@@ -77,8 +77,8 @@ export class ProgressComponent implements OnInit {
       },
       error: (err) => {
         this.readingProgresses[bookId] = {
-          user: { id: userId },
-          book: { id: bookId },
+          user: { id: userId, username: '' },  // Added username property
+          book: { id: bookId, title: '' },     // Added title property
           currentPage: 0,
           percentageRead: 0
         };
@@ -96,18 +96,15 @@ export class ProgressComponent implements OnInit {
     const currentUser = this.authService.currentUserValue;
     if (!currentUser) return;
 
-    // Asegúrate de que currentPages tiene un valor válido
     const currentPage = this.currentPages[book.id] || 0;
-    const totalPages = book.totalPages || 1; // Evitar división por cero
-
-    // Calcular el nuevo porcentaje
+    const totalPages = book.totalPages || 1;
     const percentageRead = Math.min(Math.round((currentPage / totalPages) * 100), 100);
 
     this.isLoading = true;
 
     const progressData: Partial<ReadingProgress> = {
-      user: { id: currentUser.id },
-      book: { id: book.id },
+      user: { id: currentUser.id, username: currentUser.username },  // Added username property
+      book: { id: book.id, title: book.title },                     // Added title property
       currentPage: currentPage,
       percentageRead: percentageRead
     };

@@ -1,11 +1,13 @@
 export interface ReadingProgress {
     id?: number;
     user: {
-      id: number;
+        id: number;
+        username: string;
     };
     book: {
-      id: number;
+        id: number;
+        title: string;
     };
     currentPage: number;
     percentageRead: number;
-  }
+}
