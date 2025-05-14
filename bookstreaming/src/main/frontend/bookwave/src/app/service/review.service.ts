@@ -15,6 +15,10 @@ export class ReviewService {
         return this.http.get<Review[]>(`${this.apiUrl}/book/${bookId}`);
     }
 
+    getAverageRatingByBook(bookId: number): Observable<number> {
+        return this.http.get<number>(`${this.apiUrl}/book/${bookId}/average-rating`);
+    }
+
     createReview(review: Review): Observable<Review> {
         return this.http.post<Review>(this.apiUrl, review);
     }

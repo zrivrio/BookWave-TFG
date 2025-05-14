@@ -9,6 +9,7 @@ import { UserService } from '../../../../service/user.service';
 import { User } from '../../../../models/User';
 import { ReadingProgress } from '../../../../models/ReadinProgress';
 import { AddToReadingListComponent } from '../../add-to-reading-list/add-to-reading-list.component';
+import { ReviewService } from '../../../../service/review.service';
 
 
 @Component({
@@ -22,28 +23,56 @@ export class NewBookComponent implements OnInit, OnDestroy {
   @Input() book: Book | null = null;
   private subscription: Subscription | null = null;
   currentUser: User | null = null;
+  averageRating: number = 0;
 
   constructor(
     private recommendationsService: RecommendationsService,
     private router: Router,
     private userService: UserService,
-    private readingProgressService: ReadingProgressService
+    private readingProgressService: ReadingProgressService,
+    private reviewService: ReviewService
   ) { }
 
   ngOnInit(): void {
     if (!this.book && this.router.url === '/') {
       this.loadMostPopularBooks();
     }
+    // Siempre cargar el rating si hay un libro
+    if (this.book?.id) {
+        this.loadAverageRating();
+    }
     this.currentUser = this.userService.getCurrentUser();
   }
 
   private loadMostPopularBooks(): void {
-    this.subscription = this.recommendationsService.getMostPopularBook().subscribe(
-      books => {
-        this.book = books;
-      }
-    );
-  }
+    this.subscription = this.recommendationsService.getMostPopularBook().subscribe({
+        next: (books) => {
+            this.book = books;
+            if (this.book) {
+                this.loadAverageRating();
+            }
+        },
+        error: (error) => {
+            console.error('Error al cargar el libro más popular:', error);
+        }
+    });
+}
+
+  private loadAverageRating(): void {
+    if (this.book?.id) {
+        this.reviewService.getAverageRatingByBook(this.book.id).subscribe({
+            next: (rating) => {
+                // Asegurarnos de que nunca sea null
+                this.averageRating = rating || 0;
+                console.log('Rating cargado:', this.averageRating);
+            },
+            error: (error) => {
+                console.error('Error al cargar el rating:', error);
+                this.averageRating = 0;
+            }
+        });
+    }
+}
 
   onReadNow(): void {
     if (!this.currentUser || !this.book) {

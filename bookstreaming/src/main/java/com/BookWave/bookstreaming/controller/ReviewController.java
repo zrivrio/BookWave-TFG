@@ -30,6 +30,12 @@ public class ReviewController {
         return reviews;
     }
 
+    @GetMapping("/book/{bookId}/average-rating")
+    public ResponseEntity<Double> getAverageRatingByBook(@PathVariable Long bookId) {
+        Double average = reviewService.getAverageRatingByBook(bookId);
+        return ResponseEntity.ok(average != null ? average : 0.0);
+    }
+
     @GetMapping
     public List<Review> getAllReviews() {
         List<Review> reviews = reviewService.getAllReviews();

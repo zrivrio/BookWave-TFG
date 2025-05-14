@@ -15,6 +15,10 @@ public class ReviewService {
         return reviewRepository.findByBookId(bookId);
     }
 
+    public Double getAverageRatingByBook(Long bookId) {
+        return reviewRepository.findAverageRatingByBookId(bookId);
+    }
+
     public List<Review> getAllReviews() {
         return reviewRepository.findAll();
     }
