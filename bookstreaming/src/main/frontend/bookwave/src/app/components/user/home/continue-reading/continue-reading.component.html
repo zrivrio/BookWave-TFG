@@ -1,109 +1,132 @@
 <div class="space-y-6">
+  <!-- Encabezado -->
   <div class="flex justify-between items-center">
-    <h2 class="text-xl font-bold text-[#1E0F75]">Continuar Leyendo</h2>
-    <a *ngIf="books.length > 0" 
-       routerLink="/progress" 
-       class="text-sm font-medium text-[#3785D8] hover:text-[#1C1DAB] transition-colors flex items-center gap-2 px-3 py-1 rounded-lg hover:bg-[#F4F4F4]">
-      Ver todos
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+  
+  </div>
+
+  <!-- Estado de Carga -->
+  <div *ngIf="isLoading" class="flex flex-col items-center justify-center h-64 space-y-4">
+    <div class="animate-spin rounded-full h-10 w-10 border-3 border-[#E0E9F5] border-t-[#1965B3]"></div>
+    <p class="text-[#999999] font-medium">Cargando tus libros...</p>
+  </div>
+
+  <!-- Estado No Autenticado -->
+  <div *ngIf="!isLoggedIn && !isLoading" class="flex flex-col items-center justify-center p-8 bg-gradient-to-br from-[#F8F8F8] to-[#F4F4F4] rounded-xl">
+    <div class="w-16 h-16 bg-[#E6F0F7] rounded-full flex items-center justify-center mb-4">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#1965B3]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+      </svg>
+    </div>
+    <p class="text-[#666666] mb-4 text-center">Inicia sesión para ver tus libros en progreso</p>
+    <a routerLink="/login" 
+       class="px-6 py-3 bg-[#1965B3] hover:bg-[#3785D8] text-white rounded-xl font-medium transition-all duration-300 hover:shadow-lg flex items-center gap-2">
+      <span>Iniciar sesión</span>
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
       </svg>
     </a>
   </div>
 
-  <!-- Loading State -->
-  <div *ngIf="isLoading" class="flex flex-col items-center justify-center h-64 space-y-4">
-    <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#1E0F75]"></div>
-    <p class="text-[#666666]">Cargando tus libros...</p>
-  </div>
-
-  <!-- Not Logged In State -->
-  <div *ngIf="!isLoggedIn && !isLoading" class="flex flex-col items-center justify-center p-8 bg-[#F8F8F8] rounded-xl border border-[#E0E9F5]">
-    <p class="text-[#666666] mb-4">Inicia sesión para ver tus libros en progreso</p>
-    <a routerLink="/login" 
-       class="px-6 py-3 bg-[#1E0F75] hover:bg-[#1C1DAB] text-white rounded-lg font-medium transition-all duration-300 hover:shadow-md">
-      Iniciar sesión
-    </a>
-  </div>
-
-  <!-- Book List -->
-  <div *ngIf="isLoggedIn && !isLoading && !error && books.length > 0" class="space-y-4">
+  <!-- Lista de Libros -->
+  <div *ngIf="isLoggedIn && !isLoading && !error && books.length > 0" class="space-y-3 overflow-y-auto pr-2">
     <div *ngFor="let book of books" 
-         class="bg-white p-5 rounded-xl shadow-sm border border-[#E0E9F5] hover:shadow-md transition-all duration-300">
+         class="group bg-white p-4 rounded-xl border border-[#E0E9F5] hover:shadow-lg transition-all duration-300">
       <div class="flex gap-4">
+        <!-- Portada del Libro -->
         <div class="relative shrink-0">
           <img [src]="book.cover || 'assets/images/placeholder.png'" 
                [alt]="book.title || 'Book cover'" 
-               class="w-20 h-28 object-cover rounded-lg border border-[#E0E9F5] transform hover:scale-105 transition-transform duration-300">
-          <div class="absolute -bottom-2 -right-2 bg-[#1E0F75] text-white text-xs px-2 py-1 rounded-full font-medium shadow-md">
+               class="w-20 h-28 object-cover rounded-xl shadow-md transform group-hover:scale-105 transition-transform duration-300">
+          <div class="absolute -bottom-2 -right-2 bg-[#1965B3] text-white text-xs px-3 py-1.5 rounded-full font-medium shadow-md">
             {{ getProgressPercentage(book) }}%
           </div>
         </div>
         
+        <!-- Detalles del Libro -->
         <div class="flex-1 min-w-0">
-          <h4 class="text-md font-bold text-[#2A2A2A] truncate">{{ book.title || 'Título no disponible' }}</h4>
-          <p class="text-sm text-[#666666] mb-3">{{ book.author || 'Autor desconocido' }}</p>
+          <h4 class="text-base font-bold text-[#2A2A2A] truncate group-hover:text-[#1965B3] transition-colors">
+            {{ book.title || 'Título no disponible' }}
+          </h4>
+          <p class="text-xs text-[#999999] mb-2">{{ book.author || 'Autor desconocido' }}</p>
           
-          <div class="mb-4">
+          <!-- Barra de Progreso -->
+          <div class="mb-2">
             <div class="h-2 bg-[#F4F4F4] rounded-full overflow-hidden">
-              <div class="h-2 rounded-full transition-all duration-500 ease-in-out" 
+              <div class="h-full rounded-full transition-all duration-500 ease-in-out" 
                    [ngClass]="getProgressColor(getProgressPercentage(book))"
                    [style.width.%]="getProgressPercentage(book)"></div>
             </div>
-            <div class="text-xs text-[#666666] mt-2">
-              {{ currentPages[book.id] || 0 }} de {{ book.totalPages || '?' }} páginas
+            <div class="mt-1">
+              <span class="text-xs text-[#666666]">
+                {{ currentPages[book.id] || 0 }} de {{ book.totalPages || '?' }} páginas
+              </span>
             </div>
           </div>
-          
-          <div class="flex flex-col space-y-3">
-            <div *ngIf="!editingProgress[book.id]" class="flex items-center gap-3">
-              <button (click)="toggleEditMode(book.id)" 
-                      class="text-xs font-medium text-[#3785D8] hover:text-[#1C1DAB] transition-colors px-3 py-1 rounded-lg hover:bg-[#F4F4F4]">
-                Actualizar Progreso
-              </button>
-              <span class="text-[#CCCCCC]">•</span>
-              <a [routerLink]="['/book', book.id]" 
-                 class="text-xs text-[#666666] hover:text-[#2A2A2A] transition-colors">
-                Detalles
-              </a>
-            </div>
-            
-            <!-- Edit Progress Form -->
-            <div *ngIf="editingProgress[book.id]" class="flex flex-col space-y-3">
-              <div class="flex items-center gap-3">
-                <input type="number" 
-                       [(ngModel)]="currentPages[book.id]"
-                       (keyup.enter)="updateProgress(book)"
-                       class="w-24 border border-[#E0E9F5] rounded-lg px-3 py-2 focus:ring-2 focus:ring-[#1E0F75] focus:border-transparent"
-                       [min]="0" 
-                       [max]="book.totalPages || 0"
-                       placeholder="Páginas leídas">
-                <span class="text-sm text-[#666666]">/ {{ book.totalPages || '?' }} páginas</span>
-              </div>
-              <div class="flex gap-2">
-                <button (click)="updateProgress(book)" 
-                        class="px-4 py-2 text-xs bg-[#1E0F75] text-white rounded-lg hover:bg-[#1C1DAB] transition-all duration-300">
-                  Guardar
-                </button>
-                <button (click)="toggleEditMode(book.id)" 
-                        class="px-4 py-2 text-xs bg-[#F4F4F4] text-[#666666] rounded-lg hover:bg-[#E0E9F5] transition-colors">
-                  Cancelar
-                </button>
-              </div>
-            </div>
+        </div>
+      </div>
+
+      <!-- Acciones (Centradas) -->
+      <div class="flex items-center justify-center gap-4 mt-3 border-t border-[#E0E9F5] pt-3">
+        <button (click)="toggleEditMode(book.id)" 
+                class="text-xs font-medium text-[#3785D8] hover:text-[#1C1DAB] transition-colors px-3 py-1.5 rounded-lg hover:bg-[#F4F4F4] flex items-center gap-1.5">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+          </svg>
+          Actualizar
+        </button>
+        <div class="w-px h-4 bg-[#E0E9F5]"></div>
+        <a [routerLink]="['/book', book.id]" 
+           class="text-xs font-medium text-[#3785D8] hover:text-[#1C1DAB] transition-colors px-3 py-1.5 rounded-lg hover:bg-[#F4F4F4] flex items-center gap-1.5">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Detalles
+        </a>
+      </div>
+
+      <!-- Formulario de Edición -->
+      <div *ngIf="editingProgress[book.id]" class="mt-4 p-4 bg-[#F8F8F8] rounded-xl">
+        <div class="flex items-center gap-4">
+          <div class="flex-1">
+            <input type="number" 
+                   [(ngModel)]="currentPages[book.id]"
+                   (keyup.enter)="updateProgress(book)"
+                   class="w-full px-4 py-2.5 border border-[#E0E9F5] rounded-lg focus:ring-2 focus:ring-[#1965B3] focus:border-transparent transition-all"
+                   [min]="0" 
+                   [max]="book.totalPages || 0"
+                   placeholder="Páginas leídas">
           </div>
+          <span class="text-sm text-[#666666]">de {{ book.totalPages || '?' }} páginas</span>
+        </div>
+        <div class="flex gap-2 mt-4">
+          <button (click)="updateProgress(book)" 
+                  class="flex-1 px-4 py-2.5 bg-[#1965B3] text-white rounded-lg hover:bg-[#3785D8] transition-all duration-300 font-medium">
+            Guardar
+          </button>
+          <button (click)="toggleEditMode(book.id)" 
+                  class="px-4 py-2.5 bg-[#F4F4F4] text-[#666666] rounded-lg hover:bg-[#E0E9F5] transition-colors">
+            Cancelar
+          </button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Empty State -->
+  <!-- Estado Vacío -->
   <div *ngIf="isLoggedIn && !isLoading && !error && books.length === 0" 
-       class="flex flex-col items-center justify-center p-8 bg-[#F8F8F8] rounded-xl border border-[#E0E9F5]">
-    <p class="text-[#666666] mb-4">No tienes libros en progreso</p>
+       class="flex flex-col items-center justify-center p-8 bg-gradient-to-br from-[#F8F8F8] to-[#F4F4F4] rounded-xl">
+    <div class="w-16 h-16 bg-[#E6F0F7] rounded-full flex items-center justify-center mb-4">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#1965B3]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+      </svg>
+    </div>
+    <p class="text-[#666666] mb-4 text-center">No tienes libros en progreso</p>
     <a routerLink="/books" 
-       class="px-6 py-3 bg-[#1E0F75] hover:bg-[#1C1DAB] text-white rounded-lg font-medium transition-all duration-300 hover:shadow-md">
-      Explorar libros
+       class="px-6 py-3 bg-[#1965B3] hover:bg-[#3785D8] text-white rounded-xl font-medium transition-all duration-300 hover:shadow-lg flex items-center gap-2">
+      <span>Explorar libros</span>
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+      </svg>
     </a>
   </div>
 </div>
