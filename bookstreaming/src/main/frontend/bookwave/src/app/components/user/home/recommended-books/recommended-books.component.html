@@ -1,48 +1,41 @@
 <!-- Loading State -->
 <div *ngIf="isLoading" class="flex flex-col items-center justify-center p-6">
-  <div class="animate-pulse flex space-x-3 w-full">
-    <div *ngFor="let i of [1,2,3,4,5]" class="bg-[#F4F4F4] rounded-lg w-32 h-48 flex-shrink-0"></div>
+  <div class="animate-pulse flex space-x-4 w-full">
+    <div *ngFor="let i of [1,2,3,4,5]" class="bg-[#F8F8F8] rounded-lg w-32 h-48 flex-shrink-0 border border-[#F4F4F4]"></div>
   </div>
-  <p class="text-[#666666] mt-3 text-sm">Cargando recomendaciones...</p>
+  <p class="text-[#666666] mt-4 text-sm">Cargando recomendaciones...</p>
 </div>
 
 <!-- Carousel Container -->
 <div *ngIf="!isLoading" class="relative group">
-  <!-- Navigation Arrows -->
   <button (click)="scrollLeft()"
-    class="hidden md:block absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-[#1E0f75] text-[#FFFFFF] rounded-full shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    class="hidden md:block absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-[#1E0F75] text-[#FFFFFF] rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-[#1C1DAB] hover:scale-110">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
     </svg>
   </button>
 
-  <!-- Carousel Content -->
-  <div #carousel class="max-w-full overflow-x-auto scroll-smooth scrollbar-hide snap-x px-1 py-3">
-    <div class="flex gap-4 w-max px-3">
+  <div #carousel class="max-w-full overflow-x-auto scroll-smooth scrollbar-hide snap-x px-2 py-4">
+    <div class="flex gap-6 w-max px-4">
       <div *ngFor="let book of recommendedBooks"
-        class="bg-[#FFFFFF] rounded-lg border border-[#F4F4F4] hover:shadow-sm transition-all duration-200 w-36 flex-shrink-0 snap-start relative">
-        <!-- Book Cover with Hover Effect -->
-        <div class="relative overflow-hidden rounded-t-lg">
+        class="bg-[#FFFFFF] rounded-xl border border-[#E0E9F5] hover:shadow-lg transition-all duration-300 w-40 flex-shrink-0 snap-start relative">
+        <div class="relative overflow-hidden rounded-t-xl">
           <img [src]="book.cover || 'assets/images/placeholder.png'" [alt]="book.title"
-            class="w-full h-40 object-cover transform hover:scale-[1.02] transition-transform duration-200" />
-          <!-- Badge for Special Books -->
-          <div
-            class="absolute top-1 right-1 bg-[#BF8CE1] text-[#FFFFFF] text-[10px] font-bold px-1.5 py-0.5 rounded-full">
+            class="w-full h-48 object-cover transform hover:scale-110 transition-transform duration-500" />
+          <div class="absolute top-2 right-2 bg-[#BF8CE1] text-[#FFFFFF] text-xs font-bold px-3 py-1 rounded-full shadow-md">
             Recomendado
           </div>
         </div>
 
-        <!-- Book Info -->
-        <div class="p-2.5">
-          <h4 class="text-sm font-medium text-[#2A2A2A] truncate">
+        <div class="p-4">
+          <h4 class="text-sm font-semibold text-[#2A2A2A] truncate">
             {{ book.title || 'Título no disponible' }}
           </h4>
-          <p class="text-xs text-[#666666] mt-0.5 truncate">
+          <p class="text-xs text-[#666666] mt-1 truncate">
             {{ book.author || 'Autor desconocido' }}
           </p>
-          <!-- Quick Action Button -->
           <button *ngIf="book.id" [routerLink]="['/book', book.id]"
-            class="mt-2 w-full text-xs py-1.5 bg-[#1E0f75] hover:bg-[#1C1DAB] text-[#FFFFFF] rounded-md transition-colors duration-150">
+            class="mt-3 w-full text-sm py-2 bg-[#1E0F75] hover:bg-[#1C1DAB] text-[#FFFFFF] rounded-lg transition-all duration-300 font-medium hover:shadow-md">
             Ver detalles
           </button>
         </div>
@@ -50,10 +43,9 @@
     </div>
   </div>
 
-  <!-- Right Navigation Arrow -->
   <button (click)="scrollRight()"
-    class="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 bg-[#1E0f75] text-[#FFFFFF] rounded-full shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    class="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-[#1E0F75] text-[#FFFFFF] rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-[#1C1DAB] hover:scale-110">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
     </svg>
   </button>

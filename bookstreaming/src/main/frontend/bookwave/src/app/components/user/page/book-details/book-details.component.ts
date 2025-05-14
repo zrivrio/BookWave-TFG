@@ -75,12 +75,10 @@ export class BookDetailsComponent implements OnInit {
     this.readingProgressService.createReadingProgress(progress).subscribe({
       next: (savedProgress) => {
         console.log('Reading progress saved:', savedProgress);
-        // Navigate to the progress page instead of the read page
         this.router.navigate(['/progress']);
       },
       error: (err) => {
         console.error('Error saving reading progress:', err);
-        // You might want to show an error message to the user here
       }
     });
   }

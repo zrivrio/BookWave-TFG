@@ -1,83 +1,109 @@
-<!-- add-to-reading-list.component.html -->
 <div class="add-to-list-container relative">
-  <!-- Main Button -->
+  <!-- Botón Principal -->
   <button 
-    class="px-4 py-2 bg-[#1C1DAB] hover:bg-[#1E0F75] text-white rounded-lg font-medium transition-colors flex items-center gap-2"
+    class="px-6 py-4 bg-[#F5F5F5] text-[#1965B3] hover:bg-[#E6F0F7] rounded-xl font-medium transition-all duration-300 flex items-center gap-2 group"
     (click)="toggleDropdown()"
     [disabled]="loading">
-    <span>Añadir a lista</span>
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform duration-300 group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
     </svg>
+    <span>Añadir a lista</span>
   </button>
   
-  <!-- Dropdown Menu -->
-  <div *ngIf="showDropdown" class="absolute z-10 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200">
-    <div class="p-2">
-      <!-- Quick Add to Existing Lists -->
-      <div *ngFor="let list of readingLists" class="p-2 hover:bg-gray-100 rounded cursor-pointer"
+  <!-- Menú Desplegable -->
+  <div *ngIf="showDropdown" 
+       class="absolute z-10 mt-3 w-64 bg-white rounded-xl shadow-lg border border-[#E0E9F5] transform transition-all duration-300 origin-top-right">
+    <div class="p-3 space-y-1">
+      <!-- Listas Existentes -->
+      <div *ngFor="let list of readingLists" 
+           class="flex items-center p-2.5 hover:bg-[#F8F8F8] rounded-lg cursor-pointer transition-colors group"
            (click)="addToList(list.id)">
-        {{ list.name }}
+        <span class="flex-1 text-[#2A2A2A] group-hover:text-[#1965B3] transition-colors">{{ list.name }}</span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#CCCCCC] group-hover:text-[#1965B3] opacity-0 group-hover:opacity-100 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
       </div>
       
-      <!-- Divider -->
-      <div class="border-t border-gray-200 my-1"></div>
+      <!-- Separador -->
+      <div class="my-2 border-t border-[#E6F0F7]"></div>
       
-      <!-- Create New List Option -->
-      <div class="p-2 hover:bg-gray-100 rounded cursor-pointer text-[#1C1DAB] font-medium"
-           (click)="openModal()">
-        + Crear nueva lista
-      </div>
+      <!-- Opción de Nueva Lista -->
+      <button class="w-full flex items-center justify-between p-2.5 text-[#1965B3] hover:bg-[#F8F8F8] rounded-lg transition-colors group"
+              (click)="openModal()">
+        <span class="font-medium">Crear nueva lista</span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transform transition-transform group-hover:scale-110" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+      </button>
     </div>
   </div>
-  
-  <!-- Messages -->
-  <div *ngIf="success" class="mt-2 p-2 bg-green-100 text-green-800 rounded text-sm">
-    {{ success }}
+
+  <!-- Mensajes de Estado -->
+  <div class="absolute right-0 mt-2">
+    <div *ngIf="success" 
+         class="animate-fade-in px-4 py-2 bg-[#E6F0F7] text-[#1965B3] rounded-lg text-sm flex items-center gap-2">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+      </svg>
+      {{ success }}
+    </div>
+    <div *ngIf="error" 
+         class="animate-fade-in px-4 py-2 bg-[#FEE2E2] text-[#EF4444] rounded-lg text-sm flex items-center gap-2">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+      {{ error }}
+    </div>
   </div>
-  <div *ngIf="error" class="mt-2 p-2 bg-red-100 text-red-800 rounded text-sm">
-    {{ error }}
+
+  <!-- Indicador de Carga -->
+  <div *ngIf="loading" 
+       class="absolute right-0 mt-2 px-4 py-2 bg-white rounded-lg shadow-md">
+    <div class="flex items-center gap-2">
+      <div class="h-5 w-5 border-2 border-t-[#1965B3] border-r-[#1965B3] border-b-[#CBD8E8] border-l-[#CBD8E8] rounded-full animate-spin"></div>
+      <span class="text-sm text-[#666666]">Procesando...</span>
+    </div>
   </div>
-  
-  <!-- Loading indicator -->
-  <div *ngIf="loading" class="mt-2 text-center">
-    <div class="inline-block h-4 w-4 border-2 border-[#1C1DAB] border-t-transparent rounded-full animate-spin"></div>
-  </div>
-  
-  <!-- Create New List Modal -->
-  <div *ngIf="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
-    <div class="bg-white rounded-lg p-6 w-96" (click)="$event.stopPropagation()">
-      <div class="flex justify-between items-center mb-4">
-        <h3 class="text-lg font-semibold">Crear nueva lista</h3>
-        <button (click)="closeModal()" class="text-gray-500 hover:text-gray-700">
+
+  <!-- Modal de Nueva Lista -->
+  <div *ngIf="showModal" 
+       class="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm flex items-center justify-center z-50">
+    <div class="bg-white rounded-2xl p-6 w-[400px] shadow-xl" 
+         (click)="$event.stopPropagation()">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="text-xl font-semibold text-[#2A2A2A]">Crear nueva lista</h3>
+        <button (click)="closeModal()" 
+                class="text-[#999999] hover:text-[#666666] transition-colors">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
       </div>
       
-      <form [formGroup]="newListForm" (ngSubmit)="createNewList()">
-        <div class="mb-4">
-          <label class="block text-gray-700 mb-2">Nombre de la lista</label>
+      <form [formGroup]="newListForm" (ngSubmit)="createNewList()" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-[#666666] mb-2">Nombre de la lista</label>
           <input 
             type="text" 
-            class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-1 focus:ring-[#1C1DAB]"
-            formControlName="name">
+            class="w-full px-4 py-3 border border-[#E0E9F5] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#1965B3] focus:border-transparent transition-all"
+            formControlName="name"
+            placeholder="Ej: Mis favoritos">
           <div *ngIf="newListForm.get('name')?.invalid && newListForm.get('name')?.touched" 
-               class="text-red-500 text-sm mt-1">
+               class="mt-2 text-sm text-[#EF4444]">
             El nombre debe tener al menos 3 caracteres
           </div>
         </div>
         
-        <div class="flex justify-end gap-2">
-          <button type="button" (click)="closeModal()" class="px-4 py-2 text-gray-700 rounded-lg hover:bg-gray-100">
+        <div class="flex justify-end gap-3 pt-4">
+          <button type="button" 
+                  (click)="closeModal()" 
+                  class="px-5 py-2.5 text-[#666666] hover:text-[#2A2A2A] hover:bg-[#F5F5F5] rounded-xl transition-colors">
             Cancelar
           </button>
-          <button 
-            type="submit" 
-            class="px-4 py-2 bg-[#1C1DAB] text-white rounded-lg hover:bg-[#1E0F75] disabled:opacity-50"
-            [disabled]="newListForm.invalid || loading">
-            Crear
+          <button type="submit" 
+                  class="px-5 py-2.5 bg-[#1965B3] hover:bg-[#3785D8] text-white rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  [disabled]="newListForm.invalid || loading">
+            Crear lista
           </button>
         </div>
       </form>

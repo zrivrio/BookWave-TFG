@@ -1,26 +1,27 @@
 <div class="flex flex-col h-screen p-6 gap-6 bg-gradient-to-br from-[#E6F0F7] to-[#F5F5F5]">
   <div class="flex gap-6 h-1/2">
-    <div class="flex flex-col bg-[#FFFFFF] rounded-2xl shadow-lg p-4 w-1/3 h-full border border-[#E0E9F5]">
+    <div class="flex flex-col bg-[#FFFFFF] rounded-2xl shadow-lg p-4 w-1/3 h-full border border-[#E0E9F5] hover:shadow-xl transition-all duration-300">
       <div class="overflow-y-auto flex-1 pr-2 space-y-4">
         <app-continue-reading class="text-[#2A2A2A]"></app-continue-reading>
       </div>
     </div>
 
-    <div class="flex flex-col bg-[#FFFFFF] rounded-2xl shadow-lg p-4 w-2/3 h-full border border-[#E0E9F5]">
-      <h2 class="text-lg font-semibold text-[#1E0F75] mb-4">Libro Destacado</h2>
-
+    <div class="flex flex-col bg-[#FFFFFF] rounded-2xl shadow-lg p-4 w-2/3 h-full border border-[#E0E9F5] hover:shadow-xl transition-all duration-300">
+      <h2 class="text-xl font-semibold text-[#1E0F75] mb-4">Libro Destacado</h2>
       <app-new-book class="text-[#2A2A2A]"></app-new-book>
     </div>
   </div>
 
-  <div class="flex flex-col bg-[#FFFFFF] rounded-2xl shadow-lg p-4 h-1/2 border border-[#E0E9F5]">
-    <div class="flex justify-between items-center mb-2">
+  <div class="flex flex-col bg-[#FFFFFF] rounded-2xl shadow-lg p-4 h-1/2 border border-[#E0E9F5] hover:shadow-xl transition-all duration-300">
+    <div class="flex justify-between items-center mb-4">
       <h2 class="text-xl font-bold text-[#1E0F75]">Libros que te pueden gustar</h2>
-      <button class="text-[#3785D8] hover:text-[#1C1DAB] text-sm font-medium transition-colors">Ver más</button>
+      <button class="text-[#3785D8] hover:text-[#1C1DAB] text-sm font-medium transition-colors px-4 py-2 rounded-lg hover:bg-[#F4F4F4]">
+        Ver más
+      </button>
     </div>
 
     <div class="grid grid-cols-1 gap-4 overflow-y-auto">
-        <app-recommended-books class="text-[#2A2A2A]"></app-recommended-books>
+      <app-recommended-books class="text-[#2A2A2A]"></app-recommended-books>
     </div>
   </div>
 </div>
