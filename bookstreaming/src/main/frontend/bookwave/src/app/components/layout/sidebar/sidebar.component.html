@@ -1,72 +1,80 @@
-<div class="flex flex-col h-screen bg-[#F5F5F5] w-64 p-4 border-r border-[#CCCCCC]">
-  <div class="flex items-center mb-8 pl-2">
-    <img src="assets/logo/logo.png" alt="Logo" class="h-10 w-10 rounded-lg">
-    <h1 class="text-[#1E0f75] text-xl font-bold ml-3 tracking-tight">BookWave</h1>
+<div class="flex flex-col h-screen bg-gradient-to-b from-[#F8F8F8] to-[#F4F4F4] w-72 p-6 border-r border-[#CCCCCC] sidebar-container">
+  <div class="flex items-center mb-10 pl-2 header-container">
+    <img src="assets/logo/logo.png" alt="Logo" class="h-12 w-12 rounded-xl shadow-sm">
+    <h1 class="text-[#1E0f75] text-2xl font-bold ml-4 tracking-tight">BookWave</h1>
   </div>
 
-  <nav class="flex flex-col space-y-1 flex-grow">
+  <nav class="flex flex-col space-y-2 flex-grow nav-container">
     <!-- Menú de Administrador -->
     <ng-container *ngIf="isAdmin">
-      <app-sidebar-link icon="dashboard" label="Panel de Control" route="/admin/dashboard"
-        class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
-      </app-sidebar-link>
+      <div class="mb-4">
+        <p class="text-[#999999] text-xs font-medium uppercase tracking-wider ml-4 mb-3">Administración</p>
+        <app-sidebar-link icon="dashboard" label="Panel de Control" route="/admin/dashboard"
+          class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
+        </app-sidebar-link>
 
-      <app-sidebar-link icon="library_books" label="Gestión de Libros" route="/admin/books"
-        class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
-      </app-sidebar-link>
+        <app-sidebar-link icon="library_books" label="Gestión de Libros" route="/admin/books"
+          class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
+        </app-sidebar-link>
 
-      <app-sidebar-link icon="category" label="Gestión de Categorías" route="/admin/categories"
-        class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
-      </app-sidebar-link>
+        <app-sidebar-link icon="category" label="Gestión de Categorías" route="/admin/categories"
+          class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
+        </app-sidebar-link>
 
-      <app-sidebar-link icon="format_list_bulleted" label="Gestión de Listas" route="/admin/lists"
-        class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
-      </app-sidebar-link>
+        <app-sidebar-link icon="format_list_bulleted" label="Gestión de Listas" route="/admin/lists"
+          class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
+        </app-sidebar-link>
 
-      <app-sidebar-link icon="analytics" label="Gestión de Progresos" route="/admin/progress"
-        class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
-      </app-sidebar-link>
+        <app-sidebar-link icon="analytics" label="Gestión de Progresos" route="/admin/progress"
+          class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
+        </app-sidebar-link>
 
-      <app-sidebar-link icon="group" label="Gestión de Usuarios" route="/admin/users"
-        class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
-      </app-sidebar-link>
+        <app-sidebar-link icon="group" label="Gestión de Usuarios" route="/admin/users"
+          class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
+        </app-sidebar-link>
 
-      <app-sidebar-link icon="rate_review" label="Gestión de Reseñas" route="/admin/reviews"
-        class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
-      </app-sidebar-link>
+        <app-sidebar-link icon="rate_review" label="Gestión de Reseñas" route="/admin/reviews"
+          class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
+        </app-sidebar-link>
 
-      <app-sidebar-link icon="shopping_cart" label="Gestión de Carritos" route="/admin/carts"
-        class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
-      </app-sidebar-link>
-    </ng-container>
-
-    <!-- Menú de Usuario Normal -->
-    <ng-container *ngIf="!isAdmin">
-      <app-sidebar-link icon="home" label="Inicio" route="/"
-        class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
-      </app-sidebar-link>
-
-      <app-sidebar-link icon="category" label="Categorías" route="/categories"
-        class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
-      </app-sidebar-link>
-
-      <app-sidebar-link icon="menu_book" label="Mi Biblioteca" route="/library"
-        class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
-      </app-sidebar-link>
-
-      <app-sidebar-link icon="trending_up" label="Progreso" route="/progress"
-        class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
-      </app-sidebar-link>
-
-      <div class="mt-2 pt-2 border-t border-[#CCCCCC]">
-        <app-sidebar-link icon="help" label="Centro de Ayuda" route="/help"
+        <app-sidebar-link icon="shopping_cart" label="Gestión de Carritos" route="/admin/carts"
           class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
         </app-sidebar-link>
       </div>
     </ng-container>
+
+    <!-- Menú de Usuario Normal -->
+    <ng-container *ngIf="!isAdmin">
+      <div class="mb-4">
+        <p class="text-[#999999] text-xs font-medium uppercase tracking-wider ml-4 mb-3">Navegación</p>
+        <app-sidebar-link icon="home" label="Inicio" route="/"
+          class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
+        </app-sidebar-link>
+
+        <app-sidebar-link icon="category" label="Categorías" route="/categories"
+          class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
+        </app-sidebar-link>
+
+        <app-sidebar-link icon="menu_book" label="Mi Biblioteca" route="/library"
+          class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
+        </app-sidebar-link>
+
+        <app-sidebar-link icon="trending_up" label="Progreso" route="/progress"
+          class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
+        </app-sidebar-link>
+
+        <div class="mt-6">
+          <p class="text-[#666666] text-xs font-medium uppercase tracking-wider ml-4 mb-3">Soporte</p>
+          <app-sidebar-link icon="help" label="Centro de Ayuda" route="/help"
+            class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
+          </app-sidebar-link>
+        </div>
+      </div>
+    </ng-container>
   </nav>
 
-  <div class="mt-auto pt-4 border-t border-[#CCCCCC]">
+  <div class="mt-auto pt-6 border-t border-[#E6F0F7] separator">
+    <p class="text-[#999999] text-xs font-medium uppercase tracking-wider ml-4 mb-3">Cuenta</p>
     <ng-container *ngIf="isLoggedIn; else showLogin">
       <app-sidebar-link *ngIf="!isAdmin" icon="person" label="Mi Perfil" route="/profile"
         class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
@@ -86,5 +94,4 @@
         class="text-[#2A2A2A] hover:bg-[#E0E9F5] hover:text-[#1C1DAB] transition-colors duration-200">
       </app-sidebar-link>
     </ng-template>
-  </div>
 </div>

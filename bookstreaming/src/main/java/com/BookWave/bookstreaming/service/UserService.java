@@ -18,12 +18,23 @@ public class UserService {
     private UserRepository userRepository;
 
     public User registerUser(User user) {
+        // Validaciones básicas
+        if (user.getUsername() == null || user.getUsername().trim().isEmpty()) {
+            throw new IllegalArgumentException("El nombre de usuario no puede estar vacío");
+        }
+        if (user.getEmail() == null || !user.getEmail().contains("@")) {
+            throw new IllegalArgumentException("El email no es válido");
+        }
+        if (user.getPassword() == null || user.getPassword().length() < 6) {
+            throw new IllegalArgumentException("La contraseña debe tener al menos 6 caracteres");
+        }
+
         try {
             String hashedPassword = util.hashPassword(user.getPassword());
             user.setPassword(hashedPassword);
             return userRepository.save(user);
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("Error al hashear la contraseña", e);
+            throw new RuntimeException("Error al procesar la contraseña", e);
         }
     }
 

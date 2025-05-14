@@ -1,0 +1,51 @@
+.sidebar-link {
+  transition: all 0.3s ease;
+}
+
+.sidebar-link:hover {
+  background-color: #E0E9F5;
+}
+
+.sidebar-link.active {
+  background-color: #E6F0F7;
+  border-right: 3px solid #1965B3;
+}
+
+.icon-container {
+  background-color: #F4F4F4;
+  color: #1965B3;
+}
+
+.icon-container.active {
+  background-color: #1965B3;
+  color: #FFFFFF;
+}
+
+.link-text {
+  color: #333333;
+}
+
+.link-text.active {
+  color: #1965B3;
+  font-weight: 600;
+}
+
+/* Estilos para los botones de acción */
+.action-button {
+  background-color: #E0E9F5;
+  color: #1965B3;
+}
+
+.action-button:hover {
+  background-color: #CBD8E8;
+}
+
+/* Estilos para el botón de cerrar sesión */
+.logout-button {
+  background-color: #EBB2C3;
+  color: #1E0f75;
+}
+
+.logout-button:hover {
+  background-color: #E893C5;
+}
