@@ -1,98 +1,154 @@
-<div class="max-w-4xl mx-auto p-4 md:p-8">
+<div class="min-h-screen bg-gradient-to-br from-[#E6F0F7] via-[#F8F8F8] to-[#F5F5F5] p-4 md:p-8">
+  <div class="max-w-7xl mx-auto">
     <!-- Título y descripción -->
-    <div class="text-center mb-8">
-      <h1 class="text-3xl font-bold text-[#1E0f75] mb-2">Centro de Ayuda</h1>
-      <p class="text-[#666666]">¿Tienes problemas o preguntas? Déjanos un mensaje y te responderemos pronto.</p>
+    <div class="text-center mb-12">
+      <h1 class="text-4xl font-bold text-[#1E0f75] mb-3">Centro de Ayuda</h1>
+      <p class="text-[#999999] text-lg">¿Tienes problemas o preguntas? Estamos aquí para ayudarte</p>
     </div>
-  
-    <!-- Sección de Formulario -->
-    <div class="bg-white rounded-xl shadow-sm p-6 border border-[#F4F4F4]">
-      <form (ngSubmit)="onSubmit()" [formGroup]="helpForm">
-        <!-- Campo: Asunto -->
-        <div class="mb-4">
-          <label for="subject" class="block text-[#666666] font-medium mb-2">Asunto</label>
-          <select 
-            id="subject" 
-            formControlName="subject"
-            class="w-full px-4 py-2 border border-[#E0E9F5] rounded-lg focus:ring-2 focus:ring-[#1E0f75] focus:border-transparent">
-            <option value="" disabled selected>Selecciona un tema</option>
-            <option value="technical">Problema técnico</option>
-            <option value="account">Cuenta o suscripción</option>
-            <option value="payment">Pagos o facturación</option>
-            <option value="content">Contenido no disponible</option>
-            <option value="other">Otro</option>
-          </select>
-        </div>
-  
-        <!-- Campo: Mensaje -->
-        <div class="mb-4">
-          <label for="message" class="block text-[#666666] font-medium mb-2">Mensaje</label>
-          <textarea 
-            id="message" 
-            formControlName="message"
-            rows="5"
-            placeholder="Describe tu problema o pregunta..."
-            class="w-full px-4 py-2 border border-[#E0E9F5] rounded-lg focus:ring-2 focus:ring-[#1E0f75] focus:border-transparent"></textarea>
-        </div>
-  
-        <!-- Botón de Envío -->
-        <button 
-          type="submit"
-          [disabled]="helpForm.invalid || isSubmitting"
-          class="w-full px-6 py-3 bg-[#1E0f75] hover:bg-[#1C1DAB] text-white font-medium rounded-lg shadow-md transition-all disabled:opacity-70 disabled:cursor-not-allowed">
-          <span *ngIf="!isSubmitting">Enviar Mensaje</span>
-          <span *ngIf="isSubmitting" class="flex items-center justify-center gap-2">
-            <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+
+    <div class="grid md:grid-cols-2 gap-8">
+      <!-- Columna Izquierda: Formulario de Contacto -->
+      <div class="space-y-6">
+        <div class="bg-white rounded-2xl shadow-lg p-6 border border-[#E0E9F5]">
+          <h2 class="text-2xl font-semibold text-[#1E0f75] mb-6 flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
             </svg>
-            Enviando...
-          </span>
-        </button>
-  
-        <!-- Mensaje de Confirmación -->
-        <div *ngIf="isSuccess" class="mt-4 p-4 bg-green-50 text-green-600 rounded-lg flex items-center gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-          </svg>
-          ¡Mensaje enviado! Te contactaremos pronto.
+            Contáctanos
+          </h2>
+          <form (ngSubmit)="onSubmit()" [formGroup]="helpForm" class="space-y-4">
+            <div>
+              <label for="subject" class="block text-[#2A2A2A] font-medium mb-2">Asunto</label>
+              <select 
+                id="subject" 
+                formControlName="subject"
+                class="w-full px-4 py-3 border border-[#E0E9F5] rounded-xl focus:ring-2 focus:ring-[#3785D8] focus:border-[#1965B3] bg-[#F8F8F8] transition-all">
+                <option value="" disabled selected>Selecciona un tema</option>
+                <option value="technical">Problema técnico</option>
+                <option value="account">Cuenta o suscripción</option>
+                <option value="payment">Pagos o facturación</option>
+                <option value="content">Contenido no disponible</option>
+                <option value="suggestion">Sugerencia</option>
+                <option value="other">Otro</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="message" class="block text-[#2A2A2A] font-medium mb-2">Mensaje</label>
+              <textarea 
+                id="message" 
+                formControlName="message"
+                rows="6"
+                placeholder="Describe tu problema o pregunta con detalle..."
+                class="w-full px-4 py-3 border border-[#E0E9F5] rounded-xl focus:ring-2 focus:ring-[#3785D8] focus:border-[#1965B3] bg-[#F8F8F8] transition-all resize-none"></textarea>
+            </div>
+
+            <button 
+              type="submit"
+              [disabled]="helpForm.invalid || isSubmitting"
+              class="w-full py-4 bg-[#1965B3] hover:bg-[#3785D8] text-white font-medium rounded-xl shadow-lg transition-all duration-300 flex items-center justify-center gap-2">
+              <span *ngIf="!isSubmitting">Enviar Mensaje</span>
+              <span *ngIf="isSubmitting" class="flex items-center gap-2">
+                <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Enviando...
+              </span>
+            </button>
+
+            <div *ngIf="isSuccess" class="p-4 bg-[#E6F0F7] text-[#1965B3] rounded-xl flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+              </svg>
+              ¡Mensaje enviado! Te responderemos pronto.
+            </div>
+          </form>
         </div>
-      </form>
-    </div>
-  
-    <!-- Preguntas Frecuentes (FAQ) -->
-    <div class="mt-12">
-      <h2 class="text-2xl font-bold text-[#1E0f75] mb-6">Preguntas Frecuentes</h2>
-      <div class="space-y-4">
-        <!-- Ejemplo de pregunta -->
-        <div class="bg-white rounded-xl shadow-sm p-6 border border-[#F4F4F4]">
-          <button 
-            (click)="toggleFAQ(1)"
-            class="w-full flex justify-between items-center text-left">
-            <span class="font-medium text-[#2A2A2A]">¿Cómo cambio mi plan de suscripción?</span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#1E0f75]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+      </div>
+
+      <!-- Columna Derecha: Preguntas Frecuentes -->
+      <div class="space-y-6">
+        <div class="bg-white rounded-2xl shadow-lg p-6 border border-[#E0E9F5]">
+          <h2 class="text-2xl font-semibold text-[#1E0f75] mb-6 flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-          </button>
-          <div *ngIf="activeFAQ === 1" class="mt-4 text-[#666666]">
-            Puedes cambiar tu plan en cualquier momento desde la sección "Perfil". Selecciona "Actualizar a Premium" o "Cancelar suscripción" según necesites.
-          </div>
-        </div>
-  
-        <!-- Más preguntas... -->
-        <div class="bg-white rounded-xl shadow-sm p-6 border border-[#F4F4F4]">
-          <button 
-            (click)="toggleFAQ(2)"
-            class="w-full flex justify-between items-center text-left">
-            <span class="font-medium text-[#2A2A2A]">¿Dónde encuentro mis facturas?</span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#1E0f75]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-            </svg>
-          </button>
-          <div *ngIf="activeFAQ === 2" class="mt-4 text-[#666666]">
-            Todas las facturas se envían automáticamente al correo electrónico asociado a tu cuenta. También puedes descargarlas desde la sección "Facturación" en tu perfil.
+            Preguntas Frecuentes
+          </h2>
+          <div class="space-y-4">
+            <div class="border-b border-[#E0E9F5] last:border-0">
+              <button 
+                (click)="toggleFAQ(1)"
+                class="w-full py-4 flex justify-between items-center text-left hover:text-[#1965B3] transition-colors">
+                <span class="font-medium text-[#2A2A2A]">¿Cómo funciona la suscripción Premium?</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#1965B3] transform transition-transform" [class.rotate-180]="activeFAQ === 1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              <div *ngIf="activeFAQ === 1" class="pb-4 text-[#999999]">
+                La suscripción Premium te da acceso ilimitado a toda nuestra biblioteca, lectura offline y hasta 5 dispositivos simultáneos. Se renueva mensualmente y puedes cancelar en cualquier momento.
+              </div>
+            </div>
+
+            <div class="border-b border-[#E0E9F5] last:border-0">
+              <button 
+                (click)="toggleFAQ(2)"
+                class="w-full py-4 flex justify-between items-center text-left hover:text-[#1965B3] transition-colors">
+                <span class="font-medium text-[#2A2A2A]">¿Cómo descargo libros para leer offline?</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#1965B3] transform transition-transform" [class.rotate-180]="activeFAQ === 2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              <div *ngIf="activeFAQ === 2" class="pb-4 text-[#999999]">
+                En cada libro, encontrarás un botón de descarga. Los libros descargados estarán disponibles en la sección "Mi Biblioteca" para lectura offline.
+              </div>
+            </div>
+
+            <div class="border-b border-[#E0E9F5] last:border-0">
+              <button 
+                (click)="toggleFAQ(3)"
+                class="w-full py-4 flex justify-between items-center text-left hover:text-[#1965B3] transition-colors">
+                <span class="font-medium text-[#2A2A2A]">¿Puedo compartir mi cuenta?</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#1965B3] transform transition-transform" [class.rotate-180]="activeFAQ === 3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              <div *ngIf="activeFAQ === 3" class="pb-4 text-[#999999]">
+                Por seguridad, no recomendamos compartir tu cuenta. Sin embargo, puedes usar tu cuenta en hasta 5 dispositivos diferentes simultáneamente.
+              </div>
+            </div>
+
+            <div class="border-b border-[#E0E9F5] last:border-0">
+              <button 
+                (click)="toggleFAQ(4)"
+                class="w-full py-4 flex justify-between items-center text-left hover:text-[#1965B3] transition-colors">
+                <span class="font-medium text-[#2A2A2A]">¿Cómo recupero mi contraseña?</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#1965B3] transform transition-transform" [class.rotate-180]="activeFAQ === 4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              <div *ngIf="activeFAQ === 4" class="pb-4 text-[#999999]">
+                Haz clic en "¿Olvidaste tu contraseña?" en la página de inicio de sesión. Te enviaremos un enlace a tu correo para restablecerla.
+              </div>
+            </div>
+
+            <div class="border-b border-[#E0E9F5] last:border-0">
+              <button 
+                (click)="toggleFAQ(5)"
+                class="w-full py-4 flex justify-between items-center text-left hover:text-[#1965B3] transition-colors">
+                <span class="font-medium text-[#2A2A2A]">¿Cómo reporto un problema técnico?</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#1965B3] transform transition-transform" [class.rotate-180]="activeFAQ === 5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              <div *ngIf="activeFAQ === 5" class="pb-4 text-[#999999]">
+                Usa el formulario de contacto seleccionando "Problema técnico" como asunto. Incluye detalles como tu dispositivo y navegador para ayudarnos a resolver el problema más rápido.
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>
