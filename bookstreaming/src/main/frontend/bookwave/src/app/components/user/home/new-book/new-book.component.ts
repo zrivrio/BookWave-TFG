@@ -37,7 +37,6 @@ export class NewBookComponent implements OnInit, OnDestroy {
     if (!this.book && this.router.url === '/') {
       this.loadMostPopularBooks();
     }
-    // Siempre cargar el rating si hay un libro
     if (this.book?.id) {
         this.loadAverageRating();
     }
@@ -62,7 +61,6 @@ export class NewBookComponent implements OnInit, OnDestroy {
     if (this.book?.id) {
         this.reviewService.getAverageRatingByBook(this.book.id).subscribe({
             next: (rating) => {
-                // Asegurarnos de que nunca sea null
                 this.averageRating = rating || 0;
                 console.log('Rating cargado:', this.averageRating);
             },

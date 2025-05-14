@@ -21,7 +21,7 @@ export class ContinueReadingComponent implements OnInit {
   error: string = '';
   isLoggedIn: boolean = false;
   editingProgress: { [key: number]: boolean } = {};
-  currentPages: { [key: number]: number } = {};  // Cambiado de currentProgress a currentPages
+  currentPages: { [key: number]: number } = {};
   readingProgresses: { [bookId: number]: ReadingProgress } = {};
   
   constructor(

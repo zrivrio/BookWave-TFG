@@ -1,5 +1,4 @@
 <div class="add-to-list-container relative">
-  <!-- Botón Principal -->
   <button 
     class="px-6 py-4 bg-[#F5F5F5] text-[#1965B3] hover:bg-[#E6F0F7] rounded-xl font-medium transition-all duration-300 flex items-center gap-2 group"
     (click)="toggleDropdown()"
@@ -10,11 +9,9 @@
     <span>Añadir a lista</span>
   </button>
   
-  <!-- Menú Desplegable -->
   <div *ngIf="showDropdown" 
        class="absolute z-10 mt-3 w-64 bg-white rounded-xl shadow-lg border border-[#E0E9F5] transform transition-all duration-300 origin-top-right">
     <div class="p-3 space-y-1">
-      <!-- Listas Existentes -->
       <div *ngFor="let list of readingLists" 
            class="flex items-center p-2.5 hover:bg-[#F8F8F8] rounded-lg cursor-pointer transition-colors group"
            (click)="addToList(list.id)">
@@ -24,10 +21,8 @@
         </svg>
       </div>
       
-      <!-- Separador -->
       <div class="my-2 border-t border-[#E6F0F7]"></div>
       
-      <!-- Opción de Nueva Lista -->
       <button class="w-full flex items-center justify-between p-2.5 text-[#1965B3] hover:bg-[#F8F8F8] rounded-lg transition-colors group"
               (click)="openModal()">
         <span class="font-medium">Crear nueva lista</span>
@@ -38,7 +33,6 @@
     </div>
   </div>
 
-  <!-- Mensajes de Estado -->
   <div class="absolute right-0 mt-2">
     <div *ngIf="success" 
          class="animate-fade-in px-4 py-2 bg-[#E6F0F7] text-[#1965B3] rounded-lg text-sm flex items-center gap-2">
@@ -56,7 +50,6 @@
     </div>
   </div>
 
-  <!-- Indicador de Carga -->
   <div *ngIf="loading" 
        class="absolute right-0 mt-2 px-4 py-2 bg-white rounded-lg shadow-md">
     <div class="flex items-center gap-2">
@@ -65,7 +58,6 @@
     </div>
   </div>
 
-  <!-- Modal de Nueva Lista -->
   <div *ngIf="showModal" 
        class="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm flex items-center justify-center z-50">
     <div class="bg-white rounded-2xl p-6 w-[400px] shadow-xl" 

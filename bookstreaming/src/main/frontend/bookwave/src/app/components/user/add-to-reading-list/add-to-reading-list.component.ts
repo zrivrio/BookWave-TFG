@@ -61,7 +61,6 @@ export class AddToReadingListComponent implements OnInit {
     });
   }
 
- // Actualiza el método addToList
 addToList(listId?: number): void {
   const targetListId = listId || this.selectedListId;
   

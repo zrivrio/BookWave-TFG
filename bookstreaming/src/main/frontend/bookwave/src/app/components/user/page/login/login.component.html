@@ -1,76 +1,77 @@
-<div class="flex justify-center items-center min-h-screen bg-gradient-to-br from-[#E0E9F5] to-[#CBD8E8] p-4">
-  <div class="w-full max-w-md bg-white rounded-2xl shadow-xl p-8 border border-[#ADC6E5]">
-
-    <!-- Header -->
+<div class="flex justify-center items-center min-h-screen bg-gradient-to-br from-[#E6F0F7] via-[#CBD8E8] to-[#F8F8F8] p-4">
+  <div class="w-full max-w-md bg-white rounded-2xl shadow-lg p-8 border border-[#E0E9F5] hover:shadow-xl transition-all duration-300">
+    <!-- Encabezado -->
     <div class="text-center mb-8">
-      <h2 class="text-3xl font-bold text-[#1E0f75] mb-2">Welcome Back</h2>
-      <p class="text-[#666666]">Sign in to continue your reading journey</p>
+      <h2 class="text-3xl font-bold text-[#1E0f75] mb-3">Bienvenido de nuevo</h2>
+      <p class="text-[#999999]">Inicia sesión para continuar tu viaje de lectura</p>
     </div>
 
-    <!-- Form -->
-    <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="space-y-6">
-
-      <!-- Username Field -->
-      <div>
-        <label for="username" class="block text-sm font-medium text-[#2A2A2A] mb-1">Username</label>
+    <!-- Formulario -->
+    <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="space-y-5">
+      <!-- Campo Usuario -->
+      <div class="space-y-1.5">
+        <label for="username" class="block text-sm font-medium text-[#2A2A2A]">Usuario</label>
         <input 
           type="text"
           id="username"
           formControlName="username"
-          placeholder="Enter your username"
-          [class.border-red-500]="username?.invalid && username?.touched"
-          class="w-full px-4 py-3 rounded-lg border border-[#E0E0E0] focus:ring-2 focus:ring-[#ADC6E5] focus:border-[#1E0f75] outline-none transition-all"
+          placeholder="Ingresa tu usuario"
+          [class.border-[#E893C5]]="username?.invalid && username?.touched"
+          [class.bg-[#F8F8F8]]="username?.invalid && username?.touched"
+          class="w-full px-4 py-3 rounded-xl border border-[#E0E9F5] focus:ring-2 focus:ring-[#3785D8] focus:border-[#1965B3] outline-none transition-all"
         >
-        <div class="h-4 mt-1 text-xs text-red-500" *ngIf="username?.invalid && username?.touched">
-          <span *ngIf="username?.errors?.['required']">Required field</span>
-          <span *ngIf="username?.errors?.['minlength']">Minimum 3 characters</span>
+        <div class="min-h-[1.25rem] text-xs text-[#E893C5]" *ngIf="username?.invalid && username?.touched">
+          <span *ngIf="username?.errors?.['required']">Campo requerido</span>
+          <span *ngIf="username?.errors?.['minlength']">Mínimo 3 caracteres</span>
         </div>
       </div>
 
-      <!-- Password Field -->
-      <div>
-        <label for="password" class="block text-sm font-medium text-[#2A2A2A] mb-1">Password</label>
+      <!-- Campo Contraseña -->
+      <div class="space-y-1.5">
+        <label for="password" class="block text-sm font-medium text-[#2A2A2A]">Contraseña</label>
         <div class="relative">
           <input 
             type="password"
             id="password"
             formControlName="password"
-            placeholder="Enter your password"
-            [class.border-red-500]="password?.invalid && password?.touched"
-            class="w-full px-4 py-3 rounded-lg border border-[#E0E0E0] focus:ring-2 focus:ring-[#ADC6E5] focus:border-[#1E0f75] outline-none transition-all pr-10"
+            placeholder="••••••••"
+            [class.border-[#E893C5]]="password?.invalid && password?.touched"
+            [class.bg-[#F8F8F8]]="password?.invalid && password?.touched"
+            class="w-full px-4 py-3 rounded-xl border border-[#E0E9F5] focus:ring-2 focus:ring-[#3785D8] focus:border-[#1965B3] outline-none transition-all"
           >
         </div>
-        <div class="h-4 mt-1 text-xs text-red-500" *ngIf="password?.invalid && password?.touched">
-          <span *ngIf="password?.errors?.['required']">Required field</span>
-          <span *ngIf="password?.errors?.['minlength']">Minimum 6 characters</span>
+        <div class="min-h-[1.25rem] text-xs text-[#E893C5]" *ngIf="password?.invalid && password?.touched">
+          <span *ngIf="password?.errors?.['required']">Campo requerido</span>
+          <span *ngIf="password?.errors?.['minlength']">Mínimo 6 caracteres</span>
         </div>
       </div>
 
-      <!-- Error Message -->
-      <div *ngIf="errorMessage" class="p-3 bg-[#EBB2C3]/30 border border-[#E893C5] text-[#1E0f75] rounded-lg text-sm flex items-center">
+      <!-- Mensaje de Error -->
+      <div *ngIf="errorMessage" class="p-4 bg-[#F8F8F8] border border-[#E893C5] text-[#E893C5] rounded-xl text-sm flex items-center">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
         {{ errorMessage }}
       </div>
 
-      <!-- Submit Button -->
+      <!-- Botón de Envío -->
       <button
         type="submit"
         [disabled]="loginForm.invalid || isLoading"
-        class="w-full py-3 px-4 bg-[#1E0f75] hover:bg-[#1C1DAB] text-white font-medium rounded-lg shadow-md transition-all disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center"
+        class="w-full py-3.5 px-4 bg-[#1965B3] hover:bg-[#3785D8] text-white font-medium rounded-xl shadow-lg transition-all disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center gap-2"
       >
-        <span *ngIf="isLoading" class="inline-block animate-spin mr-2">↻</span>
-        {{ isLoading ? 'Signing in...' : 'Sign In' }}
+        <svg *ngIf="isLoading" class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        {{ isLoading ? 'Iniciando sesión...' : 'Iniciar Sesión' }}
       </button>
-
     </form>
 
-    <!-- Sign Up Link -->
-    <div class="mt-6 text-center text-sm text-[#666666]">
-      Don't have an account? 
-      <a routerLink="/signup" class="text-[#1E0f75] font-medium hover:underline ml-1">Sign up</a>
+    <!-- Enlace de Registro -->
+    <div class="mt-6 text-center text-sm text-[#999999]">
+      ¿No tienes una cuenta? 
+      <a routerLink="/signup" class="text-[#1965B3] font-medium hover:text-[#3785D8] transition-colors ml-1">Regístrate</a>
     </div>
-
   </div>
 </div>

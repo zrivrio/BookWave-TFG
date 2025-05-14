@@ -27,7 +27,6 @@ export class RecommendedBooksComponent implements OnInit, OnDestroy  {
   ) {}
 
   ngOnInit(): void {
-    // Only load books if we're on the home page
     if (this.router.url === '/') {
       this.loadBooks();
     }
@@ -38,7 +37,6 @@ export class RecommendedBooksComponent implements OnInit, OnDestroy  {
     const currentUser = this.authService.currentUserValue;
 
     if (!currentUser) {
-      // Only subscribe if we're on the home page
       if (this.router.url === '/') {
         this.subscription = this.recommendationsService.getRandomBooks().subscribe({
           next: (books) => {
@@ -52,7 +50,6 @@ export class RecommendedBooksComponent implements OnInit, OnDestroy  {
         });
       }
     } else {
-      // Only subscribe if we're on the home page
       if (this.router.url === '/') {
         this.subscription = this.recommendationsService.getRecommendedBooks(currentUser.id).subscribe({
           next: (books) => {
@@ -75,14 +72,14 @@ export class RecommendedBooksComponent implements OnInit, OnDestroy  {
   }
   scrollLeft(): void {
     this.carousel.nativeElement.scrollBy({
-      left: -300, // Adjust this value based on your card width + gap
+      left: -300,
       behavior: 'smooth'
     });
   }
 
   scrollRight(): void {
     this.carousel.nativeElement.scrollBy({
-      left: 300, // Adjust this value based on your card width + gap
+      left: 300,
       behavior: 'smooth'
     });
   }

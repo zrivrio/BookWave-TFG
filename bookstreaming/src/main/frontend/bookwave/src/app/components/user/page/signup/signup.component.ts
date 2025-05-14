@@ -63,7 +63,6 @@ export class SignupComponent implements OnInit {
     this.userService.signup(userData).subscribe({
       next: (user) => {
         console.log('Signup successful');
-        // Remove automatic login and redirect to login page instead
         this.router.navigate(['/login']);
       },
       error: (error) => {
@@ -80,7 +79,6 @@ export class SignupComponent implements OnInit {
     });
 }
 
-  // Form control getters
   get username() { return this.signupForm.get('username'); }
   get email() { return this.signupForm.get('email'); }
   get password() { return this.signupForm.get('password'); }
