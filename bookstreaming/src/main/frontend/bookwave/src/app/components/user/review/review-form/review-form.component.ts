@@ -43,12 +43,9 @@ export class ReviewFormComponent {
     rating: 5 as 1 | 2 | 3 | 4 | 5,
     comment: ''
   };
-
-  showForm = false;
   error: string | null = null;
 
   toggleForm(): void {
-    this.showForm = !this.showForm;
     this.error = null;
   }
 
@@ -93,7 +90,6 @@ export class ReviewFormComponent {
       rating: 5 as 1 | 2 | 3 | 4 | 5,
       comment: ''
     };
-    this.showForm = false;
     this.error = null;
   }
 }

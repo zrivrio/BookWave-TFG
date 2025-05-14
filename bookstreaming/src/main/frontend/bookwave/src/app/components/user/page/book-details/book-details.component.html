@@ -1,53 +1,66 @@
-<div class="max-w-7xl mx-auto px-6 py-8" *ngIf="!loading">
-    <div *ngIf="book; else noBook" class="space-y-10">
-  
-      <!-- 🔹 Parte superior más compacta -->
-      <div class="bg-white rounded-xl shadow-md p-6 border border-[#E0E9F5]">
-        <div class="flex flex-col md:flex-row gap-6">
-          <!-- Portada reducida -->
-          <div class="w-full md:w-1/5">
-            <img 
-              [src]="book.cover || 'assets/images/default-book-cover.jpg'" 
-              [alt]="book.title" 
-              class="w-full h-auto object-cover aspect-[2/3]"
-              onerror="this.src='assets/images/default-book-cover.jpg'">
-          </div>
-  
-          <!-- Detalles más pequeños -->
-          <div class="w-full md:w-4/5 space-y-3">
-            <div>
-              <h1 class="text-2xl font-semibold text-[#2A2A2A]">{{ book.title }}</h1>
-              <h2 class="text-lg text-[#666666] mt-1">por {{ book.author || 'Autor desconocido' }}</h2>
+<div class="min-h-screen bg-gradient-to-br from-[#E6F0F7] via-[#F8F8F8] to-[#F5F5F5] p-4 md:p-8 flex justify-center items-start">
+  <div class="max-w-7xl w-full px-4" *ngIf="!loading">
+    <div *ngIf="book; else noBook" class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <!-- Columna Izquierda: Detalles del libro -->
+      <div class="lg:col-span-7 flex items-center justify-center">
+        <div class="bg-[#FFFFFF] rounded-2xl shadow-lg p-8 border border-[#E0E9F5] w-full">
+          <div class="flex flex-col items-center justify-center min-h-full">
+            <div class="flex flex-col md:flex-row gap-8 w-full">
+              <div class="w-full md:w-2/5 flex items-center justify-center">
+                <div class="w-full">
+                  <img 
+                    [src]="book.cover || 'assets/images/default-book-cover.jpg'" 
+                    [alt]="book.title" 
+                    class="w-full h-auto object-cover rounded-xl shadow-md transform hover:scale-105 transition-all duration-300"
+                    onerror="this.src='assets/images/default-book-cover.jpg'">
+                </div>
+              </div>
+
+              <!-- Columna del contenido -->
+              <div class="w-full md:w-3/5 space-y-6 flex flex-col justify-center">
+                <!-- Rating -->
+                <div class="flex items-center gap-3">
+                  <div class="flex items-center bg-[#F5F5F5] px-4 py-2 rounded-xl">
+                    <span class="text-2xl text-[#BF8CE1]">★</span>
+                    <span class="text-xl font-semibold text-[#333333] ml-2">{{averageRating | number:'1.1-1'}}</span>
+                  </div>
+                </div>
+
+                <!-- Título y autor -->
+                <div>
+                  <h1 class="text-3xl font-bold text-[#2A2A2A] mb-2">{{ book.title }}</h1>
+                  <h2 class="text-xl text-[#999999]">por {{ book.author || 'Autor desconocido' }}</h2>
+                </div>
+
+                <!-- Etiquetas -->
+                <div class="flex flex-wrap gap-2">
+                  <span class="px-4 py-2 rounded-full bg-[#E6F0F7] text-[#1965B3] text-sm font-medium">
+                    {{ book.language || 'Idioma no especificado' }}
+                  </span>
+                  <span class="px-4 py-2 rounded-full bg-[#F4F4F4] text-[#333333] text-sm font-medium">
+                    {{ book.year || 'Año desconocido' }}
+                  </span>
+                </div>
+
+                <!-- Descripción -->
+                <div class="bg-[#F8F8F8] rounded-xl p-6">
+                  <h3 class="text-lg font-semibold text-[#1965B3] mb-3">Descripción</h3>
+                  <p class="text-[#666666] leading-relaxed">
+                    {{ book.description || 'No hay descripción disponible para este libro.' }}
+                  </p>
+                </div>
+              </div>
             </div>
-  
-            <div class="flex flex-wrap gap-2 items-center text-sm">
-              <span class="px-3 py-1 rounded-full bg-[#E6F0F7] text-[#1C1DAB] font-medium">
-                {{ book.language || 'Idioma no especificado' }}
-              </span>
-              <span class="px-3 py-1 rounded-full bg-[#F4F4F4] text-[#666666] font-medium">
-                {{ book.year || 'Año desconocido' }}
-              </span>
-              <span *ngIf="book.averageRating" class="px-3 py-1 rounded-full bg-[#FFC107] text-[#2A2A2A] font-medium flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                  <path d="..." />
-                </svg>
-                {{ book.averageRating | number:'1.1-1' }}
-              </span>
-            </div>
-  
-            <div>
-              <h3 class="text-md font-semibold text-[#1C1DAB] mb-1">Descripción</h3>
-              <p class="text-sm text-[#666666] leading-relaxed">
-                {{ book.description || 'No hay descripción disponible para este libro.' }}
-              </p>
-            </div>
-  
-            <div class="pt-2">
+
+            <!-- Botones de acción al final -->
+            <div class="flex justify-center gap-4 mt-8 pt-6 border-t border-[#E0E9F5] w-full">
               <button 
                 (click)="onReadNow()"
                 [disabled]="!currentUser"
-                class="px-5 py-2 bg-[#1C1DAB] hover:bg-[#1E0F75] text-white rounded-lg shadow-sm transition disabled:opacity-50 text-sm"
-                [title]="!currentUser ? 'Debes iniciar sesión para leer' : 'Comenzar a leer'">
+                class="px-6 py-3 bg-[#1965B3] hover:bg-[#3785D8] text-white rounded-xl font-medium transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                </svg>
                 Leer ahora
               </button>
               <app-add-to-reading-list [bookId]="book.id"></app-add-to-reading-list>
@@ -56,43 +69,45 @@
         </div>
       </div>
   
-      <!-- 🔸 Parte inferior más amplia -->
-      <div class="flex flex-col lg:flex-row gap-8 min-h-[500px]">
-        
-        <!-- Formulario (más estrecho) -->
-        <div class="w-full lg:w-1/4">
+      <!-- Columna Derecha: Reseñas -->
+      <div class="lg:col-span-5 space-y-6">
+        <!-- Formulario de reseña -->
+        <div class="bg-[#FFFFFF] rounded-2xl shadow-lg p-6 border border-[#E0E9F5]">
           <app-review-form 
             *ngIf="currentUser"
             [bookId]="book.id" 
             [bookTitle]="book.title"
             [currentUser]="currentUser"
-            (reviewSubmitted)="reviewList.refreshReviews($event)">
+            (reviewSubmitted)="onReviewSubmitted()">
           </app-review-form>
         </div>
   
-        <!-- Reseñas (más alto y ancho con scroll) -->
-        <div class="w-full lg:w-3/4 max-h-[600px] overflow-y-auto border border-[#E0E9F5] rounded-lg p-4 bg-white">
+        <!-- Lista de reseñas -->
+        <div class="bg-[#FFFFFF] rounded-2xl shadow-lg p-6 border border-[#E0E9F5]">
           <app-review-list 
-            #reviewList
             [bookId]="book.id">
           </app-review-list>
         </div>
       </div>
     </div>
   
-    <!-- Loading y errores -->
+    <!-- Template para cuando no hay libro -->
     <ng-template #noBook>
-      <div *ngIf="error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg">
-        {{ error }}
-      </div>
-      <div *ngIf="!error" class="bg-blue-100 border border-blue-300 text-blue-800 px-4 py-3 rounded-lg">
-        Libro no encontrado
+      <div class="bg-[#FFFFFF] rounded-xl shadow-md p-8 border border-[#E0E9F5] text-center">
+        <div *ngIf="error" class="text-[#E893C5] mb-4">
+          {{ error }}
+        </div>
+        <div *ngIf="!error" class="text-[#1965B3]">
+          Libro no encontrado
+        </div>
       </div>
     </ng-template>
   </div>
-  
-  <div *ngIf="loading" class="flex flex-col items-center justify-center min-h-[300px]">
-    <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-[#1C1DAB] border-opacity-50 mb-4"></div>
-    <p class="text-[#666666]">Cargando detalles del libro...</p>
+
+  <!-- Loading state -->
+  <div *ngIf="loading" class="flex flex-col items-center justify-center h-[300px]">
+    <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-[#1965B3] border-opacity-50 mb-4"></div>
+    <p class="text-[#999999]">Cargando detalles del libro...</p>
   </div>
+</div>
   

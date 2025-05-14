@@ -11,6 +11,7 @@ import { User } from '../../../../models/User';
 import { ReadingProgressService } from '../../../../service/reading-progress.service';
 import { ReadingProgress } from '../../../../models/ReadinProgress';
 import { AddToReadingListComponent } from '../../add-to-reading-list/add-to-reading-list.component';
+import { ReviewService } from '../../../../service/review.service';
 
 @Component({
   selector: 'app-book-details',
@@ -24,13 +25,15 @@ export class BookDetailsComponent implements OnInit {
   loading = true;
   error: string | null = null;
   currentUser: User | null = null;
+  averageRating: number = 0;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private bookService: BookService,
     private userService: UserService,
-    private readingProgressService: ReadingProgressService
+    private readingProgressService: ReadingProgressService,
+    private reviewService: ReviewService
   ) {}
 
   ngOnInit(): void {
@@ -46,6 +49,7 @@ export class BookDetailsComponent implements OnInit {
             next: (book) => {
                 this.book = book;
                 this.loading = false;
+                this.loadAverageRating();
             },
             error: (err) => {
                 this.error = 'Error al cargar los detalles del libro';
@@ -57,7 +61,21 @@ export class BookDetailsComponent implements OnInit {
         this.error = 'ID de libro no válido';
         this.loading = false;
     }
-}
+  }
+
+  private loadAverageRating(): void {
+    if (this.book?.id) {
+        this.reviewService.getAverageRatingByBook(this.book.id).subscribe({
+            next: (rating) => {
+                this.averageRating = rating || 0;
+            },
+            error: (error) => {
+                console.error('Error al cargar el rating:', error);
+                this.averageRating = 0;
+            }
+        });
+    }
+  }
 
   onReadNow(): void {
     if (!this.currentUser || !this.book) {
