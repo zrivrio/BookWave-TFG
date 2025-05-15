@@ -1,94 +1,188 @@
-<div class="max-w-7xl mx-auto p-4 md:p-8">
-    <div class="flex justify-between items-center mb-6">
-        <h2 class="text-2xl font-bold text-[#1E0f75]">Gestión de Categorías</h2>
-        <button class="px-4 py-2 bg-[#1C1DAB] hover:bg-[#1E0F75] text-white rounded-lg font-medium transition-colors"
-            (click)="showCreateForm()">
-            Añadir Categoría
-        </button>
-    </div>
+<div class="min-h-screen bg-gradient-to-br from-[#E6F0F7] to-[#F5F5F5] py-8">
+    <div class="max-w-7xl mx-auto px-4">
+        <!-- Encabezado -->
+        <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8">
+            <h2 class="text-2xl font-bold text-[#1E0f75] flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-[#1965B3]" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                </svg>
+                Gestión de Categorías
+            </h2>
 
-    <!-- Buscador -->
-    <div class="mb-6">
-        <input type="text" [(ngModel)]="searchTerm" (input)="filterCategories()" placeholder="Buscar categorías..."
-            class="w-full md:w-1/3 p-2 border border-[#E0E0E0] rounded-lg focus:ring-2 focus:ring-[#1E0f75] focus:border-[#1E0f75] transition">
-        <!-- Agrega esto debajo del buscador -->
-        <div *ngIf="isLoading" class="mb-4 p-4 bg-blue-50 text-blue-700 rounded-lg">
-            Cargando...
         </div>
-        <div *ngIf="errorMessage" class="mb-4 p-4 bg-red-50 text-red-700 rounded-lg">
+
+        <!-- Buscador y Estadísticas -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="md:col-span-2">
+                <div class="relative">
+                    <input type="text" [(ngModel)]="searchTerm" (input)="filterCategories()"
+                        placeholder="Buscar categorías..."
+                        class="w-full pl-12 pr-4 py-3 bg-white border border-[#E0E9F5] rounded-xl focus:ring-2 focus:ring-[#1965B3] focus:border-transparent transition-all shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        class="h-5 w-5 text-[#999999] absolute left-4 top-1/2 transform -translate-y-1/2" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Tarjeta de estadísticas -->
+            <div class="bg-white rounded-xl p-4 border border-[#E0E9F5] shadow-sm hover:shadow-md transition-all">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 bg-[#E6F0F7] rounded-xl flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#1965B3]" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-sm text-[#999999]">Total Categorías</p>
+                        <p class="text-xl font-bold text-[#2A2A2A]">{{filteredCategories.length}}</p>
+                    </div>
+                </div>
+            </div>
+            <button
+                class="w-full sm:w-auto px-6 py-3 bg-[#1965B3] hover:bg-[#3785D8] text-white rounded-xl font-medium transition-all shadow-md flex items-center justify-center gap-2"
+                (click)="showCreateForm()">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                </svg>
+                Añadir Categoría
+            </button>
+        </div>
+
+        <!-- Estados de carga y error -->
+        <div *ngIf="isLoading" class="mb-6 p-4 bg-[#E6F0F7] text-[#1965B3] rounded-xl flex items-center gap-2">
+            <div class="animate-spin rounded-full h-5 w-5 border-2 border-[#1965B3] border-t-transparent"></div>
+            <span>Cargando categorías...</span>
+        </div>
+
+        <div *ngIf="errorMessage"
+            class="mb-6 p-4 bg-[#EBB2C3] bg-opacity-20 text-[#E893C5] rounded-xl flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd"
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                    clip-rule="evenodd" />
+            </svg>
             {{ errorMessage }}
         </div>
-    </div>
 
-    <!-- Tabla de categorías -->
-    <div class="bg-white rounded-xl shadow-sm border border-[#F4F4F4] overflow-x-auto">
-        <table class="w-full">
-            <thead class="bg-[#F8FAFC] border-b border-[#E0E9F5]">
-                <tr>
-                    <th class="px-6 py-3 text-left text-sm font-medium text-[#666666]">ID</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium text-[#666666]">Nombre</th>
-                    <th class="px-6 py-3 text-right text-sm font-medium text-[#666666]">Acciones</th>
-                </tr>
-            </thead>
-            <tbody class="divide-y divide-[#E0E9F5]">
-                <tr *ngFor="let category of filteredCategories" class="hover:bg-[#F8FAFC]">
-                    <td class="px-6 py-4 text-sm text-[#2A2A2A]">{{category.id}}</td>
-                    <td class="px-6 py-4 text-sm text-[#2A2A2A] font-medium">{{category.nombre}}</td>
-                    <td class="px-6 py-4 text-right space-x-2">
-                        <button class="px-3 py-1 text-[#1E0f75] hover:bg-[#E6F0F7] rounded-lg transition-colors"
-                            (click)="editCategory(category)">
-                            Editar
-                        </button>
-                        <button class="px-3 py-1 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                            (click)="deleteCategory(category.id)">
-                            Eliminar
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <div *ngIf="filteredCategories.length === 0" class="p-6 text-center text-[#666666]">
-            No se encontraron categorías
-        </div>
-    </div>
+        <!-- Tabla de categorías -->
+        <div class="bg-white rounded-2xl shadow-lg border border-[#E0E9F5] overflow-hidden">
+            <div class="overflow-x-auto">
+                <div class="max-h-[calc(100vh-16rem)] overflow-y-auto">
+                    <table class="w-full">
+                        <thead class="bg-[#F8F8F8] border-b border-[#E0E9F5] sticky top-0 z-10">
+                            <tr>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-[#666666]">ID</th>
+                                <th class="px-6 py-4 text-left text-sm font-semibold text-[#666666]">Nombre</th>
+                                <th class="px-6 py-4 text-right text-sm font-semibold text-[#666666]">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-[#E0E9F5]">
+                            <tr *ngFor="let category of filteredCategories"
+                                class="hover:bg-[#F8F8F8] transition-colors">
+                                <td class="px-6 py-4 text-sm text-[#2A2A2A]">{{category.id}}</td>
+                                <td class="px-6 py-4">
+                                    <span class="inline-flex items-center gap-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#1965B3]"
+                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                                        </svg>
+                                        <span class="font-medium text-[#2A2A2A]">{{category.nombre}}</span>
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <div class="flex justify-end gap-2">
+                                        <button class="p-2 text-[#1965B3] hover:bg-[#E6F0F7] rounded-lg transition-all"
+                                            (click)="editCategory(category)" title="Editar">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                            </svg>
+                                        </button>
+                                        <button
+                                            class="p-2 text-[#E893C5] hover:bg-[#EBB2C3] hover:bg-opacity-20 rounded-lg transition-all"
+                                            (click)="deleteCategory(category.id)" title="Eliminar">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
 
-    <!-- Modal de edición/creación -->
-    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-        [style.display]="showForm ? 'flex' : 'none'">
-        <div class="bg-white rounded-xl shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-            <div class="p-6">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-xl font-bold text-[#1E0f75]">
-                        {{ isEditing ? 'Editar Categoría' : 'Añadir Nueva Categoría' }}
-                    </h3>
-                    <button class="text-[#666666] hover:text-[#2A2A2A]" (click)="cancelEdit()">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
+                    <!-- Estado vacío -->
+                    <div *ngIf="filteredCategories.length === 0" class="py-12 text-center">
+                        <div class="w-20 h-20 mx-auto mb-4 bg-[#E6F0F7] rounded-full flex items-center justify-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-[#1965B3]" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-[#2A2A2A] mb-2">No se encontraron categorías</h3>
+                        <p class="text-[#999999]">Intenta con otros términos de búsqueda o añade nuevas categorías</p>
+                    </div>
                 </div>
+            </div>
+        </div>
 
-                <form (ngSubmit)="isEditing ? updateCategory() : saveCategory()" class="space-y-4">
-                    <!-- Nombre -->
-                    <div class="space-y-2">
-                        <label class="block text-sm font-medium text-[#666666]">Nombre de la Categoría *</label>
-                        <input type="text" [(ngModel)]="currentCategory.nombre" name="nombre"
-                            class="w-full p-2 border border-[#E0E0E0] rounded-lg focus:ring-2 focus:ring-[#1E0f75] focus:border-[#1E0f75] transition"
-                            required>
+        <!-- Modal de edición/creación -->
+        <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+            [style.display]="showForm ? 'flex' : 'none'">
+            <div class="bg-white rounded-2xl shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xl font-bold text-[#1E0f75] flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#1965B3]" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                            </svg>
+                            {{ isEditing ? 'Editar Categoría' : 'Añadir Nueva Categoría' }}
+                        </h3>
+                        <button
+                            class="p-2 text-[#999999] hover:text-[#2A2A2A] hover:bg-[#F8F8F8] rounded-lg transition-all"
+                            (click)="cancelEdit()">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
                     </div>
 
-                    <div class="flex justify-end gap-3 pt-4">
-                        <button type="button" (click)="cancelEdit()"
-                            class="px-4 py-2 border border-[#1E0f75] text-[#1E0f75] hover:bg-[#E6F0F7] rounded-lg transition-colors">
-                            Cancelar
-                        </button>
-                        <button type="submit"
-                            class="px-6 py-2 bg-[#1C1DAB] hover:bg-[#1E0F75] text-white rounded-lg transition-colors">
-                            {{ isEditing ? 'Actualizar' : 'Crear' }}
-                        </button>
-                    </div>
-                </form>
+                    <form (ngSubmit)="isEditing ? updateCategory() : saveCategory()" class="space-y-6">
+                        <div class="space-y-2">
+                            <label class="block text-sm font-medium text-[#666666]">Nombre de la Categoría *</label>
+                            <input type="text" [(ngModel)]="currentCategory.nombre" name="nombre"
+                                class="w-full px-4 py-3 bg-[#F8F8F8] border border-[#E0E9F5] rounded-xl focus:ring-2 focus:ring-[#1965B3] focus:border-transparent transition-all"
+                                required>
+                        </div>
+
+                        <div class="flex justify-end gap-3 pt-6 border-t border-[#E0E9F5]">
+                            <button type="button" (click)="cancelEdit()"
+                                class="px-6 py-3 border border-[#1965B3] text-[#1965B3] hover:bg-[#E6F0F7] rounded-xl transition-all">
+                                Cancelar
+                            </button>
+                            <button type="submit"
+                                class="px-6 py-3 bg-[#1965B3] hover:bg-[#3785D8] text-white rounded-xl shadow-md transition-all">
+                                {{ isEditing ? 'Actualizar' : 'Crear' }}
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

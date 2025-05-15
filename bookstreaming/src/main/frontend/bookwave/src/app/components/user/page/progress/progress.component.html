@@ -1,100 +1,140 @@
-<div class="container mx-auto p-4">
+<div class="min-h-screen bg-gradient-to-br from-[#E6F0F7] to-[#F5F5F5] py-8 px-4">
   <!-- Estado no autenticado -->
   <div *ngIf="!isLoggedIn" class="flex flex-col items-center justify-center min-h-[60vh] text-center">
-    <div class="bg-white p-8 rounded-xl shadow-sm border border-[#E0E9F5] max-w-lg w-full">
+    <div class="bg-white p-8 rounded-2xl shadow-lg border border-[#E0E9F5] max-w-lg w-full">
+      <div class="w-20 h-20 mx-auto mb-6 bg-[#E6F0F7] rounded-full flex items-center justify-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-[#1965B3]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+        </svg>
+      </div>
       <h2 class="text-2xl font-bold text-[#2A2A2A] mb-4">Seguimiento de lectura</h2>
-      <p class="text-[#666666] mb-6">Inicia sesión para hacer un seguimiento de tu progreso de lectura</p>
+      <p class="text-[#999999] mb-6">Inicia sesión para hacer un seguimiento de tu progreso de lectura</p>
       <a routerLink="/login" 
-         class="inline-block px-6 py-3 bg-[#1C1DAB] hover:bg-[#1E0F75] text-white rounded-lg font-medium transition-colors">
+         class="inline-block px-6 py-3 bg-[#1965B3] hover:bg-[#3785D8] text-white rounded-xl font-medium transition-all shadow-md">
         Iniciar Sesión
       </a>
     </div>
   </div>
 
   <!-- Contenido para usuarios autenticados -->
-  <div *ngIf="isLoggedIn">
-    <h2 class="text-2xl font-bold mb-4">Mis libros en progreso</h2>
-
-    <!-- Estados de carga y error -->
-    <div *ngIf="isLoading" class="flex justify-center py-8">
-      <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-500"></div>
+  <div *ngIf="isLoggedIn" class="max-w-7xl mx-auto">
+    <div class="flex items-center justify-between mb-8">
+      <h2 class="text-2xl font-bold text-[#1E0f75] flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-[#1965B3]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+        </svg>
+        Mis libros en progreso
+      </h2>
     </div>
 
-    <div *ngIf="error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+    <!-- Estados de carga y error -->
+    <div *ngIf="isLoading" class="flex flex-col items-center justify-center py-16">
+      <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-[#1965B3] border-opacity-50 mb-4"></div>
+      <p class="text-[#999999]">Cargando tu progreso...</p>
+    </div>
+
+    <div *ngIf="error" class="bg-[#EBB2C3] bg-opacity-20 text-[#E893C5] px-6 py-4 rounded-xl mb-6 flex items-center gap-3">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+      </svg>
       {{ error }}
     </div>
 
-    <div *ngIf="!isLoading && books.length === 0" class="text-center py-8">
-      <p>No tienes libros en progreso</p>
+    <div *ngIf="!isLoading && books.length === 0" class="text-center py-16 bg-white rounded-2xl border border-[#E0E9F5] shadow-sm">
+      <div class="w-20 h-20 mx-auto mb-4 bg-[#E6F0F7] rounded-full flex items-center justify-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-[#1965B3]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+        </svg>
+      </div>
+      <h3 class="text-xl font-semibold text-[#2A2A2A] mb-2">No tienes libros en progreso</h3>
+      <p class="text-[#999999] mb-6">¡Comienza a leer y haz un seguimiento de tu progreso!</p>
+      <a routerLink="/categories" class="inline-block px-6 py-3 bg-[#1965B3] hover:bg-[#3785D8] text-white rounded-xl font-medium transition-all shadow-md">
+        Explorar libros
+      </a>
     </div>
 
     <!-- Grid de libros -->
-    <div *ngIf="!isLoading && books.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      <div *ngFor="let book of books" class="border rounded-lg p-4 shadow hover:shadow-md transition-shadow">
-        <div class="flex items-start space-x-4">
+    <div *ngIf="!isLoading && books.length > 0" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div *ngFor="let book of books" class="bg-white rounded-2xl p-6 shadow-sm border border-[#E0E9F5] hover:shadow-lg transition-all">
+        <div class="flex gap-6">
           <!-- Portada del libro -->
-          <a [routerLink]="['/book', book.id]" class="block">
+          <a [routerLink]="['/book', book.id]" class="block shrink-0">
             <img [src]="book.cover || 'assets/images/default-book-cover.jpg'" 
                  [alt]="book.title" 
-                 class="w-24 h-36 object-cover rounded hover:opacity-80 transition-opacity"
+                 class="w-32 h-48 object-cover rounded-xl shadow-sm hover:opacity-90 transition-opacity"
                  onerror="this.src='assets/images/default-book-cover.jpg'">
           </a>
           
           <!-- Detalles del libro -->
-          <div class="flex-1">
+          <div class="flex-1 min-w-0">
             <a [routerLink]="['/book', book.id]" class="block group">
-              <h3 class="font-semibold group-hover:text-blue-600 transition-colors">{{ book.title }}</h3>
-              <p class="text-gray-600">{{ book.author }}</p>
+              <h3 class="text-lg font-semibold text-[#2A2A2A] group-hover:text-[#1965B3] transition-colors line-clamp-2">
+                {{ book.title }}
+              </h3>
+              <p class="text-[#999999] mt-1">{{ book.author }}</p>
             </a>
             
             <!-- Barra de progreso -->
-            <div class="mt-2">
-              <div class="flex items-center justify-between mb-2">
-                <span>Progreso: {{ getProgressPercentage(book) }}% ({{ currentPages[book.id] || 0 }}/{{ book.totalPages || 0 }} páginas)</span>
+            <div class="mt-4 space-y-4">
+              <div class="flex items-center justify-between">
+                <span class="text-sm text-[#2A2A2A]">
+                  {{ currentPages[book.id] || 0 }}/{{ book.totalPages || 0 }} páginas
+                </span>
                 <button 
                   (click)="toggleEditMode(book.id)" 
-                  class="text-blue-500 hover:text-blue-700 transition-colors">
+                  class="text-[#1965B3] hover:text-[#3785D8] text-sm font-medium transition-colors">
                   {{ editingProgress[book.id] ? 'Guardar' : 'Editar' }}
                 </button>
               </div>
 
-              <div *ngIf="!editingProgress[book.id]" class="w-full bg-gray-200 rounded-full h-2.5">
-                <div class="h-2.5 rounded-full transition-all duration-300" 
-                     [ngClass]="getProgressColor(getProgressPercentage(book))"
-                     [style.width.%]="getProgressPercentage(book)">
+              <div *ngIf="!editingProgress[book.id]">
+                <div class="w-full bg-[#E6F0F7] rounded-full h-2">
+                  <div class="h-2 rounded-full transition-all duration-300 bg-[#1965B3]"
+                       [style.width.%]="getProgressPercentage(book)">
+                  </div>
                 </div>
-            </div>
+                <p class="text-sm text-[#999999] mt-2">
+                  Progreso: {{ getProgressPercentage(book) }}%
+                </p>
+              </div>
             
-            <div *ngIf="editingProgress[book.id]" class="space-y-2">
-                <div class="flex items-center">
-                    <input 
-                        type="number" 
-                        [(ngModel)]="currentPages[book.id]"
-                        (keyup.enter)="updateProgress(book)"
-                        (blur)="updateProgress(book)"
-                        class="w-24 border rounded px-2 py-1 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        [min]="0" 
-                        [max]="book.totalPages || 0"
-                        placeholder="Páginas leídas">
-                    <span class="ml-2 text-sm text-gray-600">
-                        / {{ book.totalPages || 0 }} páginas
-                    </span>
+              <div *ngIf="editingProgress[book.id]" class="space-y-3">
+                <div class="flex items-center gap-3">
+                  <input 
+                    type="number" 
+                    [(ngModel)]="currentPages[book.id]"
+                    (keyup.enter)="updateProgress(book)"
+                    (blur)="updateProgress(book)"
+                    class="w-24 px-3 py-2 bg-[#F8F8F8] border border-[#E0E9F5] rounded-lg focus:ring-2 focus:ring-[#1965B3] focus:border-transparent"
+                    [min]="0" 
+                    [max]="book.totalPages || 0"
+                    placeholder="Páginas">
+                  <span class="text-sm text-[#999999]">
+                    de {{ book.totalPages || 0 }} páginas
+                  </span>
                 </div>
-                <div class="text-sm text-blue-600">
-                    Progreso: {{ calculatePercentage(currentPages[book.id] || 0, book.totalPages || 0) }}%
-                </div>
-            </div>
+                <p class="text-sm text-[#1965B3]">
+                  {{ calculatePercentage(currentPages[book.id] || 0, book.totalPages || 0) }}% completado
+                </p>
+              </div>
 
-            <!-- Acciones -->
-            <div class="mt-4 flex justify-between">
-              <a [routerLink]="['/read', book.id]" 
-                 class="text-blue-500 hover:text-blue-700 transition-colors">
-                Continuar leyendo
-              </a>
-              <button (click)="deleteProgress(book)" 
-                      class="text-red-500 hover:text-red-700 transition-colors">
-                Eliminar
-              </button>
+              <!-- Acciones -->
+              <div class="flex items-center justify-between pt-4 border-t border-[#E0E9F5]">
+                <a [routerLink]="['/categories']" 
+                   class="inline-flex items-center gap-2 px-4 py-2 bg-[#1965B3] hover:bg-[#3785D8] text-white rounded-lg text-sm font-medium transition-all">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                  </svg>
+                  Continuar leyendo
+                </a>
+                <button (click)="deleteProgress(book)" 
+                        class="inline-flex items-center gap-2 px-4 py-2 text-[#E893C5] hover:text-white hover:bg-[#E893C5] rounded-lg text-sm font-medium transition-all">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                  </svg>
+                  Eliminar
+                </button>
+              </div>
             </div>
           </div>
         </div>

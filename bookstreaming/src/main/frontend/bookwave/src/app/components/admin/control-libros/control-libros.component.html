@@ -1,189 +1,243 @@
-<div class="max-w-7xl mx-auto p-4 md:p-8">
-  <div class="flex justify-between items-center mb-6">
-    <h2 class="text-2xl font-bold text-[#1E0f75]">Gestión de Libros</h2>
-    <button class="px-4 py-2 bg-[#1C1DAB] hover:bg-[#1E0F75] text-white rounded-lg font-medium transition-colors" 
-            (click)="showCreateForm()">
-      Añadir Libro
-    </button>
-  </div>
-
-  <!-- Buscador -->
-  <div class="mb-6">
-    <input type="text" 
-           [(ngModel)]="searchTerm" 
-           (input)="filterBooks()"
-           placeholder="Buscar libros..."
-           class="w-full md:w-1/3 p-2 border border-[#E0E0E0] rounded-lg focus:ring-2 focus:ring-[#1E0f75] focus:border-[#1E0f75] transition">
-  </div>
-
-  <!-- Tabla de libros -->
-  <div class="bg-white rounded-xl shadow-sm border border-[#F4F4F4] overflow-x-auto">
-    <table class="w-full">
-      <thead class="bg-[#F8FAFC] border-b border-[#E0E9F5]">
-        <tr>
-          <th class="px-6 py-3 text-left text-sm font-medium text-[#666666]">Portada</th>
-          <th class="px-6 py-3 text-left text-sm font-medium text-[#666666]">Título</th>
-          <th class="px-6 py-3 text-left text-sm font-medium text-[#666666]">Autor</th>
-          <th class="px-6 py-3 text-left text-sm font-medium text-[#666666]">Año</th>
-          <th class="px-6 py-3 text-left text-sm font-medium text-[#666666]">Idioma</th>
-          <th class="px-6 py-3 text-right text-sm font-medium text-[#666666]">Acciones</th>
-        </tr>
-      </thead>
-      <tbody class="divide-y divide-[#E0E9F5]">
-        <tr *ngFor="let book of filteredBooks" class="hover:bg-[#F8FAFC]">
-          <td class="px-6 py-4">
-            <img [src]="book.cover || 'assets/default-book-cover.jpg'" 
-                 alt="Portada" 
-                 class="w-12 h-16 object-cover rounded">
-          </td>
-          <td class="px-6 py-4 text-sm text-[#2A2A2A] font-medium">{{book.title}}</td>
-          <td class="px-6 py-4 text-sm text-[#2A2A2A]">{{book.author}}</td>
-          <td class="px-6 py-4 text-sm text-[#2A2A2A]">{{book.year}}</td>
-          <td class="px-6 py-4 text-sm text-[#2A2A2A]">{{getLanguageName(book.language)}}</td>
-          <td class="px-6 py-4 text-right space-x-2">
-            <button class="px-3 py-1 text-[#1E0f75] hover:bg-[#E6F0F7] rounded-lg transition-colors" 
-                    (click)="editBook(book)">
-              Editar
-            </button>
-            <button class="px-3 py-1 text-red-600 hover:bg-red-50 rounded-lg transition-colors" 
-                    (click)="deleteBook(book.id)">
-              Eliminar
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <div *ngIf="filteredBooks.length === 0" class="p-6 text-center text-[#666666]">
-      No se encontraron libros
+<div class="min-h-screen bg-gradient-to-br from-[#E6F0F7] to-[#F5F5F5] py-6">
+  <div class="max-w-7xl mx-auto px-4">
+    <!-- Encabezado -->
+    <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8">
+      <h2 class="text-2xl font-bold text-[#1E0f75] flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-[#1965B3]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+        </svg>
+        Gestión de Libros
+      </h2>
     </div>
-  </div>
 
-  <!-- Modal de edición/creación -->
-  <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" 
-       [style.display]="showForm ? 'flex' : 'none'">
-    <div class="bg-white rounded-xl shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-      <div class="p-6">
-        <div class="flex justify-between items-center mb-6">
-          <h3 class="text-xl font-bold text-[#1E0f75]">
-            {{ isEditing ? 'Editar Libro' : 'Añadir Nuevo Libro' }}
-          </h3>
-          <button class="text-[#666666] hover:text-[#2A2A2A]" (click)="cancelEdit()">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-            </svg>
-          </button>
+    <!-- Buscador y Estadísticas -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+      <div class="md:col-span-2">
+        <div class="relative">
+          <input type="text" 
+                 [(ngModel)]="searchTerm" 
+                 (input)="filterBooks()"
+                 placeholder="Buscar por título, autor o año..."
+                 class="w-full pl-12 pr-4 py-3 bg-white border border-[#E0E9F5] rounded-xl focus:ring-2 focus:ring-[#1965B3] focus:border-transparent transition-all shadow-sm">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#999999] absolute left-4 top-1/2 transform -translate-y-1/2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
         </div>
-        
-        <form (ngSubmit)="isEditing ? updateBook() : createBook()" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <!-- Título -->
-          <div class="space-y-2">
-            <label class="block text-sm font-medium text-[#666666]">Título *</label>
-            <input 
-              type="text" 
-              [(ngModel)]="currentBook.title"
-              name="title"
-              class="w-full p-2 border border-[#E0E0E0] rounded-lg focus:ring-2 focus:ring-[#1E0f75] focus:border-[#1E0f75] transition"
-              required
-            >
-          </div>
+      </div>
 
-          <!-- Autor -->
-          <div class="space-y-2">
-            <label class="block text-sm font-medium text-[#666666]">Autor *</label>
-            <input 
-              type="text" 
-              [(ngModel)]="currentBook.author"
-              name="author"
-              class="w-full p-2 border border-[#E0E0E0] rounded-lg focus:ring-2 focus:ring-[#1E0f75] focus:border-[#1E0f75] transition"
-              required
-            >
+      <!-- Tarjetas de estadísticas -->
+      <div class="bg-white rounded-xl p-4 border border-[#E0E9F5] shadow-sm hover:shadow-md transition-all">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 bg-[#E6F0F7] rounded-xl flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#1965B3]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+            </svg>
           </div>
-
-          <!-- Idioma -->
-          <div class="space-y-2">
-            <label class="block text-sm font-medium text-[#666666]">Idioma *</label>
-            <select
-              [(ngModel)]="currentBook.language"
-              name="language"
-              class="w-full p-2 border border-[#E0E0E0] rounded-lg focus:ring-2 focus:ring-[#1E0f75] focus:border-[#1E0f75] transition"
-              required
-            >
-              <option value="es">Español</option>
-              <option value="en">Inglés</option>
-              <option value="fr">Francés</option>
-              <option value="de">Alemán</option>
-              <option value="it">Italiano</option>
-            </select>
+          <div>
+            <p class="text-sm text-[#999999]">Total Libros</p>
+            <p class="text-xl font-bold text-[#2A2A2A]">{{filteredBooks.length}}</p>
           </div>
+        </div>
+      </div>
 
-          <!-- Año -->
-          <div class="space-y-2">
-            <label class="block text-sm font-medium text-[#666666]">Año *</label>
-            <input 
-              type="number" 
-              [(ngModel)]="currentBook.year"
-              name="year"
-              min="1900"
-              [max]="currentYear"
-              class="w-full p-2 border border-[#E0E0E0] rounded-lg focus:ring-2 focus:ring-[#1E0f75] focus:border-[#1E0f75] transition"
-              required
-            >
+      <button class="w-full sm:w-auto px-6 py-3 bg-[#1965B3] hover:bg-[#3785D8] text-white rounded-xl font-medium transition-all shadow-md flex items-center justify-center gap-2" 
+              (click)="showCreateForm()">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+        </svg>
+        Añadir Libro
+      </button>
+    </div>
+
+    <!-- Tabla de libros -->
+    <div class="bg-white rounded-2xl shadow-lg border border-[#E0E9F5]">
+      <div class="overflow-x-auto">
+        <div class="max-h-[calc(100vh-16rem)] overflow-y-auto">
+          <table class="w-full">
+            <thead class="bg-[#F8F8F8] border-b border-[#E0E9F5] sticky top-0 z-10">
+              <tr>
+                <th class="px-6 py-4 text-left text-sm font-semibold text-[#666666]">Portada</th>
+                <th class="px-6 py-4 text-left text-sm font-semibold text-[#666666]">Título</th>
+                <th class="px-6 py-4 text-left text-sm font-semibold text-[#666666]">Autor</th>
+                <th class="px-6 py-4 text-left text-sm font-semibold text-[#666666]">Año</th>
+                <th class="px-6 py-4 text-left text-sm font-semibold text-[#666666]">Idioma</th>
+                <th class="px-6 py-4 text-right text-sm font-semibold text-[#666666]">Acciones</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-[#E0E9F5]">
+            <tr *ngFor="let book of filteredBooks" class="hover:bg-[#F8F8F8] transition-colors">
+              <td class="px-6 py-4">
+                <img [src]="book.cover || 'assets/images/default-book-cover.jpg'" 
+                     [alt]="book.title"
+                     class="w-16 h-24 object-cover rounded-lg shadow-sm hover:shadow-md transition-all"
+                     onerror="this.src='assets/images/default-book-cover.jpg'">
+              </td>
+              <td class="px-6 py-4">
+                <p class="font-medium text-[#2A2A2A]">{{book.title}}</p>
+                <p *ngIf="book.totalPages" class="text-sm text-[#999999] mt-1">{{book.totalPages}} páginas</p>
+              </td>
+              <td class="px-6 py-4 text-[#2A2A2A]">{{book.author}}</td>
+              <td class="px-6 py-4 text-[#2A2A2A]">{{book.year}}</td>
+              <td class="px-6 py-4">
+                <span class="px-3 py-1 bg-[#E6F0F7] text-[#1965B3] rounded-full text-sm">
+                  {{getLanguageName(book.language)}}
+                </span>
+              </td>
+              <td class="px-6 py-4 text-right">
+                <div class="flex justify-end gap-2">
+                  <button class="p-2 text-[#1965B3] hover:bg-[#E6F0F7] rounded-lg transition-all" 
+                          (click)="editBook(book)"
+                          title="Editar">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                    </svg>
+                  </button>
+                  <button class="p-2 text-[#E893C5] hover:bg-[#EBB2C3] hover:bg-opacity-20 rounded-lg transition-all" 
+                          (click)="deleteBook(book.id)"
+                          title="Eliminar">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    </svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Estado vacío -->
+      <div *ngIf="filteredBooks.length === 0" class="py-12 text-center">
+        <div class="w-20 h-20 mx-auto mb-4 bg-[#E6F0F7] rounded-full flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-[#1965B3]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold text-[#2A2A2A] mb-2">No se encontraron libros</h3>
+        <p class="text-[#999999]">Intenta con otros términos de búsqueda o añade nuevos libros</p>
+      </div>
+    </div>
+
+    <!-- Modal de edición/creación -->
+    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" 
+         [style.display]="showForm ? 'flex' : 'none'">
+      <div class="bg-white rounded-2xl shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+        <div class="p-6">
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="text-xl font-bold text-[#1E0f75] flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#1965B3]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+              </svg>
+              {{ isEditing ? 'Editar Libro' : 'Añadir Nuevo Libro' }}
+            </h3>
+            <button class="p-2 text-[#999999] hover:text-[#2A2A2A] hover:bg-[#F8F8F8] rounded-lg transition-all" 
+                    (click)="cancelEdit()">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+            </button>
           </div>
+          
+          <form (ngSubmit)="isEditing ? updateBook() : createBook()" class="space-y-6">
+            <!-- Título y Autor -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="space-y-2">
+                <label class="block text-sm font-medium text-[#666666]">Título *</label>
+                <input type="text" 
+                       [(ngModel)]="currentBook.title"
+                       name="title"
+                       class="w-full px-4 py-3 bg-[#F8F8F8] border border-[#E0E9F5] rounded-xl focus:ring-2 focus:ring-[#1965B3] focus:border-transparent transition-all"
+                       required>
+              </div>
 
-          <!-- Descripción -->
-          <div class="space-y-2 md:col-span-2">
-            <label class="block text-sm font-medium text-[#666666]">Descripción</label>
-            <textarea 
-              [(ngModel)]="currentBook.description"
-              name="description"
-              class="w-full p-2 border border-[#E0E0E0] rounded-lg focus:ring-2 focus:ring-[#1E0f75] focus:border-[#1E0f75] transition"
-              rows="3"
-            ></textarea>
-          </div>
-
-          <!-- URL de la Portada -->
-          <div class="space-y-2 md:col-span-2">
-            <label class="block text-sm font-medium text-[#666666]">URL de la Portada</label>
-            <input 
-              type="text" 
-              [(ngModel)]="currentBook.cover"
-              name="cover"
-              class="w-full p-2 border border-[#E0E0E0] rounded-lg focus:ring-2 focus:ring-[#1E0f75] focus:border-[#1E0f75] transition"
-            >
-            <div *ngIf="currentBook.cover" class="mt-2">
-              <p class="text-sm text-[#666666] mb-1">Vista previa:</p>
-              <img [src]="currentBook.cover" alt="Portada" class="h-32 object-contain border rounded">
+              <div class="space-y-2">
+                <label class="block text-sm font-medium text-[#666666]">Autor *</label>
+                <input type="text" 
+                       [(ngModel)]="currentBook.author"
+                       name="author"
+                       class="w-full px-4 py-3 bg-[#F8F8F8] border border-[#E0E9F5] rounded-xl focus:ring-2 focus:ring-[#1965B3] focus:border-transparent transition-all"
+                       required>
+              </div>
             </div>
-          </div>
 
-          <!-- Total de páginas -->
-          <div class="space-y-2">
-            <label class="block text-sm font-medium text-[#666666]">Total de páginas</label>
-            <input 
-              type="number" 
-              [(ngModel)]="currentBook.totalPages"
-              name="totalPages"
-              min="1"
-              class="w-full p-2 border border-[#E0E0E0] rounded-lg focus:ring-2 focus:ring-[#1E0f75] focus:border-[#1E0f75] transition"
-            >
-          </div>
+            <!-- Idioma y Año -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="space-y-2">
+                <label class="block text-sm font-medium text-[#666666]">Idioma *</label>
+                <select [(ngModel)]="currentBook.language"
+                        name="language"
+                        class="w-full px-4 py-3 bg-[#F8F8F8] border border-[#E0E9F5] rounded-xl focus:ring-2 focus:ring-[#1965B3] focus:border-transparent transition-all"
+                        required>
+                  <option value="es">Español</option>
+                  <option value="en">Inglés</option>
+                  <option value="fr">Francés</option>
+                  <option value="de">Alemán</option>
+                  <option value="it">Italiano</option>
+                </select>
+              </div>
 
-          <div class="md:col-span-2 flex justify-end gap-3 pt-4">
-            <button 
-              type="button"
-              (click)="cancelEdit()"
-              class="px-4 py-2 border border-[#1E0f75] text-[#1E0f75] hover:bg-[#E6F0F7] rounded-lg transition-colors"
-            >
-              Cancelar
-            </button>
-            <button 
-              type="submit"
-              class="px-6 py-2 bg-[#1C1DAB] hover:bg-[#1E0F75] text-white rounded-lg transition-colors"
-            >
-              {{ isEditing ? 'Actualizar' : 'Crear' }}
-            </button>
-          </div>
-        </form>
+              <div class="space-y-2">
+                <label class="block text-sm font-medium text-[#666666]">Año *</label>
+                <input type="number" 
+                       [(ngModel)]="currentBook.year"
+                       name="year"
+                       min="1900"
+                       [max]="currentYear"
+                       class="w-full px-4 py-3 bg-[#F8F8F8] border border-[#E0E9F5] rounded-xl focus:ring-2 focus:ring-[#1965B3] focus:border-transparent transition-all"
+                       required>
+              </div>
+            </div>
+
+            <!-- Descripción -->
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-[#666666]">Descripción</label>
+              <textarea [(ngModel)]="currentBook.description"
+                        name="description"
+                        rows="4"
+                        class="w-full px-4 py-3 bg-[#F8F8F8] border border-[#E0E9F5] rounded-xl focus:ring-2 focus:ring-[#1965B3] focus:border-transparent transition-all resize-none"></textarea>
+            </div>
+
+            <!-- URL de la Portada -->
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-[#666666]">URL de la Portada</label>
+              <input type="text" 
+                     [(ngModel)]="currentBook.cover"
+                     name="cover"
+                     class="w-full px-4 py-3 bg-[#F8F8F8] border border-[#E0E9F5] rounded-xl focus:ring-2 focus:ring-[#1965B3] focus:border-transparent transition-all">
+              
+              <div *ngIf="currentBook.cover" class="mt-4 p-4 bg-[#F8F8F8] rounded-xl border border-[#E0E9F5]">
+                <p class="text-sm text-[#666666] mb-2">Vista previa:</p>
+                <img [src]="currentBook.cover" 
+                     [alt]="currentBook.title"
+                     class="h-40 object-contain mx-auto"
+                     onerror="this.src='assets/images/default-book-cover.jpg'">
+              </div>
+            </div>
+
+            <!-- Total de páginas -->
+            <div class="space-y-2">
+              <label class="block text-sm font-medium text-[#666666]">Total de páginas</label>
+              <input type="number" 
+                     [(ngModel)]="currentBook.totalPages"
+                     name="totalPages"
+                     min="1"
+                     class="w-full px-4 py-3 bg-[#F8F8F8] border border-[#E0E9F5] rounded-xl focus:ring-2 focus:ring-[#1965B3] focus:border-transparent transition-all">
+            </div>
+
+            <!-- Botones de acción -->
+            <div class="flex flex-col sm:flex-row justify-end gap-3 pt-6 border-t border-[#E0E9F5]">
+              <button type="button"
+                      (click)="cancelEdit()"
+                      class="px-6 py-3 border border-[#1965B3] text-[#1965B3] hover:bg-[#E6F0F7] rounded-xl transition-all">
+                Cancelar
+              </button>
+              <button type="submit"
+                      class="px-6 py-3 bg-[#1965B3] hover:bg-[#3785D8] text-white rounded-xl shadow-md transition-all">
+                {{ isEditing ? 'Actualizar Libro' : 'Crear Libro' }}
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>

@@ -15,6 +15,8 @@ import { Book } from '../../../models/Book';
 export class ControlListasComponent implements OnInit {
   readingLists: ReadingList[] = [];
   selectedList: ReadingList | null = null;
+  selectedUser: any = null;
+  expandedUsers: Set<number> = new Set();
   editForm: FormGroup;
   loading = false;
   error = '';
@@ -100,5 +102,37 @@ export class ControlListasComponent implements OnInit {
         }
       });
     }
+  }
+
+  getUsersWithLists(): any[] {
+    const usersMap = new Map();
+    this.readingLists.forEach(list => {
+      if (list.user && !usersMap.has(list.user.id)) {
+        usersMap.set(list.user.id, list.user);
+      }
+    });
+    return Array.from(usersMap.values());
+  }
+
+  getUserLists(user: any): ReadingList[] {
+    return this.readingLists.filter(list => list.user.id === user.id);
+  }
+
+  getTotalBooksInLists(user: any): number {
+    return this.getUserLists(user).reduce((total, list) => total + (list.books?.length || 0), 0);
+  }
+
+  toggleUserLists(user: any): void {
+    if (this.isUserExpanded(user)) {
+      this.expandedUsers.delete(user.id);
+      this.selectedUser = null;
+    } else {
+      this.expandedUsers.add(user.id);
+      this.selectedUser = user;
+    }
+  }
+
+  isUserExpanded(user: any): boolean {
+    return this.expandedUsers.has(user.id);
   }
 }

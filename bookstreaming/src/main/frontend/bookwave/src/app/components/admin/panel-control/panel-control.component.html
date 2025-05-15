@@ -1,171 +1,237 @@
-<div class="max-w-7xl mx-auto p-4 md:p-8">
-    <div class="flex justify-between items-center mb-6">
-        <h2 class="text-2xl font-bold text-[#1E0f75]">Panel de Control - Solicitudes de Ayuda</h2>
-        <div class="flex gap-2">
-            <span class="px-3 py-1 bg-[#E6F0F7] text-[#1E0f75] rounded-full text-sm">
-                Total: {{helpRequests.length}}
-            </span>
-        </div>
+<div class="min-h-screen bg-gradient-to-br from-[#E6F0F7] to-[#F5F5F5] py-8">
+  <div class="max-w-7xl mx-auto px-4">
+    <!-- Encabezado -->
+    <div class="flex justify-between items-center mb-8">
+      <h2 class="text-2xl font-bold text-[#1E0f75] flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-[#1965B3]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/>
+        </svg>
+        Panel de Control - Solicitudes de Ayuda
+      </h2>
+      <div class="px-4 py-2 bg-[#E6F0F7] text-[#1965B3] rounded-xl font-medium">
+        Total: {{helpRequests.length}} solicitudes
+      </div>
     </div>
 
     <!-- Estado de carga y error -->
-    <div *ngIf="loading" class="mb-4 p-4 bg-blue-50 text-blue-700 rounded-lg">
-        Cargando solicitudes...
+    <div *ngIf="loading" class="flex items-center justify-center p-6 bg-white rounded-2xl border border-[#E0E9F5] mb-6">
+      <div class="animate-spin rounded-full h-10 w-10 border-t-4 border-[#1965B3] border-opacity-50"></div>
+      <span class="ml-3 text-[#999999]">Cargando solicitudes...</span>
     </div>
-    <div *ngIf="error" class="mb-4 p-4 bg-red-50 text-red-700 rounded-lg">
-        {{error}}
+
+    <div *ngIf="error" class="p-4 bg-[#EBB2C3] bg-opacity-20 text-[#E893C5] rounded-xl mb-6 flex items-center gap-2">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+      </svg>
+      {{error}}
     </div>
 
     <!-- Tarjetas de estado -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4">
-            <div class="flex items-center justify-between">
-                <h3 class="text-blue-700 font-semibold">Pendientes</h3>
-                <span class="text-2xl font-bold text-blue-700">
-                    {{getStatusRequests(HelpStatus.PENDING).length}}
-                </span>
+      <!-- Pendientes -->
+      <div class="bg-white rounded-2xl p-6 border border-[#E0E9F5] hover:shadow-lg transition-all">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 bg-[#E6F0F7] rounded-xl flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#1965B3]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
             </div>
+            <h3 class="text-[#2A2A2A] font-semibold">Pendientes</h3>
+          </div>
+          <span class="text-2xl font-bold text-[#1965B3]">
+            {{getStatusRequests(HelpStatus.PENDING).length}}
+          </span>
         </div>
-        <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl p-4">
-            <div class="flex items-center justify-between">
-                <h3 class="text-yellow-700 font-semibold">En Proceso</h3>
-                <span class="text-2xl font-bold text-yellow-700">
-                    {{getStatusRequests(HelpStatus.IN_PROGRESS).length}}
-                </span>
+      </div>
+
+      <!-- En Proceso -->
+      <div class="bg-white rounded-2xl p-6 border border-[#E0E9F5] hover:shadow-lg transition-all">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 bg-[#E6F0F7] rounded-xl flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#BF8CE1]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+              </svg>
             </div>
+            <h3 class="text-[#2A2A2A] font-semibold">En Proceso</h3>
+          </div>
+          <span class="text-2xl font-bold text-[#BF8CE1]">
+            {{getStatusRequests(HelpStatus.IN_PROGRESS).length}}
+          </span>
         </div>
-        <div class="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-4">
-            <div class="flex items-center justify-between">
-                <h3 class="text-green-700 font-semibold">Completadas</h3>
-                <span class="text-2xl font-bold text-green-700">
-                    {{getStatusRequests(HelpStatus.RESOLVED).length}}
-                </span>
+      </div>
+
+      <!-- Completadas -->
+      <div class="bg-white rounded-2xl p-6 border border-[#E0E9F5] hover:shadow-lg transition-all">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 bg-[#E6F0F7] rounded-xl flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#3785D8]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
             </div>
+            <h3 class="text-[#2A2A2A] font-semibold">Completadas</h3>
+          </div>
+          <span class="text-2xl font-bold text-[#3785D8]">
+            {{getStatusRequests(HelpStatus.RESOLVED).length}}
+          </span>
         </div>
-        <div class="bg-gradient-to-br from-red-50 to-red-100 rounded-xl p-4">
-            <div class="flex items-center justify-between">
-                <h3 class="text-red-700 font-semibold">Canceladas</h3>
-                <span class="text-2xl font-bold text-red-700">
-                    {{getStatusRequests(HelpStatus.CANCELLED).length}}
-                </span>
+      </div>
+
+      <!-- Canceladas -->
+      <div class="bg-white rounded-2xl p-6 border border-[#E0E9F5] hover:shadow-lg transition-all">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 bg-[#E6F0F7] rounded-xl flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#E893C5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+              </svg>
             </div>
+            <h3 class="text-[#2A2A2A] font-semibold">Canceladas</h3>
+          </div>
+          <span class="text-2xl font-bold text-[#E893C5]">
+            {{getStatusRequests(HelpStatus.CANCELLED).length}}
+          </span>
         </div>
+      </div>
     </div>
 
     <!-- Kanban Board -->
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        <!-- Columna Pendientes -->
-        <div class="bg-gray-50 rounded-xl p-4">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="font-semibold text-gray-700">Pendientes</h3>
-                <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
-                    {{getStatusRequests(HelpStatus.PENDING).length}}
-                </span>
-            </div>
-            <div class="space-y-3">
-                <div *ngFor="let request of getStatusRequests(HelpStatus.PENDING)"
-                     class="bg-white p-4 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-                    <div class="flex justify-between items-start mb-2">
-                        <h4 class="font-medium text-gray-900">{{request.subject}}</h4>
-                        <span class="text-xs text-gray-500">{{request.createdAt | date:'short'}}</span>
-                    </div>
-                    <p class="text-sm text-gray-600 mb-3">{{request.message}}</p>
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs text-gray-500">{{request.user.username}}</span>
-                        <button (click)="updateHelpStatus(request, HelpStatus.IN_PROGRESS)"
-                                class="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full hover:bg-blue-200 transition-colors">
-                            Iniciar
-                        </button>
-                    </div>
-                </div>
-            </div>
+      <!-- Columna Pendientes -->
+      <div class="bg-white rounded-2xl p-6 border border-[#E0E9F5]">
+        <div class="flex items-center justify-between mb-6">
+          <div class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#1965B3]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <h3 class="font-semibold text-[#2A2A2A]">Pendientes</h3>
+          </div>
+          <span class="px-3 py-1 bg-[#E6F0F7] text-[#1965B3] rounded-xl text-sm font-medium">
+            {{getStatusRequests(HelpStatus.PENDING).length}}
+          </span>
         </div>
+        <div class="space-y-4">
+          <div *ngFor="let request of getStatusRequests(HelpStatus.PENDING)"
+               class="bg-[#F8F8F8] p-4 rounded-xl border border-[#E0E9F5] hover:shadow-md transition-all">
+            <div class="flex justify-between items-start mb-3">
+              <h4 class="font-medium text-[#2A2A2A]">{{request.subject}}</h4>
+              <span class="text-xs text-[#999999]">{{request.createdAt | date:'short'}}</span>
+            </div>
+            <p class="text-sm text-[#666666] mb-4">{{request.message}}</p>
+            <div class="flex items-center justify-between">
+              <span class="text-xs px-2 py-1 bg-[#E6F0F7] text-[#1965B3] rounded-lg">{{request.user.username}}</span>
+              <button (click)="updateHelpStatus(request, HelpStatus.IN_PROGRESS)"
+                      class="px-4 py-2 bg-[#1965B3] hover:bg-[#3785D8] text-white text-sm rounded-xl transition-all">
+                Iniciar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
 
-        <!-- Columna En Proceso -->
-        <div class="bg-gray-50 rounded-xl p-4">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="font-semibold text-gray-700">En Proceso</h3>
-                <span class="px-2 py-1 bg-yellow-100 text-yellow-700 rounded-full text-sm">
-                    {{getStatusRequests(HelpStatus.IN_PROGRESS).length}}
-                </span>
-            </div>
-            <div class="space-y-3">
-                <div *ngFor="let request of getStatusRequests(HelpStatus.IN_PROGRESS)"
-                     class="bg-white p-4 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-                    <div class="flex justify-between items-start mb-2">
-                        <h4 class="font-medium text-gray-900">{{request.subject}}</h4>
-                        <span class="text-xs text-gray-500">{{request.createdAt | date:'short'}}</span>
-                    </div>
-                    <p class="text-sm text-gray-600 mb-3">{{request.message}}</p>
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs text-gray-500">{{request.user.username}}</span>
-                        <div class="flex gap-2">
-                            <button (click)="updateHelpStatus(request, HelpStatus.RESOLVED)"
-                                    class="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full hover:bg-green-200 transition-colors">
-                                Completar
-                            </button>
-                            <button (click)="updateHelpStatus(request, HelpStatus.CANCELLED)"
-                                    class="text-xs bg-red-100 text-red-700 px-3 py-1 rounded-full hover:bg-red-200 transition-colors">
-                                Cancelar
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      <!-- Columna En Proceso -->
+      <div class="bg-white rounded-2xl p-6 border border-[#E0E9F5]">
+        <div class="flex items-center justify-between mb-6">
+          <div class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#BF8CE1]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+            </svg>
+            <h3 class="font-semibold text-[#2A2A2A]">En Proceso</h3>
+          </div>
+          <span class="px-3 py-1 bg-[#E6F0F7] text-[#BF8CE1] rounded-xl text-sm font-medium">
+            {{getStatusRequests(HelpStatus.IN_PROGRESS).length}}
+          </span>
         </div>
+        <div class="space-y-4">
+          <div *ngFor="let request of getStatusRequests(HelpStatus.IN_PROGRESS)"
+               class="bg-[#F8F8F8] p-4 rounded-xl border border-[#E0E9F5] hover:shadow-md transition-all">
+            <div class="flex justify-between items-start mb-3">
+              <h4 class="font-medium text-[#2A2A2A]">{{request.subject}}</h4>
+              <span class="text-xs text-[#999999]">{{request.createdAt | date:'short'}}</span>
+            </div>
+            <p class="text-sm text-[#666666] mb-4">{{request.message}}</p>
+            <div class="flex items-center justify-between">
+              <span class="text-xs px-2 py-1 bg-[#E6F0F7] text-[#BF8CE1] rounded-lg">{{request.user.username}}</span>
+              <div class="flex gap-2">
+                <button (click)="updateHelpStatus(request, HelpStatus.RESOLVED)"
+                        class="px-4 py-2 bg-[#3785D8] hover:bg-[#1965B3] text-white text-sm rounded-xl transition-all">
+                  Completar
+                </button>
+                <button (click)="updateHelpStatus(request, HelpStatus.CANCELLED)"
+                        class="px-4 py-2 bg-[#E893C5] hover:bg-[#EBB2C3] text-white text-sm rounded-xl transition-all">
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-        <!-- Columna Completadas -->
-        <div class="bg-gray-50 rounded-xl p-4">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="font-semibold text-gray-700">Completadas</h3>
-                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">
-                    {{getStatusRequests(HelpStatus.RESOLVED).length}}
-                </span>
-            </div>
-            <div class="space-y-3">
-                <div *ngFor="let request of getStatusRequests(HelpStatus.RESOLVED)"
-                     class="bg-white p-4 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-                    <div class="flex justify-between items-start mb-2">
-                        <h4 class="font-medium text-gray-900">{{request.subject}}</h4>
-                        <span class="text-xs text-gray-500">{{request.createdAt | date:'short'}}</span>
-                    </div>
-                    <p class="text-sm text-gray-600 mb-3">{{request.message}}</p>
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs text-gray-500">{{request.user.username}}</span>
-                        <button (click)="updateHelpStatus(request, HelpStatus.PENDING)"
-                                class="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full hover:bg-blue-200 transition-colors">
-                            Reabrir
-                        </button>
-                    </div>
-                </div>
-            </div>
+      <!-- Columna Completadas -->
+      <div class="bg-white rounded-2xl p-6 border border-[#E0E9F5]">
+        <div class="flex items-center justify-between mb-6">
+          <div class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#3785D8]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <h3 class="font-semibold text-[#2A2A2A]">Completadas</h3>
+          </div>
+          <span class="px-3 py-1 bg-[#E6F0F7] text-[#3785D8] rounded-xl text-sm font-medium">
+            {{getStatusRequests(HelpStatus.RESOLVED).length}}
+          </span>
         </div>
+        <div class="space-y-4">
+          <div *ngFor="let request of getStatusRequests(HelpStatus.RESOLVED)"
+               class="bg-[#F8F8F8] p-4 rounded-xl border border-[#E0E9F5] hover:shadow-md transition-all">
+            <div class="flex justify-between items-start mb-3">
+              <h4 class="font-medium text-[#2A2A2A]">{{request.subject}}</h4>
+              <span class="text-xs text-[#999999]">{{request.createdAt | date:'short'}}</span>
+            </div>
+            <p class="text-sm text-[#666666] mb-4">{{request.message}}</p>
+            <div class="flex items-center justify-between">
+              <span class="text-xs px-2 py-1 bg-[#E6F0F7] text-[#3785D8] rounded-lg">{{request.user.username}}</span>
+              <button (click)="updateHelpStatus(request, HelpStatus.PENDING)"
+                      class="px-4 py-2 bg-[#1965B3] hover:bg-[#3785D8] text-white text-sm rounded-xl transition-all">
+                Reabrir
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
 
-        <!-- Columna Canceladas -->
-        <div class="bg-gray-50 rounded-xl p-4">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="font-semibold text-gray-700">Canceladas</h3>
-                <span class="px-2 py-1 bg-red-100 text-red-700 rounded-full text-sm">
-                    {{getStatusRequests(HelpStatus.CANCELLED).length}}
-                </span>
-            </div>
-            <div class="space-y-3">
-                <div *ngFor="let request of getStatusRequests(HelpStatus.CANCELLED)"
-                     class="bg-white p-4 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-                    <div class="flex justify-between items-start mb-2">
-                        <h4 class="font-medium text-gray-900">{{request.subject}}</h4>
-                        <span class="text-xs text-gray-500">{{request.createdAt | date:'short'}}</span>
-                    </div>
-                    <p class="text-sm text-gray-600 mb-3">{{request.message}}</p>
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs text-gray-500">{{request.user.username}}</span>
-                        <button (click)="updateHelpStatus(request, HelpStatus.PENDING)"
-                                class="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full hover:bg-blue-200 transition-colors">
-                            Reabrir
-                        </button>
-                    </div>
-                </div>
-            </div>
+      <!-- Columna Canceladas -->
+      <div class="bg-white rounded-2xl p-6 border border-[#E0E9F5]">
+        <div class="flex items-center justify-between mb-6">
+          <div class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#E893C5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+            <h3 class="font-semibold text-[#2A2A2A]">Canceladas</h3>
+          </div>
+          <span class="px-3 py-1 bg-[#E6F0F7] text-[#E893C5] rounded-xl text-sm font-medium">
+            {{getStatusRequests(HelpStatus.CANCELLED).length}}
+          </span>
         </div>
+        <div class="space-y-4">
+          <div *ngFor="let request of getStatusRequests(HelpStatus.CANCELLED)"
+               class="bg-[#F8F8F8] p-4 rounded-xl border border-[#E0E9F5] hover:shadow-md transition-all">
+            <div class="flex justify-between items-start mb-3">
+              <h4 class="font-medium text-[#2A2A2A]">{{request.subject}}</h4>
+              <span class="text-xs text-[#999999]">{{request.createdAt | date:'short'}}</span>
+            </div>
+            <p class="text-sm text-[#666666] mb-4">{{request.message}}</p>
+            <div class="flex items-center justify-between">
+              <span class="text-xs px-2 py-1 bg-[#E6F0F7] text-[#E893C5] rounded-lg">{{request.user.username}}</span>
+              <button (click)="updateHelpStatus(request, HelpStatus.PENDING)"
+                      class="px-4 py-2 bg-[#1965B3] hover:bg-[#3785D8] text-white text-sm rounded-xl transition-all">
+                Reabrir
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </div>

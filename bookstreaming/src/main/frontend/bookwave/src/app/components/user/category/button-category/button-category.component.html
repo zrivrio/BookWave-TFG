@@ -1,11 +1,11 @@
-<div class="flex gap-2 px-4 py-3 overflow-x-auto scrollbar-hide">
+<div class="flex gap-3 px-6 py-4 overflow-x-auto custom-scrollbar">
   <!-- Botón "Todos" -->
   <button type="button"
-          class="shrink-0 px-4 py-2 text-sm font-medium rounded-full border transition-all duration-200
-                 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-[#1C1DAB] focus:ring-opacity-50"
+          class="shrink-0 px-5 py-2.5 text-sm font-medium rounded-xl border transition-all duration-300
+                 focus:outline-none focus:ring-2 focus:ring-[#1965B3] focus:ring-opacity-50"
           [ngClass]="{
-            'bg-[#1C1DAB] text-white border-transparent': selectedCategory === 'all',
-            'bg-white text-[#2A2A2A] border-[#E0E9F5] hover:bg-[#E6F0F7]': selectedCategory !== 'all'
+            'bg-[#1965B3] text-white border-transparent hover:bg-[#3785D8]': selectedCategory === 'all',
+            'bg-[#F8F8F8] text-[#2A2A2A] border-[#E0E9F5] hover:bg-[#E6F0F7] hover:text-[#1965B3]': selectedCategory !== 'all'
           }"
           (click)="selectCategory('all')">
       Todos
@@ -13,11 +13,11 @@
 
   <button type="button"
           *ngFor="let category of categories"
-          class="shrink-0 px-4 py-2 text-sm font-medium rounded-full border transition-all duration-200
-                 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-[#1C1DAB] focus:ring-opacity-50"
+          class="shrink-0 px-5 py-2.5 text-sm font-medium rounded-xl border transition-all duration-300
+                 focus:outline-none focus:ring-2 focus:ring-[#1965B3] focus:ring-opacity-50"
           [ngClass]="{
-            'bg-[#1C1DAB] text-white border-transparent': selectedCategory === category.id,
-            'bg-white text-[#2A2A2A] border-[#E0E9F5] hover:bg-[#E6F0F7]': selectedCategory !== category.id
+            'bg-[#1965B3] text-white border-transparent hover:bg-[#3785D8]': selectedCategory === category.id,
+            'bg-[#F8F8F8] text-[#2A2A2A] border-[#E0E9F5] hover:bg-[#E6F0F7] hover:text-[#1965B3]': selectedCategory !== category.id
           }"
           (click)="selectCategory(category.id)">
       {{ category.nombre }}

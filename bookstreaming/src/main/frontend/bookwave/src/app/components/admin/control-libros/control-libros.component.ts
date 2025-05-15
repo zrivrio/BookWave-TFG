@@ -152,7 +152,7 @@ export class ControlLibrosComponent implements OnInit {
     return true;
   }
 
-  getLanguageName(code: string): string {
+  getLanguageName(code: string = 'es'): string {
     const languages: {[key: string]: string} = {
       'es': 'Español',
       'en': 'Inglés',
