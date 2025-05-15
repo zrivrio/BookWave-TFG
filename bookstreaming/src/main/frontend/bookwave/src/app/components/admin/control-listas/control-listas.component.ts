@@ -17,6 +17,7 @@ export class ControlListasComponent implements OnInit {
   selectedList: ReadingList | null = null;
   selectedUser: any = null;
   expandedUsers: Set<number> = new Set();
+  editModeUsers: Set<number> = new Set();
   editForm: FormGroup;
   loading = false;
   error = '';
@@ -57,22 +58,17 @@ export class ControlListasComponent implements OnInit {
     });
   }
 
-  updateList(): void {
-    if (this.editForm.invalid || !this.selectedList) return;
-
-    const updatedList: ReadingList = {
-      ...this.selectedList,
-      name: this.editForm.get('name')?.value
-    };
+  updateList(list: ReadingList): void {
+    if (!list) return;
 
     this.loading = true;
-    this.libraryService.updateReadingList(updatedList).subscribe({
-      next: (list) => {
-        const index = this.readingLists.findIndex(l => l.id === list.id);
+    this.libraryService.updateReadingList(list).subscribe({
+      next: (updatedList) => {
+        const index = this.readingLists.findIndex(l => l.id === updatedList.id);
         if (index !== -1) {
-          this.readingLists[index] = list;
+          this.readingLists[index] = updatedList;
         }
-        this.success = 'Lista actualizada con éxito';
+        this.success = 'Lista actualizada correctamente';
         this.loading = false;
       },
       error: (err) => {
@@ -86,7 +82,7 @@ export class ControlListasComponent implements OnInit {
   deleteList(list: ReadingList): void {
     if (confirm(`¿Está seguro de que desea eliminar la lista "${list.name}"?`)) {
       this.loading = true;
-      this.libraryService.deleteReadingListAdmin(list.id).subscribe({
+      this.libraryService.deleteList(list.id, list.user.id).subscribe({
         next: () => {
           this.readingLists = this.readingLists.filter(l => l.id !== list.id);
           if (this.selectedList?.id === list.id) {
@@ -97,6 +93,29 @@ export class ControlListasComponent implements OnInit {
         },
         error: (err) => {
           this.error = 'Error al eliminar la lista';
+          this.loading = false;
+          console.error(err);
+        }
+      });
+    }
+  }
+
+  removeBookFromList(listId: number, bookId: number): void {
+    const list = this.readingLists.find(l => l.id === listId);
+    if (!list) return;
+
+    if (confirm('¿Estás seguro de que deseas eliminar este libro de la lista?')) {
+      this.loading = true;
+      this.libraryService.removeBookFromList(listId, bookId, list.user.id).subscribe({
+        next: () => {
+          if (list) {
+            list.books = list.books.filter(b => b.id !== bookId);
+          }
+          this.success = 'Libro eliminado de la lista correctamente';
+          this.loading = false;
+        },
+        error: (err) => {
+          this.error = 'Error al eliminar el libro de la lista';
           this.loading = false;
           console.error(err);
         }
@@ -134,5 +153,33 @@ export class ControlListasComponent implements OnInit {
 
   isUserExpanded(user: any): boolean {
     return this.expandedUsers.has(user.id);
+  }
+
+  getUserSubscriptionType(user: any): string {
+    return user.subscription?.type || 'free';
+  }
+
+  isUserAtListLimit(user: any): boolean {
+    const userLists = this.getUserLists(user);
+    return this.getUserSubscriptionType(user) === 'free' && userLists.length >= 5;
+  }
+
+  isListAtBookLimit(list: ReadingList): boolean {
+    if (this.getUserSubscriptionType(list.user) === 'free') {
+      return (list.books?.length || 0) >= 10;
+    }
+    return false;
+  }
+
+  toggleEditMode(user: any): void {
+    if (this.isUserInEditMode(user)) {
+      this.editModeUsers.delete(user.id);
+    } else {
+      this.editModeUsers.add(user.id);
+    }
+  }
+
+  isUserInEditMode(user: any): boolean {
+    return this.editModeUsers.has(user.id);
   }
 }

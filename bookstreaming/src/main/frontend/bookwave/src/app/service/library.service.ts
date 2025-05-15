@@ -63,10 +63,6 @@ export class LibraryService {
     return this.http.post<ReadingList>(`${this.apiUrl}/admin`, readingList);
   }
 
-  deleteReadingListAdmin(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/admin/${id}`);
-  }
-
   updateReadingList(readingList: ReadingList): Observable<ReadingList> {
     return this.http.put<ReadingList>(`${this.apiUrl}/admin`, readingList);
   }
