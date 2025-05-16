@@ -85,7 +85,10 @@ export class BookDetailsComponent implements OnInit {
 
     const progress: ReadingProgress = {
       user: { id: this.currentUser.id } as User,
-      book: { id: this.book.id } as Book,
+      book: { 
+        id: this.book.id,
+        title: this.book.title,
+      },
       currentPage: 0,
       percentageRead: 0
     };

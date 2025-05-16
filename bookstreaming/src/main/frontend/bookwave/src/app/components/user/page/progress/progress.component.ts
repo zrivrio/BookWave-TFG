@@ -103,8 +103,8 @@ export class ProgressComponent implements OnInit {
     this.isLoading = true;
 
     const progressData: Partial<ReadingProgress> = {
-      user: { id: currentUser.id, username: currentUser.username },  // Added username property
-      book: { id: book.id, title: book.title },                     // Added title property
+      user: { id: currentUser.id, username: currentUser.username },
+      book: { id: book.id, title: book.title },                  
       currentPage: currentPage,
       percentageRead: percentageRead
     };

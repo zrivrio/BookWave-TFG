@@ -75,7 +75,7 @@ export class ContinueReadingComponent implements OnInit {
               },
               book: { 
                 id: book.id,
-                title: book.title || ''
+                title: book.title || '',
               },
               currentPage: 0,
               percentageRead: 0
@@ -84,7 +84,7 @@ export class ContinueReadingComponent implements OnInit {
           }
         });
     });
-  }
+}
 
   getProgressPercentage(book: Book): number {
     const progress = this.readingProgresses[book.id];
@@ -113,7 +113,7 @@ export class ContinueReadingComponent implements OnInit {
       },
       book: { 
         id: book.id,
-        title: book.title
+        title: book.title,
       },
       currentPage: currentPage,
       percentageRead: percentageRead
