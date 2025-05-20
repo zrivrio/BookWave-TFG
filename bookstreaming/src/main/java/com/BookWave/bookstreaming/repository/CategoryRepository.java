@@ -18,6 +18,6 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     @Query("SELECT DISTINCT new map(c.id as id, c.nombre as nombre) FROM Category c")
     List<Map<String, Object>> findAllCategoryName();
 
-    String findByNombre(String nombre);
+    Category findByNombre(String nombre);
 
 }

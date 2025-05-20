@@ -54,7 +54,7 @@ public class SubscriptionCartService {
         
         cart.setSelectedSubscription(newSubscription);
         cart.setUpdatedAt(new Date());
-        cart.setStatus(CartStatus.PENDING);
+        cart.setStatus(CartStatus.COMPLETED);
         return cartRepository.save(cart);
     }
 

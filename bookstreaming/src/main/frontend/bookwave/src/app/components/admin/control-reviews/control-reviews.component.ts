@@ -18,8 +18,7 @@ export class ControlReviewsComponent implements OnInit {
   error: string | null = null;
   searchTerm = '';
   ratingFilter = '';
-  pageSize = 10;
-  currentPage = 1;
+  selectedUsers: Set<number> = new Set();
 
   constructor(private reviewService: ReviewService) { }
 
@@ -44,26 +43,31 @@ export class ControlReviewsComponent implements OnInit {
   }
 
   filterReviews(): void {
-    let filtered = [...this.reviews];
+    this.filteredReviews = this.reviews.filter(review => {
+      const matchesSearch = !this.searchTerm || 
+        review.book.title.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        review.user.username.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        review.comment.toLowerCase().includes(this.searchTerm.toLowerCase());
 
-    // Filtrar por término de búsqueda
-    if (this.searchTerm) {
-      const term = this.searchTerm.toLowerCase();
-      filtered = filtered.filter(review =>
-        review.book.title.toLowerCase().includes(term) ||
-        review.user.username.toLowerCase().includes(term) ||
-        review.comment.toLowerCase().includes(term)
-      );
-    }
+      const matchesRating = !this.ratingFilter || 
+        review.rating === parseInt(this.ratingFilter);
 
-    // Filtrar por rating
-    if (this.ratingFilter) {
-      filtered = filtered.filter(review => 
-        review.rating === parseInt(this.ratingFilter)
-      );
-    }
+      return matchesSearch && matchesRating;
+    });
+  }
 
-    this.filteredReviews = filtered;
+  getUserReviews(user: any): Review[] {
+    return this.filteredReviews.filter(review => review.user.id === user.id);
+  }
+
+  getUniqueUsers() {
+    const uniqueUsers = new Map();
+    this.filteredReviews.forEach(review => {
+      if (!uniqueUsers.has(review.user.id)) {
+        uniqueUsers.set(review.user.id, review.user);
+      }
+    });
+    return Array.from(uniqueUsers.values());
   }
 
   deleteReview(id: number | undefined): void {
@@ -91,8 +95,22 @@ export class ControlReviewsComponent implements OnInit {
     return '★'.repeat(rating) + '☆'.repeat(5 - rating);
   }
 
-  getPageNumbers(): number[] {
-    const totalPages = Math.ceil(this.filteredReviews.length / this.pageSize);
-    return Array.from({ length: totalPages }, (_, i) => i + 1);
+  toggleUserReviews(userId: number): void {
+    if (this.selectedUsers.has(userId)) {
+      this.selectedUsers.delete(userId);
+    } else {
+      this.selectedUsers.add(userId);
+    }
+  }
+
+  isUserExpanded(user: any): boolean {
+    return this.selectedUsers.has(user.id);
+  }
+
+  getRatingClass(rating: number): string {
+    if (rating >= 4) return 'bg-[#E6F0F7] text-[#1965B3]'; 
+    if (rating >= 3) return 'bg-[#F8F8F8] text-[#2A2A2A]'; 
+    if (rating >= 2) return 'bg-[#EBB2C3] text-[#E893C5]'; 
+    return 'bg-[#F5F5F5] text-[#999999]';                  
   }
 }

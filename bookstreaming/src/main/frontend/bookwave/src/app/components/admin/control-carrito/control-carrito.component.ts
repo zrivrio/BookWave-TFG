@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { SubscriptionCartService } from '../../../service/subscription-cart.service';
 import { SubscriptionCart } from '../../../models/SubscriptionCart';
+import { SubscriptionType } from '../../../models/SubscriptionType';
 
 @Component({
   selector: 'app-control-carrito',
@@ -14,6 +15,7 @@ export class ControlCarritoComponent implements OnInit {
   carts: SubscriptionCart[] = [];
   loading: boolean = true;
   error: string | null = null;
+  SubscriptionType = SubscriptionType; // Para usar en el template
 
   constructor(private cartService: SubscriptionCartService) {}
 

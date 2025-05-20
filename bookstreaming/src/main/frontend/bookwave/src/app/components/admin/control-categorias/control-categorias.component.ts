@@ -54,13 +54,19 @@ export class ControlCategoriasComponent implements OnInit {
     
     this.categoryService.updateCategory(this.currentCategory).subscribe({
       next: (updatedCategory) => {
-        // Create a new array when updating categories
-        const updatedCategories = [...this.categories];
-        const index = updatedCategories.findIndex(c => c.id === updatedCategory.id);
+        const index = this.categories.findIndex(c => c.id === updatedCategory.id);
         if (index !== -1) {
-          updatedCategories[index] = updatedCategory;
-          this.categories = updatedCategories;
-          this.filteredCategories = [...updatedCategories];
+          // Crear nuevas referencias para forzar la detección de cambios
+          this.categories = [
+            ...this.categories.slice(0, index),
+            updatedCategory,
+            ...this.categories.slice(index + 1)
+          ];
+          this.filteredCategories = this.searchTerm ? 
+            this.categories.filter(category => 
+              category.nombre.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+              category.id.toString().includes(this.searchTerm)
+            ) : [...this.categories];
         }
         this.cancelEdit();
         this.isLoading = false;
@@ -100,21 +106,25 @@ export class ControlCategoriasComponent implements OnInit {
 
   saveCategory(): void {
     this.isLoading = true;
+    this.errorMessage = '';
+    
+    // Asegurarse de que el ID sea 0 para una nueva categoría
+    this.currentCategory.id = 0;
+    
     this.categoryService.saveCategory(this.currentCategory).subscribe({
-      next: (savedCategory) => {
-        // Agregar la nueva categoría a la lista
-        this.categories = [...this.categories, savedCategory];
-        this.filteredCategories = [...this.categories];
-        this.cancelEdit();
-        this.isLoading = false;
-      },
-      error: (error) => {
-        console.error('Error al guardar la categoría:', error);
-        this.errorMessage = 'Error al guardar la categoría';
-        this.isLoading = false;
-      }
+        next: (savedCategory) => {
+            this.categories = [...this.categories, savedCategory];
+            this.filteredCategories = [...this.categories];
+            this.cancelEdit();
+            this.isLoading = false;
+        },
+        error: (error) => {
+            console.error('Error al guardar la categoría:', error);
+            this.errorMessage = error.error?.message || 'Error al guardar la categoría';
+            this.isLoading = false;
+        }
     });
-  }
+}
 
   deleteCategory(id: number): void {
     if (confirm('¿Estás seguro de que deseas eliminar esta categoría?')) {
