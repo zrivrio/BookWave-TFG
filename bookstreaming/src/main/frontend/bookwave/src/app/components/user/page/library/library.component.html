@@ -1,29 +1,30 @@
 <div class="min-h-screen bg-gradient-to-br from-[#E6F0F7] to-[#F5F5F5] py-8">
-  <!-- Estado no autenticado -->
   <div *ngIf="!userId" class="max-w-lg mx-auto text-center bg-white rounded-2xl shadow-lg p-8 border border-[#E0E9F5]">
     <div class="w-20 h-20 mx-auto mb-6 bg-[#E6F0F7] rounded-full flex items-center justify-center">
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-[#1965B3]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-[#1965B3]" fill="none" viewBox="0 0 24 24"
+        stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
       </svg>
     </div>
     <h2 class="text-2xl font-bold text-[#2A2A2A] mb-4">Accede a tu biblioteca personal</h2>
     <p class="text-[#999999] mb-8">Necesitas iniciar sesión para ver y gestionar tus listas de lectura</p>
-    <a routerLink="/login" 
-       class="inline-block px-6 py-3 bg-[#1965B3] hover:bg-[#3785D8] text-white rounded-xl font-medium transition-all shadow-md">
+    <a routerLink="/login"
+      class="inline-block px-6 py-3 bg-[#1965B3] hover:bg-[#3785D8] text-white rounded-xl font-medium transition-all shadow-md">
       Iniciar Sesión
     </a>
   </div>
 
-  <!-- Contenido de la biblioteca para usuarios autenticados -->
   <div *ngIf="userId" class="max-w-7xl mx-auto px-4">
     <div class="flex flex-col md:flex-row gap-6">
-      <!-- Columna de listas de lectura -->
       <div class="w-full md:w-1/3">
         <div class="bg-white rounded-2xl shadow-lg border border-[#E0E9F5] overflow-hidden">
           <div class="p-6 border-b border-[#E0E9F5]">
             <h3 class="text-xl font-bold text-[#2A2A2A] flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#1965B3]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#1965B3]" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
               </svg>
               Mis listas de lectura
             </h3>
@@ -33,17 +34,16 @@
           </div>
 
           <div class="p-6">
-            <!-- Formulario para crear nueva lista -->
             <form [formGroup]="newListForm" (ngSubmit)="createNewList()" class="mb-6">
               <div class="flex gap-3">
                 <input type="text"
                   class="flex-1 px-4 py-3 rounded-xl border border-[#E0E9F5] bg-[#F8F8F8] focus:outline-none focus:border-[#1965B3] focus:ring-2 focus:ring-[#E6F0F7] transition-all"
-                  placeholder="Nombre de la lista" 
-                  formControlName="name">
+                  placeholder="Nombre de la lista" formControlName="name">
                 <button type="submit"
                   class="px-6 py-3 bg-[#1965B3] hover:bg-[#3785D8] text-white rounded-xl font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                   [disabled]="newListForm.invalid || loading">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                   </svg>
                   Crear
@@ -55,50 +55,53 @@
               </div>
             </form>
 
-            <!-- Mensajes -->
             <div *ngIf="success" class="p-4 mb-4 bg-[#E6F0F7] text-[#1965B3] rounded-xl flex items-center gap-2">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                <path fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clip-rule="evenodd" />
               </svg>
               {{ success }}
             </div>
-            <div *ngIf="error" class="p-4 mb-4 bg-[#EBB2C3] bg-opacity-20 text-[#E893C5] rounded-xl flex items-center gap-2">
+            <div *ngIf="error"
+              class="p-4 mb-4 bg-[#EBB2C3] bg-opacity-20 text-[#E893C5] rounded-xl flex items-center gap-2">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                <path fill-rule="evenodd"
+                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                  clip-rule="evenodd" />
               </svg>
               {{ error }}
             </div>
-
-            <!-- Estado de carga -->
             <div *ngIf="loading" class="flex justify-center py-8">
               <div class="animate-spin rounded-full h-10 w-10 border-t-4 border-[#1965B3] border-opacity-50"></div>
             </div>
-
-            <!-- Estado vacío -->
-            <div *ngIf="!loading && readingLists.length === 0" 
-                 class="text-center py-8 bg-[#F8F8F8] rounded-xl border border-dashed border-[#E0E9F5]">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-[#999999] mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+            <div *ngIf="!loading && readingLists.length === 0"
+              class="text-center py-8 bg-[#F8F8F8] rounded-xl border border-dashed border-[#E0E9F5]">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-[#999999] mb-3" fill="none"
+                viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
               </svg>
               <p class="text-[#999999]">No tienes listas de lectura. ¡Crea una!</p>
             </div>
-
-            <!-- Listas -->
             <ul class="space-y-3">
-              <li *ngFor="let list of readingLists" 
-                  class="group p-4 rounded-xl cursor-pointer transition-all duration-200 flex justify-between items-center hover:bg-[#F8F8F8]"
-                  [class.bg-[#E6F0F7]]="selectedList?.id === list.id"
-                  (click)="selectList(list)">
+              <li *ngFor="let list of readingLists"
+                class="group p-4 rounded-xl cursor-pointer transition-all duration-200 flex justify-between items-center hover:bg-[#F8F8F8]"
+                [class.bg-[#E6F0F7]]="selectedList?.id === list.id" (click)="selectList(list)">
                 <div class="flex-1">
-                  <div class="font-medium text-[#2A2A2A] group-hover:text-[#1965B3] transition-colors">{{ list.name }}</div>
+                  <div class="font-medium text-[#2A2A2A] group-hover:text-[#1965B3] transition-colors">{{ list.name }}
+                  </div>
                   <div class="text-sm text-[#999999] mt-1">
                     {{ list.books.length }} libros ({{ isPremiumUser ? 'ilimitados' : 'límite 10' }})
                   </div>
                 </div>
-                <button class="p-2 text-[#E893C5] hover:text-[#EBB2C3] hover:bg-white rounded-lg transition-all opacity-0 group-hover:opacity-100" 
-                        (click)="deleteList(list); $event.stopPropagation()">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                <button
+                  class="p-2 text-[#E893C5] hover:text-[#EBB2C3] hover:bg-white rounded-lg transition-all opacity-0 group-hover:opacity-100"
+                  (click)="deleteList(list); $event.stopPropagation()">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                   </svg>
                 </button>
               </li>
@@ -107,59 +110,61 @@
         </div>
       </div>
 
-      <!-- Columna de libros en la lista seleccionada -->
       <div class="w-full md:w-2/3">
         <div class="bg-white rounded-2xl shadow-lg border border-[#E0E9F5] overflow-hidden">
           <div class="p-6 border-b border-[#E0E9F5]">
             <h3 *ngIf="selectedList" class="text-xl font-bold text-[#2A2A2A] flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#1965B3]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#1965B3]" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
               </svg>
               Libros en "{{ selectedList.name }}"
             </h3>
             <h3 *ngIf="!selectedList" class="text-xl font-bold text-[#2A2A2A] flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#1965B3]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 4H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-2m-4-1v8m0 0l3-3m-3 3L9 8m-5 5h2.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293h3.172a1 1 0 00.707-.293l2.414-2.414a1 1 0 01.707-.293H20" />
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#1965B3]" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M8 4H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-2m-4-1v8m0 0l3-3m-3 3L9 8m-5 5h2.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293h3.172a1 1 0 00.707-.293l2.414-2.414a1 1 0 01.707-.293H20" />
               </svg>
               Selecciona una lista
             </h3>
           </div>
 
           <div class="p-6">
-            <!-- Estado de carga -->
             <div *ngIf="loading" class="flex justify-center py-12">
               <div class="animate-spin rounded-full h-10 w-10 border-t-4 border-[#1965B3] border-opacity-50"></div>
             </div>
-
-            <!-- Estados vacíos -->
             <div *ngIf="!loading && selectedList && booksInSelectedList.length === 0"
-                 class="text-center py-12 bg-[#F8F8F8] rounded-xl border border-dashed border-[#E0E9F5]">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-[#999999] mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              class="text-center py-12 bg-[#F8F8F8] rounded-xl border border-dashed border-[#E0E9F5]">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-[#999999] mb-4" fill="none"
+                viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
               </svg>
               <p class="text-[#999999] text-lg mb-2">No hay libros en esta lista</p>
               <p class="text-[#999999]">Añade libros desde la biblioteca o el catálogo</p>
             </div>
 
-            <div *ngIf="!loading && !selectedList" 
-                 class="text-center py-12 bg-[#F8F8F8] rounded-xl border border-dashed border-[#E0E9F5]">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-[#999999] mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 4H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-2m-4-1v8m0 0l3-3m-3 3L9 8m-5 5h2.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293h3.172a1 1 0 00.707-.293l2.414-2.414a1 1 0 01.707-.293H20" />
+            <div *ngIf="!loading && !selectedList"
+              class="text-center py-12 bg-[#F8F8F8] rounded-xl border border-dashed border-[#E0E9F5]">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-[#999999] mb-4" fill="none"
+                viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M8 4H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-2m-4-1v8m0 0l3-3m-3 3L9 8m-5 5h2.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293h3.172a1 1 0 00.707-.293l2.414-2.414a1 1 0 01.707-.293H20" />
               </svg>
               <p class="text-[#999999] text-lg mb-2">Selecciona una lista para ver sus libros</p>
               <p class="text-[#999999]">O crea una nueva lista para empezar</p>
             </div>
 
-            <!-- Grid de libros -->
             <div *ngIf="!loading && selectedList && booksInSelectedList.length > 0"
-                 class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               <div *ngFor="let book of booksInSelectedList"
-                   class="group bg-white rounded-xl border border-[#E0E9F5] overflow-hidden hover:shadow-lg transition-all">
+                class="group bg-white rounded-xl border border-[#E0E9F5] overflow-hidden hover:shadow-lg transition-all">
                 <a [routerLink]="['/book', book.id]" class="block relative aspect-[3/4] overflow-hidden">
-                  <img [src]="book.cover || 'assets/images/default-book-cover.jpg'" 
-                       [alt]="book.title"
-                       class="w-full h-full object-cover transform transition-transform duration-300 group-hover:scale-105" 
-                       onerror="this.src='assets/images/default-book-cover.jpg'">
+                  <img [src]="book.cover || 'assets/images/default-book-cover.jpg'" [alt]="book.title"
+                    class="w-full h-full object-cover transform transition-transform duration-300 group-hover:scale-105"
+                    onerror="this.src='assets/images/default-book-cover.jpg'">
                 </a>
                 <div class="p-4">
                   <a [routerLink]="['/book', book.id]" class="block group">
@@ -171,8 +176,10 @@
                   <button
                     class="mt-4 w-full px-4 py-2 bg-[#E893C5] hover:bg-[#EBB2C3] text-white rounded-xl text-sm font-medium transition-all flex items-center justify-center gap-2"
                     (click)="removeBookFromList(book)">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                      stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                     </svg>
                     Eliminar de la lista
                   </button>

@@ -86,7 +86,6 @@ export class ControlUsuariosComponent implements OnInit {
       role: user.role,
       subscriptionType: user.subscriptionType
     });
-    // Removemos la validación de contraseña para edición
     this.userForm.get('password')?.clearValidators();
     this.userForm.get('confirmPassword')?.clearValidators();
     this.userForm.get('password')?.updateValueAndValidity();
@@ -96,15 +95,13 @@ export class ControlUsuariosComponent implements OnInit {
   showCreateForm() {
     this.createMode = true;
     this.editMode = false;
-    this.errorMessage = ''; // Limpiar mensajes de error previos
-    
-    // Restauramos las validaciones de contraseña para creación
+    this.errorMessage = '';
+
     this.userForm.get('password')?.setValidators([Validators.required, Validators.minLength(6)]);
     this.userForm.get('confirmPassword')?.setValidators([Validators.required]);
     this.userForm.get('password')?.updateValueAndValidity();
     this.userForm.get('confirmPassword')?.updateValueAndValidity();
-    
-    // Resetear el formulario con valores iniciales
+
     this.userForm.reset({
       role: Role.User,
       subscriptionType: SubscriptionType.Free,
@@ -113,14 +110,14 @@ export class ControlUsuariosComponent implements OnInit {
       password: '',
       confirmPassword: ''
     });
-}
+  }
 
   passwordMatchValidator(form: FormGroup) {
     const password = form.get('password');
     const confirmPassword = form.get('confirmPassword');
-    
+
     if (!password || !confirmPassword) return null;
-    
+
     return password.value === confirmPassword.value ? null : { mismatch: true };
   }
 
@@ -134,12 +131,12 @@ export class ControlUsuariosComponent implements OnInit {
       });
       return;
     }
-  
+
     if (this.userForm.get('password')?.value !== this.userForm.get('confirmPassword')?.value) {
       this.errorMessage = 'Las contraseñas no coinciden';
       return;
     }
-  
+
     const userData: UserSignupRequest = {
       username: this.userForm.value.username,
       email: this.userForm.value.email,
@@ -149,10 +146,10 @@ export class ControlUsuariosComponent implements OnInit {
       reviews: [],
       readingLists: []
     };
-  
+
     this.isLoading = true;
     this.errorMessage = '';
-  
+
     this.userService.signup(userData).subscribe({
       next: (user) => {
         this.users.push(user);

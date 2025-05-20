@@ -1,14 +1,11 @@
 <div class="flex justify-center items-center min-h-screen bg-gradient-to-br from-[#E6F0F7] via-[#CBD8E8] to-[#F8F8F8] p-4">
   <div class="w-full max-w-md bg-white rounded-2xl shadow-lg p-8 border border-[#E0E9F5] hover:shadow-xl transition-all duration-300">
-    <!-- Encabezado -->
     <div class="text-center mb-8">
       <h2 class="text-3xl font-bold text-[#1E0f75] mb-3">Bienvenido de nuevo</h2>
       <p class="text-[#999999]">Inicia sesión para continuar tu viaje de lectura</p>
     </div>
 
-    <!-- Formulario -->
     <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="space-y-5">
-      <!-- Campo Usuario -->
       <div class="space-y-1.5">
         <label for="username" class="block text-sm font-medium text-[#2A2A2A]">Usuario</label>
         <input 
@@ -26,7 +23,6 @@
         </div>
       </div>
 
-      <!-- Campo Contraseña -->
       <div class="space-y-1.5">
         <label for="password" class="block text-sm font-medium text-[#2A2A2A]">Contraseña</label>
         <div class="relative">
@@ -46,7 +42,6 @@
         </div>
       </div>
 
-      <!-- Mensaje de Error -->
       <div *ngIf="errorMessage" class="p-4 bg-[#F8F8F8] border border-[#E893C5] text-[#E893C5] rounded-xl text-sm flex items-center">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -54,7 +49,6 @@
         {{ errorMessage }}
       </div>
 
-      <!-- Botón de Envío -->
       <button
         type="submit"
         [disabled]="loginForm.invalid || isLoading"
@@ -68,7 +62,6 @@
       </button>
     </form>
 
-    <!-- Enlace de Registro -->
     <div class="mt-6 text-center text-sm text-[#999999]">
       ¿No tienes una cuenta? 
       <a routerLink="/signup" class="text-[#1965B3] font-medium hover:text-[#3785D8] transition-colors ml-1">Regístrate</a>

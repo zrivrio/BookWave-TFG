@@ -56,8 +56,6 @@ export class LibraryComponent implements OnInit {
     this.readingListService.getLists(this.userId).subscribe({
         next: (lists: ReadingList[]) => {
             this.readingLists = lists;
-            
-            // Cargar los libros para cada lista de manera secuencial
             lists.forEach(list => {
                 if (list.id) {
                     this.readingListService.getBooksInList(list.id).subscribe({
@@ -65,8 +63,6 @@ export class LibraryComponent implements OnInit {
                             const index = this.readingLists.findIndex(l => l.id === list.id);
                             if (index !== -1) {
                                 this.readingLists[index].books = books;
-                                
-                                // Si es la primera lista, seleccionarla automáticamente
                                 if (index === 0 && !this.selectedList) {
                                     this.selectList(this.readingLists[index]);
                                 }

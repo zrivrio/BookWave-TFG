@@ -18,7 +18,6 @@ public class UserService {
     private UserRepository userRepository;
 
     public User registerUser(User user) {
-        // Validaciones básicas
         if (user.getUsername() == null || user.getUsername().trim().isEmpty()) {
             throw new IllegalArgumentException("El nombre de usuario no puede estar vacío");
         }
@@ -69,7 +68,6 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        // Actualizar username si se proporciona y es diferente
         if (updates.containsKey("username")) {
             String newUsername = (String) updates.get("username");
             if (!newUsername.equals(user.getUsername())) {
@@ -79,8 +77,6 @@ public class UserService {
                 user.setUsername(newUsername);
             }
         }
-
-        // Actualizar email si se proporciona y es diferente
         if (updates.containsKey("email")) {
             String newEmail = (String) updates.get("email");
             if (!newEmail.equals(user.getEmail())) {
@@ -91,17 +87,14 @@ public class UserService {
             }
         }
 
-        // Actualizar role si se proporciona
         if (updates.containsKey("role")) {
             user.setRole(Role.valueOf((String) updates.get("role")));
         }
 
-        // Actualizar subscriptionType si se proporciona
         if (updates.containsKey("subscriptionType")) {
             user.setSubscriptionType(SubscriptionType.valueOf((String) updates.get("subscriptionType")));
         }
 
-        // Actualizar contraseña si se proporciona
         if (updates.containsKey("password")) {
             try {
                 String newPassword = (String) updates.get("password");

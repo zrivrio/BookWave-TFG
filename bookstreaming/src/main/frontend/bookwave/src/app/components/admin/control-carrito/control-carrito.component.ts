@@ -15,7 +15,7 @@ export class ControlCarritoComponent implements OnInit {
   carts: SubscriptionCart[] = [];
   loading: boolean = true;
   error: string | null = null;
-  SubscriptionType = SubscriptionType; // Para usar en el template
+  SubscriptionType = SubscriptionType; 
 
   constructor(private cartService: SubscriptionCartService) {}
 
@@ -54,5 +54,17 @@ export class ControlCarritoComponent implements OnInit {
         }
       });
     }
+  }
+
+  getPendingCarts(): number {
+    return this.carts.filter(cart => cart.status === 'PENDING').length;
+  }
+
+  getCancelledCarts(): number {
+    return this.carts.filter(cart => cart.status === 'CANCELLED').length;
+  }
+
+  getCompletedCarts(): number {
+    return this.carts.filter(cart => cart.status === 'COMPLETED').length;
   }
 }

@@ -34,7 +34,7 @@ export class BookDetailsComponent implements OnInit {
     private userService: UserService,
     private readingProgressService: ReadingProgressService,
     private reviewService: ReviewService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loadBookDetails();
@@ -43,37 +43,37 @@ export class BookDetailsComponent implements OnInit {
 
   loadBookDetails(): void {
     const id = this.route.snapshot.paramMap.get('id');
-    
+
     if (id && !isNaN(Number(id))) {
-        this.bookService.getBookById(Number(id)).subscribe({
-            next: (book) => {
-                this.book = book;
-                this.loading = false;
-                this.loadAverageRating();
-            },
-            error: (err) => {
-                this.error = 'Error al cargar los detalles del libro';
-                this.loading = false;
-                console.error(err);
-            }
-        });
+      this.bookService.getBookById(Number(id)).subscribe({
+        next: (book) => {
+          this.book = book;
+          this.loading = false;
+          this.loadAverageRating();
+        },
+        error: (err) => {
+          this.error = 'Error al cargar los detalles del libro';
+          this.loading = false;
+          console.error(err);
+        }
+      });
     } else {
-        this.error = 'ID de libro no válido';
-        this.loading = false;
+      this.error = 'ID de libro no válido';
+      this.loading = false;
     }
   }
 
   private loadAverageRating(): void {
     if (this.book?.id) {
-        this.reviewService.getAverageRatingByBook(this.book.id).subscribe({
-            next: (rating) => {
-                this.averageRating = rating || 0;
-            },
-            error: (error) => {
-                console.error('Error al cargar el rating:', error);
-                this.averageRating = 0;
-            }
-        });
+      this.reviewService.getAverageRatingByBook(this.book.id).subscribe({
+        next: (rating) => {
+          this.averageRating = rating || 0;
+        },
+        error: (error) => {
+          console.error('Error al cargar el rating:', error);
+          this.averageRating = 0;
+        }
+      });
     }
   }
 
@@ -85,7 +85,7 @@ export class BookDetailsComponent implements OnInit {
 
     const progress: ReadingProgress = {
       user: { id: this.currentUser.id } as User,
-      book: { 
+      book: {
         id: this.book.id,
         title: this.book.title,
       },
@@ -105,6 +105,6 @@ export class BookDetailsComponent implements OnInit {
   }
 
   onReviewSubmitted(): void {
-    this.loadBookDetails(); // Reload book details to update ratings
+    this.loadBookDetails();
   }
 }

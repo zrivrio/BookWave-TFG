@@ -1,111 +1,92 @@
 <div class="min-h-screen bg-gradient-to-br from-[#E6F0F7] to-[#F5F5F5] py-8">
   <div class="max-w-2xl mx-auto px-4">
-    <!-- Estado de carga -->
     <div *ngIf="isLoading" class="flex flex-col items-center justify-center py-12">
       <div class="animate-spin rounded-full h-12 w-12 border-t-4 border-[#1965B3] border-opacity-50 mb-4"></div>
       <p class="text-[#999999]">Cargando tu perfil...</p>
     </div>
 
-    <!-- Formulario de edición -->
     <div *ngIf="!isLoading && currentUser" class="bg-[#FFFFFF] rounded-2xl shadow-lg p-8 border border-[#E0E9F5]">
       <h2 class="text-2xl font-bold text-[#2A2A2A] mb-6 flex items-center gap-2">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#1965B3]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#1965B3]" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
         </svg>
         Editar Perfil
       </h2>
 
       <form [formGroup]="editForm" (ngSubmit)="onSubmit()" class="space-y-6">
-        <!-- Campo de usuario -->
         <div>
           <label for="username" class="block text-sm font-medium text-[#2A2A2A] mb-2">Nombre de usuario</label>
-          <input
-            id="username"
-            type="text"
-            formControlName="username"
+          <input id="username" type="text" formControlName="username"
             class="w-full px-4 py-3 bg-[#F8F8F8] border border-[#E0E9F5] rounded-xl focus:ring-2 focus:ring-[#1965B3] focus:border-transparent transition-all"
             [ngClass]="{'border-[#E893C5]': editForm.get('username')?.invalid && editForm.get('username')?.touched}">
-          <div *ngIf="editForm.get('username')?.invalid && editForm.get('username')?.touched" class="text-[#E893C5] text-sm mt-2">
+          <div *ngIf="editForm.get('username')?.invalid && editForm.get('username')?.touched"
+            class="text-[#E893C5] text-sm mt-2">
             <span *ngIf="editForm.get('username')?.errors?.['required']">El nombre de usuario es requerido</span>
             <span *ngIf="editForm.get('username')?.errors?.['minlength']">Mínimo 3 caracteres</span>
           </div>
         </div>
-
-        <!-- Campo de email -->
         <div>
           <label for="email" class="block text-sm font-medium text-[#2A2A2A] mb-2">Correo electrónico</label>
-          <input
-            id="email"
-            type="email"
-            formControlName="email"
+          <input id="email" type="email" formControlName="email"
             class="w-full px-4 py-3 bg-[#F8F8F8] border border-[#E0E9F5] rounded-xl focus:ring-2 focus:ring-[#1965B3] focus:border-transparent transition-all"
             [ngClass]="{'border-[#E893C5]': editForm.get('email')?.invalid && editForm.get('email')?.touched}">
-          <div *ngIf="editForm.get('email')?.invalid && editForm.get('email')?.touched" class="text-[#E893C5] text-sm mt-2">
+          <div *ngIf="editForm.get('email')?.invalid && editForm.get('email')?.touched"
+            class="text-[#E893C5] text-sm mt-2">
             <span *ngIf="editForm.get('email')?.errors?.['required']">El correo electrónico es requerido</span>
             <span *ngIf="editForm.get('email')?.errors?.['email']">Ingresa un correo electrónico válido</span>
           </div>
         </div>
 
-        <!-- Sección de cambio de contraseña -->
         <div class="pt-6 border-t border-[#E0E9F5]">
           <h3 class="text-lg font-semibold text-[#1965B3] mb-4">Cambiar contraseña</h3>
-          
-          <!-- Contraseña actual -->
+
           <div class="mb-4">
             <label for="currentPassword" class="block text-sm font-medium text-[#2A2A2A] mb-2">Contraseña actual</label>
-            <input
-              id="currentPassword"
-              type="password"
-              formControlName="currentPassword"
+            <input id="currentPassword" type="password" formControlName="currentPassword"
               class="w-full px-4 py-3 bg-[#F8F8F8] border border-[#E0E9F5] rounded-xl focus:ring-2 focus:ring-[#1965B3] focus:border-transparent transition-all">
             <p class="text-xs text-[#999999] mt-2">Solo necesitas esto si vas a cambiar la contraseña</p>
           </div>
-          
-          <!-- Nueva contraseña -->
+
           <div class="mb-4">
             <label for="newPassword" class="block text-sm font-medium text-[#2A2A2A] mb-2">Nueva contraseña</label>
-            <input
-              id="newPassword"
-              type="password"
-              formControlName="newPassword"
+            <input id="newPassword" type="password" formControlName="newPassword"
               class="w-full px-4 py-3 bg-[#F8F8F8] border border-[#E0E9F5] rounded-xl focus:ring-2 focus:ring-[#1965B3] focus:border-transparent transition-all"
               [ngClass]="{'border-[#E893C5]': editForm.get('newPassword')?.invalid && editForm.get('newPassword')?.touched}">
-            <div *ngIf="editForm.get('newPassword')?.invalid && editForm.get('newPassword')?.touched" class="text-[#E893C5] text-sm mt-2">
+            <div *ngIf="editForm.get('newPassword')?.invalid && editForm.get('newPassword')?.touched"
+              class="text-[#E893C5] text-sm mt-2">
               <span *ngIf="editForm.get('newPassword')?.errors?.['minlength']">Mínimo 6 caracteres</span>
             </div>
           </div>
-          
-          <!-- Confirmar contraseña -->
+
           <div>
-            <label for="confirmPassword" class="block text-sm font-medium text-[#2A2A2A] mb-2">Confirmar nueva contraseña</label>
-            <input
-              id="confirmPassword"
-              type="password"
-              formControlName="confirmPassword"
+            <label for="confirmPassword" class="block text-sm font-medium text-[#2A2A2A] mb-2">Confirmar nueva
+              contraseña</label>
+            <input id="confirmPassword" type="password" formControlName="confirmPassword"
               class="w-full px-4 py-3 bg-[#F8F8F8] border border-[#E0E9F5] rounded-xl focus:ring-2 focus:ring-[#1965B3] focus:border-transparent transition-all"
               [ngClass]="{'border-[#E893C5]': editForm.hasError('mismatch') && editForm.get('confirmPassword')?.touched}">
-            <div *ngIf="editForm.hasError('mismatch') && editForm.get('confirmPassword')?.touched" class="text-[#E893C5] text-sm mt-2">
+            <div *ngIf="editForm.hasError('mismatch') && editForm.get('confirmPassword')?.touched"
+              class="text-[#E893C5] text-sm mt-2">
               Las contraseñas no coinciden
             </div>
           </div>
         </div>
 
-        <!-- Botones de acción -->
         <div class="flex flex-col sm:flex-row justify-end gap-3 pt-6">
-          <button
-            type="button"
-            (click)="navigateToProfile()"
+          <button type="button" (click)="navigateToProfile()"
             class="px-6 py-3 border border-[#1965B3] text-[#1965B3] hover:bg-[#E6F0F7] rounded-xl transition-all">
             Cancelar
           </button>
-          <button
-            type="submit"
-            [disabled]="editForm.invalid || isUpdating"
+          <button type="submit" [disabled]="editForm.invalid || isUpdating"
             class="px-6 py-3 bg-[#1965B3] hover:bg-[#3785D8] text-white font-medium rounded-xl shadow-md transition-all disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center">
             <span *ngIf="isUpdating" class="inline-flex items-center">
-              <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none"
+                viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                <path class="opacity-75" fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                </path>
               </svg>
               Guardando...
             </span>
@@ -113,17 +94,20 @@
           </button>
         </div>
 
-        <!-- Mensajes de estado -->
         <div class="mt-4 space-y-2">
           <div *ngIf="updateSuccess" class="flex items-center text-[#1965B3] bg-[#E6F0F7] p-3 rounded-xl">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+              <path fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                clip-rule="evenodd" />
             </svg>
             ¡Tus cambios se han guardado correctamente!
           </div>
           <div *ngIf="updateError" class="flex items-center text-[#E893C5] bg-[#EBB2C3] bg-opacity-20 p-3 rounded-xl">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+              <path fill-rule="evenodd"
+                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                clip-rule="evenodd" />
             </svg>
             {{ updateError }}
           </div>

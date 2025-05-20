@@ -31,7 +31,6 @@ public class SubscriptionCart {
     private Date createdAt = new Date();
     private Date updatedAt = new Date();
 
-    // Métodos para manejar el proceso de checkout
     public boolean isUpgrade() {
         return user.getSubscriptionType() == SubscriptionType.Free && 
                selectedSubscription == SubscriptionType.Premium;

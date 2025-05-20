@@ -77,8 +77,8 @@ export class ProgressComponent implements OnInit {
       },
       error: (err) => {
         this.readingProgresses[bookId] = {
-          user: { id: userId, username: '' },  // Added username property
-          book: { id: bookId, title: '' },     // Added title property
+          user: { id: userId, username: '' },  
+          book: { id: bookId, title: '' },     
           currentPage: 0,
           percentageRead: 0
         };

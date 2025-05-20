@@ -38,15 +38,12 @@ public class CategoryService {
     }
 
     public Category saveCategory(Category category) {
-        // Verificar si ya existe una categoría con el mismo nombre
         if (categoryRepository.findByNombre(category.getNombre()) != null) {
             throw new RuntimeException("Ya existe una categoría con este nombre");
         }
         
-        // Asegurarse de que el ID sea null para una nueva categoría
         category.setId(null);
         
-        // Inicializar la colección de libros si es null
         if (category.getBooks() == null) {
             category.setBooks(new HashSet<>());
         }
@@ -62,13 +59,10 @@ public class CategoryService {
         Category existingCategory = categoryRepository.findById(category.getId())
             .orElseThrow(() -> new RuntimeException("Category not found"));
         
-        // Actualizar solo el nombre, no tocar la colección de libros
         existingCategory.setNombre(category.getNombre());
         
-        // Guardar sin modificar la relación books
         Category updated = categoryRepository.save(existingCategory);
         
-        // Devuelve una categoría "limpia" sin la colección books
         Category response = new Category();
         response.setId(updated.getId());
         response.setNombre(updated.getNombre());

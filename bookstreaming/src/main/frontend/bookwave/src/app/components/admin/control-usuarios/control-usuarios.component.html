@@ -1,6 +1,5 @@
 <div class="min-h-screen bg-gradient-to-br from-[#E6F0F7] to-[#F5F5F5] py-8">
   <div class="max-w-7xl mx-auto px-4">
-    <!-- Encabezado -->
     <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8">
       <h2 class="text-2xl font-bold text-[#1E0f75] flex items-center gap-2">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-[#1965B3]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -17,7 +16,6 @@
       </button>
     </div>
 
-    <!-- Estadísticas -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
       <div class="bg-white rounded-xl p-4 border border-[#E0E9F5] shadow-sm hover:shadow-md transition-all">
         <div class="flex items-center gap-3">
@@ -76,7 +74,6 @@
       </div>
     </div>
 
-    <!-- Tabla de usuarios -->
     <div class="bg-white rounded-2xl shadow-lg border border-[#E0E9F5] overflow-hidden">
       <div class="overflow-x-auto">
         <div class="max-h-[calc(100vh-16rem)] overflow-y-auto">
@@ -140,7 +137,6 @@
             </tbody>
           </table>
 
-          <!-- Estado vacío -->
           <div *ngIf="users.length === 0" class="py-12 text-center">
             <div class="w-20 h-20 mx-auto mb-4 bg-[#E6F0F7] rounded-full flex items-center justify-center">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-[#1965B3]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -154,7 +150,6 @@
       </div>
     </div>
 
-    <!-- Modal de edición/creación -->
     <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" 
          [ngStyle]="{'display': editMode || createMode ? 'flex' : 'none'}">
       <div class="bg-white rounded-2xl shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
@@ -174,7 +169,6 @@
             </button>
           </div>
 
-          <!-- Mensaje de error -->
           <div *ngIf="errorMessage" class="mb-4 p-4 bg-[#FF4D4D] bg-opacity-20 text-[#FF0000] font-bold rounded-xl flex items-center gap-2">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
@@ -184,7 +178,6 @@
 
           <form [formGroup]="userForm" (ngSubmit)="editMode ? saveUser() : createUser()" class="space-y-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <!-- Campo Usuario -->
               <div class="space-y-2">
                 <label class="block text-sm font-medium text-[#666666]">Usuario *</label>
                 <input type="text" 
@@ -199,7 +192,6 @@
                 </div>
               </div>
 
-              <!-- Campo Email -->
               <div class="space-y-2">
                 <label class="block text-sm font-medium text-[#666666]">Email *</label>
                 <input type="email" 
@@ -216,7 +208,6 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <!-- Campo Rol -->
               <div class="space-y-2">
                 <label class="block text-sm font-medium text-[#666666]">Rol *</label>
                 <select formControlName="role"
@@ -226,7 +217,6 @@
                 </select>
               </div>
 
-              <!-- Campo Tipo de Suscripción -->
               <div class="space-y-2">
                 <label class="block text-sm font-medium text-[#666666]">Tipo de Suscripción *</label>
                 <select formControlName="subscriptionType"
@@ -237,9 +227,7 @@
               </div>
             </div>
 
-            <!-- Campos de Contraseña (solo para creación) -->
             <div *ngIf="!editMode" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <!-- Campo Contraseña -->
               <div class="space-y-2">
                 <label class="block text-sm font-medium text-[#666666]">Contraseña *</label>
                 <input type="password" 
@@ -254,7 +242,6 @@
                 </div>
               </div>
 
-              <!-- Campo Confirmar Contraseña -->
               <div class="space-y-2">
                 <label class="block text-sm font-medium text-[#666666]">Confirmar Contraseña *</label>
                 <input type="password" 
@@ -268,7 +255,6 @@
               </div>
             </div>
 
-            <!-- Botones de acción -->
             <div class="flex justify-end gap-3 pt-6 border-t border-[#E0E9F5]">
               <button type="button" 
                       (click)="editMode ? cancelEdit() : cancelCreate()"

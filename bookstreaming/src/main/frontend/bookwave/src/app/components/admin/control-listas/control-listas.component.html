@@ -1,22 +1,23 @@
 <div class="min-h-screen bg-gradient-to-br from-[#E6F0F7] to-[#F5F5F5] py-8">
   <div class="max-w-7xl mx-auto px-4">
-    <!-- Encabezado -->
     <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8">
       <h2 class="text-2xl font-bold text-[#1E0f75] flex items-center gap-2">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-[#1965B3]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-[#1965B3]" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
         </svg>
         Administración de Listas de Lectura
       </h2>
       <span class="px-4 py-2 bg-[#E6F0F7] text-[#1965B3] rounded-xl font-medium flex items-center gap-2">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
         </svg>
         Total: {{readingLists.length}} listas
       </span>
     </div>
 
-    <!-- Estados de carga y mensajes -->
     <div *ngIf="loading" class="mb-6 p-4 bg-[#E6F0F7] text-[#1965B3] rounded-xl flex items-center gap-2">
       <div class="animate-spin rounded-full h-5 w-5 border-2 border-[#1965B3] border-t-transparent"></div>
       <span>Cargando listas de lectura...</span>
@@ -24,20 +25,22 @@
 
     <div *ngIf="error" class="mb-6 p-4 bg-[#EBB2C3] bg-opacity-20 text-[#E893C5] rounded-xl flex items-center gap-2">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+        <path fill-rule="evenodd"
+          d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+          clip-rule="evenodd" />
       </svg>
       {{error}}
     </div>
 
     <div *ngIf="success" class="mb-6 p-4 bg-[#E6F0F7] text-[#1965B3] rounded-xl flex items-center gap-2">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+        <path fill-rule="evenodd"
+          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+          clip-rule="evenodd" />
       </svg>
       {{success}}
     </div>
 
-    <!-- Grid principal -->
-    
     <div class="bg-white rounded-2xl shadow-lg border border-[#E0E9F5] overflow-hidden mb-6">
       <div class="overflow-x-auto">
         <table class="w-full">
@@ -55,8 +58,10 @@
               <td class="px-6 py-4">
                 <div class="flex items-center gap-3">
                   <div class="w-10 h-10 bg-[#E6F0F7] rounded-full flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#1965B3]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#1965B3]" fill="none"
+                      viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
                   </div>
                   <span class="font-medium text-[#2A2A2A]">{{user.username}}</span>
@@ -74,24 +79,22 @@
               <td class="px-6 py-4 text-[#666666]">
                 <div class="flex items-center gap-2">
                   <span>{{getUserLists(user).length}}</span>
-                  <span *ngIf="getUserSubscriptionType(user) === 'free'" 
-                        class="text-xs text-[#999999]">
+                  <span *ngIf="getUserSubscriptionType(user) === 'free'" class="text-xs text-[#999999]">
                     (máx. 5)
                   </span>
                 </div>
               </td>
               <td class="px-6 py-4 text-[#666666]">{{getTotalBooksInLists(user)}}</td>
               <td class="px-6 py-4 text-right">
-                <button (click)="toggleUserLists(user)" 
-                        class="px-4 py-2 bg-[#E6F0F7] text-[#1965B3] rounded-lg hover:bg-[#1965B3] hover:text-white transition-colors">
+                <button (click)="toggleUserLists(user)"
+                  class="px-4 py-2 bg-[#E6F0F7] text-[#1965B3] rounded-lg hover:bg-[#1965B3] hover:text-white transition-colors">
                   <span *ngIf="!isUserExpanded(user) && !isUserInEditMode(user)">Ver listas</span>
                   <span *ngIf="isUserExpanded(user) && !isUserInEditMode(user)">Ocultar listas</span>
                   <span *ngIf="!isUserExpanded(user) && isUserInEditMode(user)">Editar listas</span>
                   <span *ngIf="isUserExpanded(user) && isUserInEditMode(user)">Guardar cambios</span>
                 </button>
-                <button *ngIf="isUserExpanded(user)" 
-                        (click)="toggleEditMode(user)"
-                        class="ml-2 px-4 py-2 bg-[#E6F0F7] text-[#1965B3] rounded-lg hover:bg-[#1965B3] hover:text-white transition-colors">
+                <button *ngIf="isUserExpanded(user)" (click)="toggleEditMode(user)"
+                  class="ml-2 px-4 py-2 bg-[#E6F0F7] text-[#1965B3] rounded-lg hover:bg-[#1965B3] hover:text-white transition-colors">
                   {{isUserInEditMode(user) ? 'Cancelar edición' : 'Editar listas'}}
                 </button>
               </td>
@@ -100,18 +103,19 @@
         </table>
       </div>
     </div>
-   
+
     <div class="space-y-6">
-      <div *ngFor="let user of getUsersWithLists()" class="bg-white rounded-2xl shadow-lg border border-[#E0E9F5] overflow-hidden">
-        <!-- Solo mostrar cuando el usuario está expandido -->
+      <div *ngFor="let user of getUsersWithLists()"
+        class="bg-white rounded-2xl shadow-lg border border-[#E0E9F5] overflow-hidden">
         <div class="divide-y divide-[#E0E9F5]" *ngIf="isUserExpanded(user)">
-          <!-- Encabezado del usuario -->
           <div class="p-6 bg-[#F8F8F8]">
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-3">
                 <div class="w-12 h-12 bg-[#E6F0F7] rounded-full flex items-center justify-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#1965B3]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#1965B3]" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                   </svg>
                 </div>
                 <div>
@@ -130,65 +134,59 @@
                   </div>
                 </div>
               </div>
-              <button (click)="toggleUserLists(user)" 
-                      class="px-4 py-2 bg-[#E6F0F7] text-[#1965B3] rounded-lg hover:bg-[#1965B3] hover:text-white transition-colors">
+              <button (click)="toggleUserLists(user)"
+                class="px-4 py-2 bg-[#E6F0F7] text-[#1965B3] rounded-lg hover:bg-[#1965B3] hover:text-white transition-colors">
                 Ocultar listas
               </button>
             </div>
           </div>
-    
-          <!-- Grid de listas -->
+
           <div class="p-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div *ngFor="let list of getUserLists(user)" 
-                   class="bg-[#F8F8F8] rounded-xl border border-[#E0E9F5] p-4 hover:shadow-md transition-all">
+              <div *ngFor="let list of getUserLists(user)"
+                class="bg-[#F8F8F8] rounded-xl border border-[#E0E9F5] p-4 hover:shadow-md transition-all">
                 <div class="flex justify-between items-start mb-4">
                   <div>
                     <div class="flex items-center gap-2">
-                      <input *ngIf="isUserInEditMode(user)"
-                             type="text"
-                             [(ngModel)]="list.name"
-                             class="font-medium text-[#2A2A2A] bg-white border border-[#E0E9F5] rounded px-2 py-1"
-                             (blur)="updateList(list)">
+                      <input *ngIf="isUserInEditMode(user)" type="text" [(ngModel)]="list.name"
+                        class="font-medium text-[#2A2A2A] bg-white border border-[#E0E9F5] rounded px-2 py-1"
+                        (blur)="updateList(list)">
                       <h4 *ngIf="!isUserInEditMode(user)" class="font-medium text-[#2A2A2A]">{{list.name}}</h4>
                     </div>
-                    <p *ngIf="getUserSubscriptionType(user) === 'free'" 
-                       class="text-xs text-[#999999] mt-1">
-                        {{list.books.length || 0}}/10 libros
+                    <p *ngIf="getUserSubscriptionType(user) === 'free'" class="text-xs text-[#999999] mt-1">
+                      {{list.books.length || 0}}/10 libros
                     </p>
                   </div>
                   <div class="flex gap-2">
-                    <button (click)="deleteList(list)" 
-                            class="p-2 text-[#E893C5] hover:bg-[#EBB2C3] hover:bg-opacity-20 rounded-lg transition-all">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    <button (click)="deleteList(list)"
+                      class="p-2 text-[#E893C5] hover:bg-[#EBB2C3] hover:bg-opacity-20 rounded-lg transition-all">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                       </svg>
                     </button>
                   </div>
                 </div>
-                
+
                 <div class="grid grid-cols-2 gap-2">
-                  <div *ngFor="let book of list.books?.slice(0, 4)" 
-                       class="flex gap-2 items-center">
-                    <img [src]="book.cover || 'assets/images/default-book-cover.jpg'"
-                         [alt]="book.title"
-                         class="w-12 h-16 object-cover rounded-lg shadow-sm"
-                         onerror="this.src='assets/images/default-book-cover.jpg'">
+                  <div *ngFor="let book of list.books?.slice(0, 4)" class="flex gap-2 items-center">
+                    <img [src]="book.cover || 'assets/images/default-book-cover.jpg'" [alt]="book.title"
+                      class="w-12 h-16 object-cover rounded-lg shadow-sm"
+                      onerror="this.src='assets/images/default-book-cover.jpg'">
                     <div class="flex-1 min-w-0">
                       <p class="text-sm font-medium text-[#2A2A2A] truncate">{{book.title}}</p>
                       <p class="text-xs text-[#999999] truncate">{{book.author}}</p>
-                      <button *ngIf="isUserInEditMode(user)"
-                              (click)="removeBookFromList(list.id, book.id)"
-                              class="text-xs text-[#E893C5] hover:text-[#EBB2C3] mt-1">
+                      <button *ngIf="isUserInEditMode(user)" (click)="removeBookFromList(list.id, book.id)"
+                        class="text-xs text-[#E893C5] hover:text-[#EBB2C3] mt-1">
                         Eliminar
                       </button>
                     </div>
                   </div>
                 </div>
-                
+
                 <div *ngIf="(list.books.length || 0) > 4" class="mt-2 text-center">
-                  <button (click)="selectList(list)" 
-                          class="text-sm text-[#1965B3] hover:underline">
+                  <button (click)="selectList(list)" class="text-sm text-[#1965B3] hover:underline">
                     Ver {{(list.books.length || 0) - 4}} libros más
                   </button>
                 </div>

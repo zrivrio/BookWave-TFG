@@ -31,7 +31,6 @@ export class ControlCategoriasComponent implements OnInit {
     this.isLoading = true;
     this.categoryService.getCategories().subscribe({
       next: (data) => {
-        // Mapear la respuesta al formato Category
         this.categories = data.map(item => ({
           id: item.id,
           nombre: item.nombre,
@@ -56,7 +55,6 @@ export class ControlCategoriasComponent implements OnInit {
       next: (updatedCategory) => {
         const index = this.categories.findIndex(c => c.id === updatedCategory.id);
         if (index !== -1) {
-          // Crear nuevas referencias para forzar la detección de cambios
           this.categories = [
             ...this.categories.slice(0, index),
             updatedCategory,
@@ -107,8 +105,6 @@ export class ControlCategoriasComponent implements OnInit {
   saveCategory(): void {
     this.isLoading = true;
     this.errorMessage = '';
-    
-    // Asegurarse de que el ID sea 0 para una nueva categoría
     this.currentCategory.id = 0;
     
     this.categoryService.saveCategory(this.currentCategory).subscribe({

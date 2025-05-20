@@ -87,7 +87,7 @@ export class ControlLibrosComponent implements OnInit {
     this.bookService.createBook(this.currentBook as Book).subscribe({
       next: (book) => {
         this.books.push(book);
-        this.filterBooks(); // Actualizar la lista filtrada
+        this.filterBooks(); 
         this.showForm = false;
         this.error = null;
       },
@@ -107,7 +107,7 @@ export class ControlLibrosComponent implements OnInit {
         if (index !== -1) {
           this.books[index] = updatedBook;
         }
-        this.filterBooks(); // Actualizar la lista filtrada
+        this.filterBooks(); 
         this.showForm = false;
         this.error = null;
       },
@@ -123,7 +123,7 @@ export class ControlLibrosComponent implements OnInit {
       this.bookService.deleteBook(id).subscribe({
         next: () => {
           this.books = this.books.filter(b => b.id !== id);
-          this.filterBooks(); // Actualizar la lista filtrada
+          this.filterBooks(); 
           this.error = null;
         },
         error: (error) => {

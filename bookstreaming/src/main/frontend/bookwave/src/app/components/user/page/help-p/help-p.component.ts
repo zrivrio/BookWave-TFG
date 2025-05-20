@@ -27,7 +27,6 @@ export class HelpPComponent {
     });
   }
 
-  // Enviar formulario
   onSubmit() {
     if (this.helpForm.invalid) return;
 
@@ -47,7 +46,6 @@ export class HelpPComponent {
       },
       createdAt: new Date().toISOString()
     };
-
     this.helpService.sendHelpRequest(formData).subscribe({
       next: () => {
         this.isSuccess = true;
@@ -63,7 +61,6 @@ export class HelpPComponent {
     });
   }
 
-  // Mostrar/ocultar FAQs
   toggleFAQ(id: number) {
     this.activeFAQ = this.activeFAQ === id ? null : id;
   }

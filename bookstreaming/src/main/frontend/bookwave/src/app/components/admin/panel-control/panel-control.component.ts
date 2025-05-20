@@ -46,7 +46,7 @@ export class PanelControlComponent implements OnInit {
     const updatedRequest = { 
       ...request, 
       status: newStatus,
-      updatedAt: new Date() // Actualizar la fecha de modificación
+      updatedAt: new Date() 
     };
 
     this.helpService.updateHelpRequest(updatedRequest).subscribe({
@@ -74,7 +74,7 @@ export class PanelControlComponent implements OnInit {
         return 'bg-green-100 text-green-700';
       case HelpStatus.CANCELLED:
         return 'bg-red-100 text-red-700';
-      default: // PENDING
+      default: 
         return 'bg-[#E6F0F7] text-[#1E0f75]';
     }
   }

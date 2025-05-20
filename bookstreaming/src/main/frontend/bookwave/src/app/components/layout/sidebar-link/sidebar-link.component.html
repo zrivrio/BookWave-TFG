@@ -1,39 +1,25 @@
-<a
-  class="group flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300 cursor-pointer relative overflow-hidden"
-  [routerLink]="route"
-  routerLinkActive="active"
-  (click)="onClick($event)"
->
-  <div
-    class="flex items-center justify-center w-10 h-10 rounded-xl transition-all duration-300"
-    [ngClass]="{
+<a class="group flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300 cursor-pointer relative overflow-hidden"
+  [routerLink]="route" routerLinkActive="active" (click)="onClick($event)">
+  <div class="flex items-center justify-center w-10 h-10 rounded-xl transition-all duration-300" [ngClass]="{
       'bg-[#1965B3] text-white shadow-md': isActiveRoute(),
       'bg-[#E6F0F7] text-[#3785D8] group-hover:bg-[#CBD8E8] group-hover:shadow-sm': !isActiveRoute()
-    }"
-  >
-    <span
-      class="material-symbols-outlined text-xl transition-transform duration-300 group-hover:scale-110"
-      [ngClass]="{
+    }">
+    <span class="material-symbols-outlined text-xl transition-transform duration-300 group-hover:scale-110" [ngClass]="{
         '!font-semibold': isActiveRoute()
       }"
-      [style.font-variation-settings]="isActiveRoute() ? '\'FILL\' 1, \'wght\' 500, \'GRAD\' 0, \'opsz\' 24' : '\'FILL\' 0, \'wght\' 400, \'GRAD\' 0, \'opsz\' 24'"
-    >
+      [style.font-variation-settings]="isActiveRoute() ? '\'FILL\' 1, \'wght\' 500, \'GRAD\' 0, \'opsz\' 24' : '\'FILL\' 0, \'wght\' 400, \'GRAD\' 0, \'opsz\' 24'">
       {{ icon }}
     </span>
   </div>
 
-  <span 
-    class="text-sm font-medium transition-all duration-300"
-    [ngClass]="{
+  <span class="text-sm font-medium transition-all duration-300" [ngClass]="{
       'text-[#1965B3] font-semibold': isActiveRoute(),
       'text-[#333333] group-hover:text-[#1965B3]': !isActiveRoute()
-    }"
-  >
+    }">
     {{ label }}
   </span>
 
-  <div 
-    *ngIf="isActiveRoute()"
-    class="absolute right-0 top-0 h-full w-1 bg-[#1965B3] rounded-l-full shadow-[-2px_0_8px_rgba(25,101,179,0.2)]"
-  ></div>
+  <div *ngIf="isActiveRoute()"
+    class="absolute right-0 top-0 h-full w-1 bg-[#1965B3] rounded-l-full shadow-[-2px_0_8px_rgba(25,101,179,0.2)]">
+  </div>
 </a>

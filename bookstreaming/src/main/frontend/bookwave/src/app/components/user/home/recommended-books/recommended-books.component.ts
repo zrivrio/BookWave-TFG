@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import {CommonModule} from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Book } from '../../../../models/Book';
 import { RecommendationsService } from '../../../../service/recommendations.service';
 import { AuthService } from '../../../../service/auth.service';
@@ -13,7 +13,7 @@ import { Router, RouterModule } from '@angular/router';
   templateUrl: './recommended-books.component.html',
   styleUrl: './recommended-books.component.css'
 })
-export class RecommendedBooksComponent implements OnInit, OnDestroy  {
+export class RecommendedBooksComponent implements OnInit, OnDestroy {
   recommendedBooks: Book[] = [];
   isLoading: boolean = false;
   error: string = '';
@@ -24,7 +24,7 @@ export class RecommendedBooksComponent implements OnInit, OnDestroy  {
     private recommendationsService: RecommendationsService,
     private authService: AuthService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     if (this.router.url === '/') {

@@ -43,10 +43,9 @@ public class ReadingProgressService {
         User usuario = userRepository.findById(progress.getUser().getId()).orElseThrow();
         Book book = bookRepository.findById(progress.getBook().getId()).orElseThrow();
     
-        // Calcular el porcentaje basado en las páginas
         if (book.getTotalPages() != null && book.getTotalPages() > 0) {
             double percentage = (double) progress.getCurrentPage() / book.getTotalPages() * 100;
-            progress.setPercentageRead(Math.min(percentage, 100)); // No más del 100%
+            progress.setPercentageRead(Math.min(percentage, 100));
         } else {
             progress.setPercentageRead(0.0);
         }

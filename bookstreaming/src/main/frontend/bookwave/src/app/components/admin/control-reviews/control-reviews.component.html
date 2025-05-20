@@ -1,6 +1,5 @@
 <div class="min-h-screen bg-gradient-to-br from-[#E6F0F7] to-[#F5F5F5] py-3">
   <div class="max-w-7xl mx-auto px-4">
-    <!-- Encabezado -->
     <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mb-8">
       <h2 class="text-2xl font-bold text-[#1E0f75] flex items-center gap-2">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-[#1965B3]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -46,7 +45,6 @@
       </div>
     </div>
 
-    <!-- Estados de carga y error -->
     <div *ngIf="isLoading" class="mb-6 p-4 bg-[#E6F0F7] text-[#1965B3] rounded-xl flex items-center gap-2">
       <div class="animate-spin rounded-full h-5 w-5 border-2 border-[#1965B3] border-t-transparent"></div>
       <span>Cargando reseñas...</span>
@@ -59,7 +57,6 @@
       {{error}}
     </div>
 
-    <!-- Lista de usuarios con reseñas -->
     <div class="space-y-6">
       <div *ngFor="let user of getUniqueUsers()" class="bg-white rounded-2xl shadow-lg border border-[#E0E9F5] overflow-hidden">
         <div class="p-6">
@@ -84,7 +81,6 @@
           </div>
         </div>
 
-        <!-- Reseñas expandidas -->
         <div *ngIf="isUserExpanded(user)" class="border-t border-[#E0E9F5]">
           <div class="p-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">

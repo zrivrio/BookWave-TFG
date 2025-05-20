@@ -35,7 +35,6 @@ export class LibrosComponent implements OnChanges, OnDestroy {
   loadBooks(): void {
     this.loading = true;
     
-    // Cancelar suscripciones anteriores para evitar llamadas duplicadas
     this.subscriptions.unsubscribe();
     this.subscriptions = new Subscription();
 

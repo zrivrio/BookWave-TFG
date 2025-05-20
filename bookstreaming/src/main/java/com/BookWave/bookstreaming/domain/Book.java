@@ -27,7 +27,6 @@ public class Book {
     private Integer totalPages;
     private Double averageRating;
 
-    //Relaciones
     @ManyToMany(mappedBy = "books")
     @JsonIgnore
     private Set<Category> categories;

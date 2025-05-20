@@ -15,13 +15,10 @@ export class SubscriptionCartService {
 
   constructor(private http: HttpClient, private authService: AuthService) { }
 
-  // Get current cart with userId
   getCurrentCart(): Observable<SubscriptionCart> {
     const userId = this.authService.currentUserValue?.id;
     return this.http.get<SubscriptionCart>(`${this.apiUrl}?userId=${userId}`);
   }
-
-  // Select subscription with userId
   selectSubscription(subscriptionType: SubscriptionType): Observable<SubscriptionCart> {
     const userId = this.authService.currentUserValue?.id;
     return this.http.post<SubscriptionCart>(
@@ -29,8 +26,6 @@ export class SubscriptionCartService {
       {}
     );
   }
-
-  // Process checkout with cartId
   processCheckout(cartId: number): Observable<SubscriptionCart> {
     return this.http.post<SubscriptionCart>(
       `${this.apiUrl}/checkout?cartId=${cartId}`,
