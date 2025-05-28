@@ -18,31 +18,30 @@ export class LibraryService {
 
   createList(userId: number, name: string): Observable<ReadingList> {
     const list = {
-        name: name,
-        userId: userId
+      name: name,
+      userId: userId
     };
-    
+
     return this.http.post<ReadingList>(
-        `${this.apiUrl}/create`,
-        list
+      `${this.apiUrl}/create`,
+      list
     );
-}
+  }
 
   deleteList(listId: number, userId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${listId}?userId=${userId}`);
-  }
+  return this.http.delete<void>(`${this.apiUrl}/${listId}?userId=${userId}`);
+}
 
   getBooksInList(listId: number): Observable<Book[]> {
     return this.http.get<Book[]>(`${this.apiUrl}/${listId}/books`);
   }
 
-  addBookToList(listId: number, bookId: number, userId: number): Observable<void> {
-    return this.http.post<void>(
-      `${this.apiUrl}/${listId}/add-book`,
-      null,
-      { params: { bookId: bookId.toString(), userId: userId.toString() } }
-    );
-  }
+  addBookToList(listId: number, bookId: number, userId: number): Observable<any> {
+  return this.http.post(
+    `${this.apiUrl}/${listId}/add-book?bookId=${bookId}&userId=${userId}`,
+    {}
+  );
+}
 
   removeBookFromList(listId: number, bookId: number, userId: number): Observable<void> {
     return this.http.delete<void>(
@@ -50,7 +49,6 @@ export class LibraryService {
     );
   }
 
-  // Métodos de Administrador
   getAllReadingLists(): Observable<ReadingList[]> {
     return this.http.get<ReadingList[]>(`${this.apiUrl}/admin`);
   }
@@ -65,5 +63,9 @@ export class LibraryService {
 
   updateReadingList(readingList: ReadingList): Observable<ReadingList> {
     return this.http.put<ReadingList>(`${this.apiUrl}/admin`, readingList);
+  }
+
+  deleteListAdmin(listId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/admin/${listId}`);
   }
 }

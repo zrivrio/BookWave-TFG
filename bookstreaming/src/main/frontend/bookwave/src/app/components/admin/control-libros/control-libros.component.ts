@@ -59,8 +59,8 @@ export class ControlLibrosComponent implements OnInit {
     }
 
     const term = this.searchTerm.toLowerCase();
-    this.filteredBooks = this.books.filter(book => 
-      book.title.toLowerCase().includes(term) || 
+    this.filteredBooks = this.books.filter(book =>
+      book.title.toLowerCase().includes(term) ||
       book.author.toLowerCase().includes(term) ||
       (book.description && book.description.toLowerCase().includes(term)) ||
       (book.language && this.getLanguageName(book.language).toLowerCase().includes(term)) ||
@@ -87,7 +87,7 @@ export class ControlLibrosComponent implements OnInit {
     this.bookService.createBook(this.currentBook as Book).subscribe({
       next: (book) => {
         this.books.push(book);
-        this.filterBooks(); 
+        this.filterBooks();
         this.showForm = false;
         this.error = null;
       },
@@ -107,7 +107,7 @@ export class ControlLibrosComponent implements OnInit {
         if (index !== -1) {
           this.books[index] = updatedBook;
         }
-        this.filterBooks(); 
+        this.filterBooks();
         this.showForm = false;
         this.error = null;
       },
@@ -118,21 +118,23 @@ export class ControlLibrosComponent implements OnInit {
     });
   }
 
-  deleteBook(id: number): void {
-    if (confirm('¿Estás seguro de que deseas eliminar este libro?')) {
-      this.bookService.deleteBook(id).subscribe({
-        next: () => {
-          this.books = this.books.filter(b => b.id !== id);
-          this.filterBooks(); 
-          this.error = null;
-        },
-        error: (error) => {
-          this.error = 'Error al eliminar el libro';
-          console.error(error);
-        }
-      });
-    }
+ deleteBook(id: number): void {
+  if (confirm('¿Estás seguro de que deseas eliminar este libro?')) {
+    console.log('Intentando eliminar libro con ID:', id);
+    this.bookService.deleteBook(id).subscribe({
+      next: () => {
+        console.log('Libro eliminado exitosamente');
+        this.books = this.books.filter(b => b.id !== id);
+        this.filterBooks();
+        this.error = null;
+      },
+      error: (error) => {
+        console.error('Error al eliminar libro:', error);
+        this.error = 'Error al eliminar el libro';
+      }
+    });
   }
+}
 
   editBook(book: Book): void {
     this.currentBook = { ...book };

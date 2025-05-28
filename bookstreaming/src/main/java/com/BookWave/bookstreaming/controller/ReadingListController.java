@@ -74,7 +74,7 @@ public ResponseEntity<?> createList(@RequestBody Map<String, Object> payload) {
         if (list == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(list.getBooks());
+        return ResponseEntity.ok(list.getBooks().stream().toList());
     }
 
     @PostMapping("/{listId}/add-book")
