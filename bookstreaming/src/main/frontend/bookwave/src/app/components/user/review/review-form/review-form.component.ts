@@ -21,7 +21,7 @@ export class ReviewFormComponent implements OnInit {
   @Input({ required: true }) bookId!: number;
   @Input() bookTitle: string = '';
   @Input({ required: true }) currentUser!: User;
-  @Output() reviewSubmitted = new EventEmitter<Review>();
+  @Output() reviewCreated = new EventEmitter<Review>();
   usuario: User = {} as User;
   libro: Book = {} as Book;
   readonly possibleRatings = [1, 2, 3, 4, 5] as const;
@@ -80,7 +80,14 @@ export class ReviewFormComponent implements OnInit {
 
     this.reviewService.createReview(reviewToSend).subscribe({
         next: (savedReview) => {
-            this.reviewSubmitted.emit(savedReview);
+            // Emite la reseña completa que viene del servidor
+            this.reviewCreated.emit({
+                ...savedReview,
+                user: {  // Asegura que el usuario tenga los datos mínimos
+                    id: this.currentUser.id,
+                    username: this.currentUser.username
+                }
+            });
             this.resetForm();
         },
         error: (error) => {

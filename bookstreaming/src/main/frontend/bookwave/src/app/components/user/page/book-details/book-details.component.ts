@@ -109,4 +109,14 @@ export class BookDetailsComponent implements OnInit {
   onReviewSubmitted(): void {
     this.loadBookDetails();
   }
+  handleNewReview(newReview: Review) {
+    this.reviews = [newReview, ...this.reviews];
+    this.loadAverageRating();
+    setTimeout(() => {
+        const element = document.getElementById('reviews-section');
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+        }
+    }, 100);
+}
 }

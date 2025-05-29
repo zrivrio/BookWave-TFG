@@ -19,12 +19,6 @@ export class CheckoutComponent implements OnInit {
   paymentError: string | null = null;
   selectedPaymentMethod = 'creditCard';
 
-  paymentMethods = [
-    { id: 'creditCard', name: 'Tarjeta de Crédito', icon: 'credit_card' },
-    { id: 'paypal', name: 'PayPal', icon: 'payments' },
-    { id: 'bankTransfer', name: 'Transferencia Bancaria', icon: 'account_balance' }
-  ];
-
   constructor(
     private cartService: SubscriptionCartService,
     private authService: AuthService,
@@ -37,23 +31,66 @@ export class CheckoutComponent implements OnInit {
       this.router.navigate(['/login']);
       return;
     }
-  
+
+    this.loadOrCreateCart();
+  }
+
+  private loadOrCreateCart(): void {
+    this.isLoading = true;
+    
     this.cartService.getCurrentCart().subscribe({
       next: (cart) => {
         this.cart = cart;
-        if (!cart) {
-          this.router.navigate(['/profile']);
-        }
+        this.isLoading = false;
       },
       error: (err) => {
-        console.error('Error getting cart:', err);
-        this.router.navigate(['/profile']);
+        console.log('No existe carrito, creando uno nuevo...');
+        this.createNewCart();
+      }
+    });
+  }
+
+  private createNewCart(): void {
+    // Crear un carrito con suscripción Premium por defecto
+    this.cartService.selectSubscription(SubscriptionType.Premium).subscribe({
+      next: (newCart) => {
+        this.cart = newCart;
+        this.isLoading = false;
+        console.log('Carrito creado exitosamente:', newCart);
+      },
+      error: (err) => {
+        console.error('Error creando carrito:', err);
+        this.paymentError = 'Error al crear el carrito';
+        this.isLoading = false;
+        // Como última opción, redirigir al perfil
+        setTimeout(() => {
+          this.router.navigate(['/profile']);
+        }, 2000);
       }
     });
   }
 
   selectPaymentMethod(method: string): void {
     this.selectedPaymentMethod = method;
+  }
+
+  changeSubscription(subscriptionType: SubscriptionType): void {
+    if (!this.cart) return;
+
+    this.isLoading = true;
+    this.paymentError = null;
+
+    this.cartService.selectSubscription(subscriptionType).subscribe({
+      next: (updatedCart) => {
+        this.cart = updatedCart;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Error cambiando suscripción:', err);
+        this.paymentError = 'Error al cambiar la suscripción';
+        this.isLoading = false;
+      }
+    });
   }
 
   processPayment(): void {
@@ -72,7 +109,7 @@ export class CheckoutComponent implements OnInit {
         this.updateLocalUser(updatedCart.selectedSubscription);
         setTimeout(() => {
           this.router.navigate(['/']);
-        }, 1000);
+        }, 2000);
       },
       error: (err) => {
         this.paymentError = err.message || 'Error al procesar el pago';
@@ -92,10 +129,14 @@ export class CheckoutComponent implements OnInit {
   }
 
   get isUpgrade(): boolean {
-    return this.cart?.selectedSubscription === 'Premium';
+    return this.cart?.selectedSubscription === SubscriptionType.Premium;
   }
 
   get isCancellation(): boolean {
-    return this.cart?.selectedSubscription === 'Free';
+    return this.cart?.selectedSubscription === SubscriptionType.Free;
+  }
+
+  get canProcessPayment(): boolean {
+    return !this.isLoading && this.cart?.id != null && !this.paymentSuccess;
   }
 }
