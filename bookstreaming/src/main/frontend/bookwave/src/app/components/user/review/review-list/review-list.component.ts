@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { Review } from '../../../../models/Review';
 import { ReviewService } from '../../../../service/review.service';
 import { CommonModule } from '@angular/common';
@@ -14,8 +14,8 @@ import { SubscriptionType } from '../../../../models/SubscriptionType';
   templateUrl: './review-list.component.html',
   styleUrls: ['./review-list.component.css']
 })
-export class ReviewListComponent implements OnInit {
-  @Input({ required: true }) bookId!: number;
+export class ReviewListComponent implements OnInit, OnChanges {
+  @Input() bookId!: number;
   @Input() reviews: Review[] = [];
   @Input() loading: boolean = false;
   error: string | null = null;
@@ -38,11 +38,20 @@ export class ReviewListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadReviews();
+    if (!this.reviews || this.reviews.length === 0) {
+      this.loadReviews();
+    }
   }
 
-  refreshReviews(newReview?: Review): void {
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['bookId'] && !changes['bookId'].firstChange) {
+      this.loadReviews();
+    }
+  }
+
+  loadReviews(): void {
     this.loading = true;
+    this.error = null;
     this.reviewService.getReviewsByBook(this.bookId).subscribe({
       next: (reviews) => {
         this.reviews = reviews;
@@ -56,8 +65,7 @@ export class ReviewListComponent implements OnInit {
     });
   }
 
-  loadReviews(): void {
-    this.loading = true;
-    this.refreshReviews();
+  addReview(newReview: Review): void {
+    this.reviews = [newReview, ...this.reviews]; 
   }
 }

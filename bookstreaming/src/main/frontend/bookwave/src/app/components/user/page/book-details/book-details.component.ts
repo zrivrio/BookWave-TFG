@@ -12,6 +12,7 @@ import { ReadingProgressService } from '../../../../service/reading-progress.ser
 import { ReadingProgress } from '../../../../models/ReadinProgress';
 import { AddToReadingListComponent } from '../../add-to-reading-list/add-to-reading-list.component';
 import { ReviewService } from '../../../../service/review.service';
+import { Review } from '../../../../models/Review';
 
 @Component({
   selector: 'app-book-details',
@@ -26,6 +27,7 @@ export class BookDetailsComponent implements OnInit {
   error: string | null = null;
   currentUser: User | null = null;
   averageRating: number = 0;
+   reviews: Review[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -36,7 +38,7 @@ export class BookDetailsComponent implements OnInit {
     private reviewService: ReviewService
   ) { }
 
-  ngOnInit(): void {
+   ngOnInit(): void {
     this.loadBookDetails();
     this.currentUser = this.userService.getCurrentUser();
   }
