@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HelpService } from '../../../../service/help.service';
 import { CommonModule } from '@angular/common';
@@ -10,11 +10,12 @@ import { AuthService } from '../../../../service/auth.service';
   templateUrl: './help-p.component.html',
   styleUrl: './help-p.component.css'
 })
-export class HelpPComponent {
+export class HelpPComponent implements OnInit {
   helpForm: FormGroup;
   isSubmitting = false;
   isSuccess = false;
   activeFAQ: number | null = null;
+  isLoggedIn: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -25,6 +26,9 @@ export class HelpPComponent {
       subject: ['', Validators.required],
       message: ['', [Validators.required, Validators.minLength(10)]]
     });
+  }
+  ngOnInit(): void {
+    this.isLoggedIn = this.authService.isAuthenticated();
   }
 
   onSubmit() {
