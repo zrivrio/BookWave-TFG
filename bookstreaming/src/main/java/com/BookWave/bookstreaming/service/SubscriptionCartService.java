@@ -58,31 +58,26 @@ public class SubscriptionCartService {
         return cartRepository.save(cart);
     }
 
-    public SubscriptionCart processCheckout(Long cartId) {
-        if (cartId == null) {
-            throw new IllegalArgumentException("Cart ID cannot be null");
-        }
-
-        SubscriptionCart cart = cartRepository.findById(cartId)
-                .orElseThrow(() -> new RuntimeException("Carrito no encontrado con ID: " + cartId));
-        
-        if (cart.getStatus() == CartStatus.COMPLETED) {
-            throw new IllegalStateException("Cart has already been processed");
-        }
-        
-        User user = cart.getUser();
-        
-        if (cart.isUpgrade()) {
-            user.setSubscriptionType(SubscriptionType.Premium);
-        } else if (cart.isCancellation()) {
-            user.setSubscriptionType(SubscriptionType.Free);
-        }
-        
-        userRepository.save(user);
-        cart.setStatus(CartStatus.COMPLETED);
-        cart.setUpdatedAt(new Date());
-        return cartRepository.save(cart);
+public SubscriptionCart processCheckout(Long cartId) {
+    if (cartId == null) {
+        throw new IllegalArgumentException("Cart ID cannot be null");
     }
+
+    SubscriptionCart cart = cartRepository.findById(cartId)
+            .orElseThrow(() -> new RuntimeException("Carrito no encontrado con ID: " + cartId));
+    
+    if (cart.getStatus() == CartStatus.COMPLETED) {
+        return cart;
+    }
+    
+    User user = cart.getUser();
+    user.setSubscriptionType(cart.getSelectedSubscription());
+    userRepository.save(user);
+    
+    cart.setStatus(CartStatus.COMPLETED);
+    cart.setUpdatedAt(new Date());
+    return cartRepository.save(cart);
+}
 
     //Métodos de Administrador
     public List<SubscriptionCart> getAllCarts() {

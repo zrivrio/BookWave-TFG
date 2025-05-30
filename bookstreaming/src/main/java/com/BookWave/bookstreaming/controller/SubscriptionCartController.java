@@ -31,7 +31,7 @@ public class SubscriptionCartController {
     }
 
     @PostMapping("/checkout")
-    public SubscriptionCart checkout(@RequestParam Long cartId) {
+    public SubscriptionCart processCheckout(@RequestParam Long cartId) {
         return cartService.processCheckout(cartId);
     }
 

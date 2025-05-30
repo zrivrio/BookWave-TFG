@@ -5,6 +5,7 @@ import { SubscriptionCartService } from '../../../../service/subscription-cart.s
 import { CommonModule } from '@angular/common';
 import { SubscriptionCart } from '../../../../models/SubscriptionCart';
 import { SubscriptionType } from '../../../../models/SubscriptionType';
+import { UserService } from '../../../../service/user.service';
 
 @Component({
   selector: 'app-checkout',
@@ -22,7 +23,8 @@ export class CheckoutComponent implements OnInit {
   constructor(
     private cartService: SubscriptionCartService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {
@@ -51,7 +53,6 @@ export class CheckoutComponent implements OnInit {
   }
 
   private createNewCart(): void {
-    // Crear un carrito con suscripción Premium por defecto
     this.cartService.selectSubscription(SubscriptionType.Premium).subscribe({
       next: (newCart) => {
         this.cart = newCart;
@@ -62,7 +63,6 @@ export class CheckoutComponent implements OnInit {
         console.error('Error creando carrito:', err);
         this.paymentError = 'Error al crear el carrito';
         this.isLoading = false;
-        // Como última opción, redirigir al perfil
         setTimeout(() => {
           this.router.navigate(['/profile']);
         }, 2000);
@@ -93,30 +93,34 @@ export class CheckoutComponent implements OnInit {
     });
   }
 
-  processPayment(): void {
+ processPayment(): void {
     if (!this.cart?.id) {
-      this.paymentError = 'No hay carrito activo';
-      return;
+        this.paymentError = 'No hay carrito activo';
+        return;
     }
 
     this.isLoading = true;
     this.paymentError = null;
 
     this.cartService.processCheckout(this.cart.id).subscribe({
-      next: (updatedCart) => {
-        this.paymentSuccess = true;
-        this.isLoading = false;
-        this.updateLocalUser(updatedCart.selectedSubscription);
-        setTimeout(() => {
-          this.router.navigate(['/']);
-        }, 2000);
-      },
-      error: (err) => {
-        this.paymentError = err.message || 'Error al procesar el pago';
-        this.isLoading = false;
-      }
+        next: (updatedCart) => {
+            this.paymentSuccess = true;
+            this.isLoading = false;
+            
+            if (updatedCart.status === 'COMPLETED') {
+                this.updateLocalUser(updatedCart.selectedSubscription);
+                
+                setTimeout(() => {
+                    this.router.navigate(['/']);
+                }, 2000);
+            }
+        },
+        error: (err) => {
+            this.paymentError = err.message || 'Error al procesar el pago';
+            this.isLoading = false;
+        }
     });
-  }
+}
 
   private updateLocalUser(newSubscription: SubscriptionType): void {
     const currentUser = this.authService.currentUserValue;

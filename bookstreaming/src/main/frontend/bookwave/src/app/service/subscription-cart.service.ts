@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, tap, throwError } from 'rxjs';
 import { SubscriptionCart } from '../models/SubscriptionCart';
 import { SubscriptionType } from '../models/SubscriptionType';
 import { AuthService } from './auth.service';
@@ -28,10 +28,14 @@ export class SubscriptionCartService {
   }
   processCheckout(cartId: number): Observable<SubscriptionCart> {
     return this.http.post<SubscriptionCart>(
-      `${this.apiUrl}/checkout?cartId=${cartId}`,
-      {}
+        `${this.apiUrl}/checkout?cartId=${cartId}`,
+        {}
+    ).pipe(
+        tap(updatedCart => {
+            this.currentCartSubject.next(updatedCart);
+        })
     );
-  }
+}
 
   // Métodos de Administrador
   getAllCarts(): Observable<SubscriptionCart[]> {
