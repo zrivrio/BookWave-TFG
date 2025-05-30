@@ -20,8 +20,8 @@ public interface ReadingListRepository extends JpaRepository<ReadingList, Long> 
     """, nativeQuery = true)
     Book findMostPopularBook();
 
-    List<ReadingList> findByUserId(Long userId);
-    
+    List<ReadingList> findByUser_Id(Long userId);
+
     @Query("SELECT COUNT(r) FROM ReadingList r WHERE r.user.id = :userId")
     long countByUserId(@Param("userId") Long userId);
 

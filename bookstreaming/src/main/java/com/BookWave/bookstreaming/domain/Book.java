@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -35,14 +37,28 @@ public class Book {
     @JsonIgnore
     private List<ReadingProgress> readingProgresses;
 
-    @ManyToMany
+    @JsonIgnore 
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
         name = "reading_list_books",
         joinColumns = @JoinColumn(name = "book_id"),
         inverseJoinColumns = @JoinColumn(name = "reading_list_id")
     )
-    @JsonIgnore
-    private Set<ReadingList> readingLists = new HashSet<>();
+    private List<ReadingList> readingLists = new ArrayList<>();
+    
+    public void addToReadingList(ReadingList readingList) {
+        if (!this.readingLists.contains(readingList)) {
+            this.readingLists.add(readingList);
+        }
+        if (!readingList.getBooks().contains(this)) {
+            readingList.getBooks().add(this);
+        }
+    }
+    
+    public void removeFromReadingList(ReadingList readingList) {
+        this.readingLists.remove(readingList);
+        readingList.getBooks().remove(this);
+    }
 
 }
 

@@ -1,10 +1,11 @@
-// add-to-reading-list.component.ts
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { ReadingList } from '../../../models/ReadingList';
 import { LibraryService } from '../../../service/library.service';
 import { UserService } from '../../../service/user.service';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Subject } from 'rxjs';
+import { takeUntil, distinctUntilChanged, filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-add-to-reading-list',
@@ -13,18 +14,19 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
   templateUrl: './add-to-reading-list.component.html',
   styleUrls: ['./add-to-reading-list.component.scss']
 })
-export class AddToReadingListComponent implements OnInit {
+export class AddToReadingListComponent implements OnInit, OnDestroy {
   @Input() bookId!: number;
   
   readingLists: ReadingList[] = [];
-  selectedListId: number | null = null;
   loading = false;
   error = '';
   success = '';
-  userId: number | null = null;
   showModal = false;
-  newListForm: FormGroup;
   showDropdown = false;
+  newListForm: FormGroup;
+  currentUserId: number | null = null;
+  
+  private destroy$ = new Subject<void>();
 
   constructor(
     private readingListService: LibraryService,
@@ -37,87 +39,161 @@ export class AddToReadingListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const user = this.userService.getCurrentUser();
-    this.userId = user?.id || null;
-    if (this.userId) {
-      this.loadUserLists();
-    }
+    // Suscribirse a cambios de usuario con filtros para evitar llamadas innecesarias
+    this.userService.currentUser$
+      .pipe(
+        takeUntil(this.destroy$),
+        distinctUntilChanged((prev, curr) => {
+          // Solo recargar si el usuario realmente cambió
+          const prevId = prev?.id || null;
+          const currId = curr?.id || null;
+          return prevId === currId;
+        })
+      )
+      .subscribe(user => {
+        console.log('Usuario cambió:', user);
+        this.currentUserId = user?.id || null;
+        
+        if (user?.id) {
+          this.loadUserLists(user.id);
+        } else {
+          this.readingLists = [];
+          this.resetState();
+        }
+      });
   }
 
-  loadUserLists(): void {
-    if (!this.userId) return;
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  loadUserLists(userId: number): void {
+    if (this.loading) return; // Evitar llamadas múltiples
     
+    console.log('Cargando listas para usuario:', userId);
     this.loading = true;
-    this.readingListService.getLists(this.userId).subscribe({
+    this.error = '';
+    
+    this.readingListService.getLists(userId).subscribe({
       next: (lists: ReadingList[]) => {
-        this.readingLists = lists;
+        console.log('Listas cargadas:', lists);
+        this.readingLists = lists || [];
         this.loading = false;
       },
       error: (err: any) => {
+        console.error('Error cargando listas:', err);
         this.error = 'Error al cargar las listas de lectura';
+        this.readingLists = [];
         this.loading = false;
-        console.error(err);
       }
     });
   }
 
-addToList(listId?: number): void {
-  const targetListId = listId || this.selectedListId;
-  
-  if (!this.userId || !targetListId || !this.bookId) {
-      this.error = 'Selecciona una lista para añadir el libro';
+  addToList(listId: number): void {
+    if (!this.currentUserId || !this.bookId || this.loading) {
+      console.error('Faltan datos:', { userId: this.currentUserId, bookId: this.bookId, loading: this.loading });
       return;
-  }
-  
-  this.loading = true;
-  this.error = '';
-  this.success = '';
-  
-  this.readingListService.addBookToList(targetListId, this.bookId, this.userId).subscribe({
+    }
+    
+    console.log('Añadiendo libro a lista:', { listId, bookId: this.bookId, userId: this.currentUserId });
+    
+    this.loading = true;
+    this.error = '';
+    this.success = '';
+    
+    this.readingListService.addBookToList(listId, this.bookId, this.currentUserId).subscribe({
       next: () => {
-          this.success = 'Libro añadido a la lista con éxito';
-          this.loading = false;
-          this.selectedListId = null;
-          setTimeout(() => this.success = '', 3000);
+        console.log('Libro añadido exitosamente');
+        this.success = 'Libro añadido a la lista con éxito';
+        this.loading = false;
+        this.showDropdown = false;
+        
+        // Limpiar mensaje de éxito después de 3 segundos
+        setTimeout(() => {
+          this.success = '';
+        }, 3000);
       },
       error: (err) => {
-          this.error = err.error?.message || err.message || 'Error al añadir el libro a la lista';
-          this.loading = false;
-          console.error(err);
+        console.error('Error añadiendo libro:', err);
+        this.error = err.error?.message || 'Error al añadir el libro a la lista';
+        this.loading = false;
+        
+        // Limpiar mensaje de error después de 5 segundos
+        setTimeout(() => {
+          this.error = '';
+        }, 5000);
       }
-  });
-}
+    });
+  }
 
   createNewList(): void {
-    if (this.newListForm.invalid || !this.userId) return;
+    if (this.newListForm.invalid || !this.currentUserId || this.loading) {
+      return;
+    }
     
     const name = this.newListForm.get('name')?.value;
-    this.loading = true;
+    console.log('Creando nueva lista:', name);
     
-    this.readingListService.createList(this.userId, name).subscribe({
+    this.loading = true;
+    this.error = '';
+    
+    this.readingListService.createList(this.currentUserId, name).subscribe({
       next: (list: ReadingList) => {
+        console.log('Lista creada:', list);
         this.readingLists.push(list);
         this.newListForm.reset();
         this.success = 'Lista creada con éxito';
         this.loading = false;
         this.showModal = false;
-        setTimeout(() => this.success = '', 3000);
+        
+        // Limpiar mensaje de éxito después de 3 segundos
+        setTimeout(() => {
+          this.success = '';
+        }, 3000);
       },
       error: (err: any) => {
+        console.error('Error creando lista:', err);
         this.error = err.error?.message || 'Error al crear la lista';
         this.loading = false;
-        console.error(err);
+        
+        // Limpiar mensaje de error después de 5 segundos
+        setTimeout(() => {
+          this.error = '';
+        }, 5000);
       }
     });
   }
 
+  private resetState(): void {
+    this.loading = false;
+    this.error = '';
+    this.success = '';
+    this.showModal = false;
+    this.showDropdown = false;
+    this.newListForm.reset();
+  }
+
   toggleDropdown(): void {
+    if (!this.currentUserId) {
+      this.error = 'Debes iniciar sesión para añadir libros a listas';
+      return;
+    }
+    
     if (this.readingLists.length > 0) {
       this.showDropdown = !this.showDropdown;
+    } else {
+      // Si no hay listas, mostrar el modal para crear una nueva
+      this.openModal();
     }
   }
 
   openModal(): void {
+    if (!this.currentUserId) {
+      this.error = 'Debes iniciar sesión para crear listas';
+      return;
+    }
+    
     this.showModal = true;
     this.newListForm.reset();
     this.error = '';
@@ -126,5 +202,7 @@ addToList(listId?: number): void {
 
   closeModal(): void {
     this.showModal = false;
+    this.newListForm.reset();
+    this.error = '';
   }
 }
