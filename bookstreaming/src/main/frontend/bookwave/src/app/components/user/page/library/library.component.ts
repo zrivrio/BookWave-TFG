@@ -157,21 +157,27 @@ export class LibraryComponent implements OnInit {
     }
   }
 
-  removeBookFromList(book: Book): void {
-    if (!this.userId || !this.selectedList?.id || !book.id) return;
-    
-    this.loading = true;
-    this.readingListService.removeBookFromList(this.selectedList.id, book.id, this.userId).subscribe({
-      next: () => {
-        this.booksInSelectedList = this.booksInSelectedList.filter(b => b.id !== book.id);
-        this.success = 'Libro eliminado de la lista';
-        this.loading = false;
-      },
-      error: (err: any) => {
-        this.error = err.error || 'Error al eliminar el libro de la lista';
-        this.loading = false;
-        console.error(err);
+ removeBookFromList(book: Book): void {
+  if (!this.userId || !this.selectedList?.id || !book.id) return;
+  
+  this.loading = true;
+  this.readingListService.removeBookFromList(this.selectedList.id, book.id, this.userId).subscribe({
+    next: () => {
+      this.booksInSelectedList = this.booksInSelectedList.filter(b => b.id !== book.id);
+      
+      const listIndex = this.readingLists.findIndex(list => list.id === this.selectedList?.id);
+      if (listIndex !== -1) {
+        this.readingLists[listIndex].books = this.readingLists[listIndex].books.filter(b => b.id !== book.id);
       }
-    });
-  }
+      
+      this.success = 'Libro eliminado de la lista';
+      this.loading = false;
+    },
+    error: (err: any) => {
+      this.error = err.error || 'Error al eliminar el libro de la lista';
+      this.loading = false;
+      console.error(err);
+    }
+  });
+}
 }
