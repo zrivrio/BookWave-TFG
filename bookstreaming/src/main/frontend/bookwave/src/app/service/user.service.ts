@@ -39,7 +39,6 @@ export class UserService {
     return this.http.post<User>(`${this.baseUrl}/login`, loginRequest, { headers })
       .pipe(
         tap(user => {
-          // Actualizar el usuario actual al hacer login
           this.setCurrentUser(user);
         }),
         catchError(this.handleError)
@@ -50,7 +49,6 @@ export class UserService {
     return this.http.post<User>(`${this.baseUrl}/signup`, userData)
       .pipe(
         tap(user => {
-          // Actualizar el usuario actual al hacer signup
           this.setCurrentUser(user);
         }),
         catchError(this.handleError)
@@ -61,7 +59,6 @@ export class UserService {
     return this.http.post<User>(`${this.baseUrl}/upgrade/${userId}`, {})
       .pipe(
         tap(user => {
-          // Actualizar el usuario actual al hacer upgrade
           this.setCurrentUser(user);
         }),
         catchError(this.handleError)

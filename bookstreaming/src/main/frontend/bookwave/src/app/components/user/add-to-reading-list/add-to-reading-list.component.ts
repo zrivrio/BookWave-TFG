@@ -109,7 +109,6 @@ export class AddToReadingListComponent implements OnInit, OnDestroy {
         this.loading = false;
         this.showDropdown = false;
         
-        // Limpiar mensaje de éxito después de 3 segundos
         setTimeout(() => {
           this.success = '';
         }, 3000);
@@ -119,7 +118,6 @@ export class AddToReadingListComponent implements OnInit, OnDestroy {
         this.error = err.error?.message || 'Error al añadir el libro a la lista';
         this.loading = false;
         
-        // Limpiar mensaje de error después de 5 segundos
         setTimeout(() => {
           this.error = '';
         }, 5000);
@@ -146,8 +144,6 @@ export class AddToReadingListComponent implements OnInit, OnDestroy {
         this.success = 'Lista creada con éxito';
         this.loading = false;
         this.showModal = false;
-        
-        // Limpiar mensaje de éxito después de 3 segundos
         setTimeout(() => {
           this.success = '';
         }, 3000);
@@ -157,7 +153,6 @@ export class AddToReadingListComponent implements OnInit, OnDestroy {
         this.error = err.error?.message || 'Error al crear la lista';
         this.loading = false;
         
-        // Limpiar mensaje de error después de 5 segundos
         setTimeout(() => {
           this.error = '';
         }, 5000);
@@ -183,7 +178,6 @@ export class AddToReadingListComponent implements OnInit, OnDestroy {
     if (this.readingLists.length > 0) {
       this.showDropdown = !this.showDropdown;
     } else {
-      // Si no hay listas, mostrar el modal para crear una nueva
       this.openModal();
     }
   }

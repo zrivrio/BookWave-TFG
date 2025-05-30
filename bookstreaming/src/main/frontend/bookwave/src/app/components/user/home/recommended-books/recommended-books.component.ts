@@ -6,6 +6,7 @@ import { AuthService } from '../../../../service/auth.service';
 import { Subscription } from 'rxjs';
 import { Router, RouterModule } from '@angular/router';
 import { LibraryService } from '../../../../service/library.service';
+import { User } from '../../../../models/User';
 
 @Component({
   selector: 'app-recommended-books',
@@ -19,8 +20,7 @@ export class RecommendedBooksComponent implements OnInit, OnDestroy {
   isLoading: boolean = false;
   error: string = '';
   @ViewChild('carousel', { static: false }) carousel!: ElementRef;
-  private subscription: Subscription | null = null;
-  private listSubscription: Subscription | null = null;
+  private subscriptions: Subscription[] = [];
 
   constructor(
     private recommendationsService: RecommendationsService,
@@ -37,69 +37,71 @@ export class RecommendedBooksComponent implements OnInit, OnDestroy {
 
   private loadBooks(): void {
     this.isLoading = true;
+    this.error = '';
     const currentUser = this.authService.currentUserValue;
-
     if (!currentUser) {
-      // Usuario no autenticado - mostrar libros aleatorios
-      if (this.router.url === '/') {
-        this.subscription = this.recommendationsService.getRandomBooks().subscribe({
-          next: (books) => {
-            this.recommendedBooks = books;
-            this.isLoading = false;
-          },
-          error: (err) => {
-            this.error = 'Error al cargar los libros';
-            this.isLoading = false;
-          }
-        });
-      }
+      this.loadDefaultRecommendedBooks();
     } else {
-      // Usuario autenticado - primero obtener las listas de lectura
-      if (this.router.url === '/') {
-        this.listSubscription = this.libraryService.getLists(currentUser.id).subscribe({
-          next: (lists) => {
-            if (lists.length === 0) {
-              // Usuario SIN listas de lectura - mostrar libros aleatorios
-              this.subscription = this.recommendationsService.getRandomBooks().subscribe({
-                next: (books) => {
-                  this.recommendedBooks = books;
-                  this.isLoading = false;
-                },
-                error: (err) => {
-                  this.error = 'Error al cargar los libros';
-                  this.isLoading = false;
-                }
-              });
-            } else {
-              // Usuario CON listas de lectura - mostrar recomendaciones personalizadas
-              this.subscription = this.recommendationsService.getRecommendedBooks(currentUser.id).subscribe({
-                next: (books) => {
-                  this.recommendedBooks = books;
-                  this.isLoading = false;
-                },
-                error: (err) => {
-                  this.error = 'Error al cargar los libros recomendados';
-                  this.isLoading = false;
-                }
-              });
-            }
-          },
-          error: (err) => {
-            this.error = 'Error al cargar las listas de lectura';
-            this.isLoading = false;
-          }
-        });
-      }
+      this.checkUserReadingLists(currentUser);
     }
   }
 
+  private loadDefaultRecommendedBooks(): void {
+    const sub = this.recommendationsService.getRandomBooks().subscribe({
+      next: (books) => {
+        this.recommendedBooks = books;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        this.handleError('Error al cargar los libros recomendados');
+      }
+    });
+    this.subscriptions.push(sub);
+  }
+
+  private checkUserReadingLists(user: User): void {
+    const sub = this.libraryService.getLists(user.id).subscribe({
+      next: (lists) => {
+        if (lists.length === 0 || this.userHasEmptyLists(lists)) {
+          this.loadDefaultRecommendedBooks();
+        } else {
+          this.loadPersonalizedRecommendations(user.id);
+        }
+      },
+      error: (err) => {
+        this.handleError('Error al verificar las listas de lectura');
+        this.loadDefaultRecommendedBooks();
+      }
+    });
+    this.subscriptions.push(sub);
+  }
+
+  private userHasEmptyLists(lists: any[]): boolean {
+    return lists.every(list => list.books.length === 0);
+  }
+
+  private loadPersonalizedRecommendations(userId: number): void {
+    const sub = this.recommendationsService.getRecommendedBooks(userId).subscribe({
+      next: (books) => {
+        this.recommendedBooks = books;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        this.handleError('Error al cargar recomendaciones personalizadas');
+        this.loadDefaultRecommendedBooks();
+      }
+    });
+    this.subscriptions.push(sub);
+  }
+
+  private handleError(errorMessage: string): void {
+    this.error = errorMessage;
+    this.isLoading = false;
+    console.error(errorMessage);
+  }
+
   ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
-    if (this.listSubscription) {
-      this.listSubscription.unsubscribe();
-    }
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
   scrollLeft(): void {
