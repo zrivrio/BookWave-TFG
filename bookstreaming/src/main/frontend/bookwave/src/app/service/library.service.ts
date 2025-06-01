@@ -26,7 +26,7 @@ export class LibraryService {
         `${this.apiUrl}/create`,
         list
     );
-}
+  }
 
   deleteList(listId: number, userId: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${listId}?userId=${userId}`);
@@ -50,7 +50,7 @@ export class LibraryService {
     );
   }
 
-  // Métodos de Administrador
+  // Admin Methods
   getAllReadingLists(): Observable<ReadingList[]> {
     return this.http.get<ReadingList[]>(`${this.apiUrl}/admin`);
   }
@@ -65,5 +65,9 @@ export class LibraryService {
 
   updateReadingList(readingList: ReadingList): Observable<ReadingList> {
     return this.http.put<ReadingList>(`${this.apiUrl}/admin`, readingList);
+  }
+
+  deleteReadingListById(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/admin/${id}`);
   }
 }

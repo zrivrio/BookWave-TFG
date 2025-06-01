@@ -94,7 +94,6 @@ export class UserService {
     return this.http.put<User>(`${this.baseUrl}/${userId}`, userData, { headers })
       .pipe(
         tap(user => {
-          // Si estamos actualizando el usuario actual, actualizar el estado
           const currentUser = this.getCurrentUser();
           if (currentUser && currentUser.id === userId) {
             this.setCurrentUser(user);
