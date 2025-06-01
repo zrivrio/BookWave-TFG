@@ -23,7 +23,7 @@ public class ReadingList {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToMany()
+    @ManyToMany(mappedBy = "readingLists")
     private List<Book> books;
 
 }
