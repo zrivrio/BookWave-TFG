@@ -37,12 +37,11 @@ export class LibraryService {
   }
 
   addBookToList(listId: number, bookId: number, userId: number): Observable<void> {
-    return this.http.post<void>(
-      `${this.apiUrl}/${listId}/add-book`,
-      null,
-      { params: { bookId: bookId.toString(), userId: userId.toString() } }
-    );
-  }
+  return this.http.post<void>(
+    `${this.apiUrl}/${listId}/add-book?bookId=${bookId}&userId=${userId}`,
+    {} // ✅ Parámetros en la URL, body vacío
+  );
+}
 
   removeBookFromList(listId: number, bookId: number, userId: number): Observable<void> {
     return this.http.delete<void>(

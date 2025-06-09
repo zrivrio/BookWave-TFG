@@ -49,27 +49,28 @@ public class ReadingListService {
     }
 
     public void addBookToList(Long listId, Long bookId, Long userId) {
-        ReadingList list = readingListRepository.findById(listId)
-                .orElseThrow(() -> new RuntimeException("Lista no encontrada"));
-        
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-        
-        if (user.getSubscriptionType() != SubscriptionType.Premium && 
-            list.getBooks().size() >= MAX_BOOKS_PER_LIST_FREE) {
-            throw new RuntimeException("Límite de libros alcanzado. Actualiza a premium para añadir más libros.");
-        }
-        
-        Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new RuntimeException("Libro no encontrado"));
-        
-        if (list.getBooks().contains(book)) {
-            throw new RuntimeException("Este libro ya está en la lista");
-        }
-        
-        list.getBooks().add(book);
-        readingListRepository.save(list);
+    ReadingList list = readingListRepository.findById(listId)
+            .orElseThrow(() -> new RuntimeException("Lista no encontrada"));
+    
+    User user = userRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+    
+    if (user.getSubscriptionType() != SubscriptionType.Premium && 
+        list.getBooks().size() >= MAX_BOOKS_PER_LIST_FREE) {
+        throw new RuntimeException("Límite de libros alcanzado. Actualiza a premium para añadir más libros.");
     }
+    
+    Book book = bookRepository.findById(bookId)
+            .orElseThrow(() -> new RuntimeException("Libro no encontrado"));
+    
+    if (list.getBooks().contains(book)) {
+        throw new RuntimeException("Este libro ya está en la lista");
+    }
+    
+    list.getBooks().add(book);
+    book.addToReadingList(list);
+    readingListRepository.save(list);
+}
 
     public void deleteReadingList(Long listId, Long userId) {
         ReadingList list = readingListRepository.findById(listId)

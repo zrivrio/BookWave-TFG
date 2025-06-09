@@ -46,19 +46,16 @@ public class Book {
     )
     private List<ReadingList> readingLists = new ArrayList<>();
     
-    public void addToReadingList(ReadingList readingList) {
-        if (!this.readingLists.contains(readingList)) {
-            this.readingLists.add(readingList);
-        }
-        if (!readingList.getBooks().contains(this)) {
-            readingList.getBooks().add(this);
-        }
-    }
-    
-    public void removeFromReadingList(ReadingList readingList) {
-        this.readingLists.remove(readingList);
-        readingList.getBooks().remove(this);
-    }
+
+public void addToReadingList(ReadingList readingList) {
+    this.readingLists.add(readingList);
+    readingList.getBooks().add(this);
+}
+
+public void removeFromReadingList(ReadingList readingList) {
+    this.readingLists.remove(readingList);
+    readingList.getBooks().remove(this);
+}
 
 }
 

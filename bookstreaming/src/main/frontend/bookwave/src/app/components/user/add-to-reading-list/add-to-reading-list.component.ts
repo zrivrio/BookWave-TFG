@@ -5,7 +5,7 @@ import { UserService } from '../../../service/user.service';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Subject } from 'rxjs';
-import { takeUntil, distinctUntilChanged, filter } from 'rxjs/operators';
+import { takeUntil, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-add-to-reading-list',
@@ -16,6 +16,7 @@ import { takeUntil, distinctUntilChanged, filter } from 'rxjs/operators';
 })
 export class AddToReadingListComponent implements OnInit, OnDestroy {
   @Input() bookId!: number;
+  @Input() bookTitle?: string; 
   
   readingLists: ReadingList[] = [];
   loading = false;
@@ -31,27 +32,25 @@ export class AddToReadingListComponent implements OnInit, OnDestroy {
   constructor(
     private readingListService: LibraryService,
     private userService: UserService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
   ) {
     this.newListForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(3)]]
+      name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]]
     });
   }
 
   ngOnInit(): void {
-    // Suscribirse a cambios de usuario con filtros para evitar llamadas innecesarias
+    this.setupUserSubscription();
+    this.setupFormChanges();
+  }
+
+  private setupUserSubscription(): void {
     this.userService.currentUser$
       .pipe(
         takeUntil(this.destroy$),
-        distinctUntilChanged((prev, curr) => {
-          // Solo recargar si el usuario realmente cambió
-          const prevId = prev?.id || null;
-          const currId = curr?.id || null;
-          return prevId === currId;
-        })
+        distinctUntilChanged((prev, curr) => prev?.id === curr?.id)
       )
       .subscribe(user => {
-        console.log('Usuario cambió:', user);
         this.currentUserId = user?.id || null;
         
         if (user?.id) {
@@ -63,27 +62,31 @@ export class AddToReadingListComponent implements OnInit, OnDestroy {
       });
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+  private setupFormChanges(): void {
+    this.newListForm.get('name')?.valueChanges
+      .pipe(
+        takeUntil(this.destroy$),
+        debounceTime(150)
+      )
+      .subscribe(() => {
+        this.error = '';
+      });
   }
 
   loadUserLists(userId: number): void {
-    if (this.loading) return; // Evitar llamadas múltiples
-    
-    console.log('Cargando listas para usuario:', userId);
+    if (this.loading) return;
+
     this.loading = true;
     this.error = '';
     
     this.readingListService.getLists(userId).subscribe({
       next: (lists: ReadingList[]) => {
-        console.log('Listas cargadas:', lists);
         this.readingLists = lists || [];
         this.loading = false;
       },
       error: (err: any) => {
-        console.error('Error cargando listas:', err);
-        this.error = 'Error al cargar las listas de lectura';
+        console.error('Error loading lists:', err);
+        this.error = 'Error loading reading lists';
         this.readingLists = [];
         this.loading = false;
       }
@@ -92,11 +95,8 @@ export class AddToReadingListComponent implements OnInit, OnDestroy {
 
   addToList(listId: number): void {
     if (!this.currentUserId || !this.bookId || this.loading) {
-      console.error('Faltan datos:', { userId: this.currentUserId, bookId: this.bookId, loading: this.loading });
       return;
     }
-    
-    console.log('Añadiendo libro a lista:', { listId, bookId: this.bookId, userId: this.currentUserId });
     
     this.loading = true;
     this.error = '';
@@ -104,23 +104,17 @@ export class AddToReadingListComponent implements OnInit, OnDestroy {
     
     this.readingListService.addBookToList(listId, this.bookId, this.currentUserId).subscribe({
       next: () => {
-        console.log('Libro añadido exitosamente');
-        this.success = 'Libro añadido a la lista con éxito';
+        const listName = this.readingLists.find(l => l.id === listId)?.name || 'the list';
+        this.success = `"${this.bookTitle || 'Book'}" added to ${listName}`;
         this.loading = false;
         this.showDropdown = false;
         
-        setTimeout(() => {
-          this.success = '';
-        }, 3000);
+        setTimeout(() => this.success = '', 3000);
       },
       error: (err) => {
-        console.error('Error añadiendo libro:', err);
-        this.error = err.error?.message || 'Error al añadir el libro a la lista';
+        this.error = err.error?.message || 'Error adding book to list';
         this.loading = false;
-        
-        setTimeout(() => {
-          this.error = '';
-        }, 5000);
+        setTimeout(() => this.error = '', 5000);
       }
     });
   }
@@ -131,47 +125,30 @@ export class AddToReadingListComponent implements OnInit, OnDestroy {
     }
     
     const name = this.newListForm.get('name')?.value;
-    console.log('Creando nueva lista:', name);
     
     this.loading = true;
     this.error = '';
     
     this.readingListService.createList(this.currentUserId, name).subscribe({
       next: (list: ReadingList) => {
-        console.log('Lista creada:', list);
         this.readingLists.push(list);
         this.newListForm.reset();
-        this.success = 'Lista creada con éxito';
+        this.success = `List "${name}" created successfully`;
         this.loading = false;
         this.showModal = false;
-        setTimeout(() => {
-          this.success = '';
-        }, 3000);
+        setTimeout(() => this.success = '', 3000);
       },
       error: (err: any) => {
-        console.error('Error creando lista:', err);
-        this.error = err.error?.message || 'Error al crear la lista';
+        this.error = err.error?.message || 'Error creating list';
         this.loading = false;
-        
-        setTimeout(() => {
-          this.error = '';
-        }, 5000);
+        setTimeout(() => this.error = '', 5000);
       }
     });
   }
 
-  private resetState(): void {
-    this.loading = false;
-    this.error = '';
-    this.success = '';
-    this.showModal = false;
-    this.showDropdown = false;
-    this.newListForm.reset();
-  }
-
   toggleDropdown(): void {
     if (!this.currentUserId) {
-      this.error = 'Debes iniciar sesión para añadir libros a listas';
+      this.error = 'You must log in to add books to lists';
       return;
     }
     
@@ -184,7 +161,7 @@ export class AddToReadingListComponent implements OnInit, OnDestroy {
 
   openModal(): void {
     if (!this.currentUserId) {
-      this.error = 'Debes iniciar sesión para crear listas';
+      this.error = 'You must log in to create lists';
       return;
     }
     
@@ -198,5 +175,19 @@ export class AddToReadingListComponent implements OnInit, OnDestroy {
     this.showModal = false;
     this.newListForm.reset();
     this.error = '';
+  }
+
+  private resetState(): void {
+    this.loading = false;
+    this.error = '';
+    this.success = '';
+    this.showModal = false;
+    this.showDropdown = false;
+    this.newListForm.reset();
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
